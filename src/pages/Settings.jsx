@@ -58,7 +58,7 @@ export default class Settings extends React.Component {
   };
 
   render() {
-    if (dbs) return this.props.children;
+    if (dbs && this.props.children) return this.props.children;
 
     return (
       <div>
