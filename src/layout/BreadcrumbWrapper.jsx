@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Breadcrumb } from "antd";
 
-const BreadcrumbWrapper = (props) => {
+export default function BreadcrumbWrapper(props) {
   const { dbName, tableName, action } = props;
   return (
     <Breadcrumb style={{ margin: "16px 0" }}>
@@ -22,6 +22,4 @@ const BreadcrumbWrapper = (props) => {
       {action ? <Breadcrumb.Item>{action}</Breadcrumb.Item> : null}
     </Breadcrumb>
   );
-};
-
-export default BreadcrumbWrapper;
+}
