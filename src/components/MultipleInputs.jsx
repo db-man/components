@@ -4,20 +4,18 @@ import { Input } from "antd";
 const str2arr = (str) => str.split("\n");
 const arr2str = (arr) => arr.join("\n");
 
-export default class MultipleInputs extends React.Component {
+export default function MultipleInputs(props) {
   handleChange = (event) => {
-    this.props.onChange(str2arr(event.target.value));
+    props.onChange(str2arr(event.target.value));
   };
-  render() {
-    return (
-      <Input.TextArea
-        rows={3}
-        {...this.props}
-        value={arr2str(this.props.value)}
-        onChange={this.handleChange}
-      />
-    );
-  }
+  return (
+    <Input.TextArea
+      rows={3}
+      {...props}
+      value={arr2str(props.value)}
+      onChange={handleChange}
+    />
+  );
 }
 
 MultipleInputs.defaultProps = {
