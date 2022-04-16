@@ -5,7 +5,7 @@ const str2arr = (str) => str.split("\n");
 const arr2str = (arr) => arr.join("\n");
 
 export default function MultipleInputs(props) {
-  handleChange = (event) => {
+  const handleChange = (event) => {
     props.onChange(str2arr(event.target.value));
   };
   return (
