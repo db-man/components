@@ -1,5 +1,7 @@
+import React from "react";
+
 const SuccessMessage = ({ url }) => {
-  console.log("Commit link:", url);
+  console.debug("Commit link:", url);
 
   return (
     <div>
