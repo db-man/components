@@ -5,3 +5,4 @@ export { default as Settings } from "./pages/Settings";
 export * as utils from "./utils";
 export * as constants from "./constants";
 export * as contexts from "./contexts/page";
+export * as dbs from "./dbs";
