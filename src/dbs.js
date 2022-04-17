@@ -1,4 +1,4 @@
-import { LS_KEY_DBS_SCHEMA } from "constants";
+import { LS_KEY_DBS_SCHEMA } from "./constants";
 
 /**
  * ```json
