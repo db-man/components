@@ -15,11 +15,30 @@ export const ImageLink = ({ url, imgSrc, description = null }) => (
   </div>
 );
 
-export const Link = ({ href, text }) => (
-  <a className="dm-dd-link" href={href} target="_blank" rel="noreferrer">
-    {text}
-  </a>
-);
+export const Link = (props) => {
+  if (props.children) {
+    return (
+      <a
+        className="dm-dd-link"
+        href={props.children}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {props.children}
+      </a>
+    );
+  }
+  return (
+    <a
+      className="dm-dd-link"
+      href={props.href}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {props.text}
+    </a>
+  );
+};
 
 export const Links = ({ links }) => (
   <div>
