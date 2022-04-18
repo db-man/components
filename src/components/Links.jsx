@@ -29,3 +29,17 @@ export const Links = ({ links }) => (
       ))}
   </div>
 );
+
+export const Fragment = (props) => {
+  return <React.Fragment>{props.children}</React.Fragment>;
+};
+
+export const ImageLinks = ({ imgs, limit = 3 }) => {
+  if (!imgs) return null;
+
+  let results = imgs;
+  if (limit !== null) {
+    results = imgs.slice(0, limit);
+  }
+  return results.map((img, index) => <ImageLink key={index} {...img} />);
+};
