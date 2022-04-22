@@ -1,3 +1,6 @@
-/src/
+.github/
+src/
+coverage/
 yarn-error.log
 .babelrc.js
+.eslintrc.js
