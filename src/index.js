@@ -7,6 +7,7 @@ export { Link } from './components/Links';
 export { Links } from './components/Links';
 export { Fragment } from './components/Links';
 export { default as ErrorAlert } from './components/ErrorAlert';
+export { default as ListPageBody } from './components/ListPageBody';
 
 export { default as BreadcrumbWrapper } from './layout/BreadcrumbWrapper';
 export { default as Settings } from './pages/Settings';

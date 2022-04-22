@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/db-man/components#readme",
   "devDependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
@@ -37,8 +38,10 @@
     "react-scripts": "5.0.1"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@db-man/github": "^0.1.2",
     "handlebars": "^4.7.7",
+    "lodash.debounce": "^4.0.8",
     "prop-types": "^15.8.1",
     "react-router-dom": "^6.3.0"
   },
