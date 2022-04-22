@@ -12,8 +12,8 @@ import Handlebars from 'handlebars/dist/handlebars';
 
 import {
   ImageLink, ImageLinks, Link, Links, Fragment,
-} from 'components/Links';
-import ErrorAlert from 'components/ErrorAlert';
+} from '../components/Links';
+import ErrorAlert from '../components/ErrorAlert';
 
 /**
  * tpl: {{#replace "foo" "bar"}}{{title}}{{/replace}}
