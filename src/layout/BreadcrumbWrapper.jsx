@@ -1,11 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Breadcrumb } from "antd";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Breadcrumb } from 'antd';
 
 export default function BreadcrumbWrapper(props) {
   const { dbName, tableName, action } = props;
   return (
-    <Breadcrumb style={{ margin: "16px 0" }}>
+    <Breadcrumb style={{ margin: '16px 0' }}>
       <Breadcrumb.Item>
         <Link to="/">Home</Link>
       </Breadcrumb.Item>
@@ -23,3 +24,9 @@ export default function BreadcrumbWrapper(props) {
     </Breadcrumb>
   );
 }
+
+BreadcrumbWrapper.propTypes = {
+  dbName: PropTypes.string.isRequired,
+  tableName: PropTypes.string.isRequired,
+  action: PropTypes.string.isRequired,
+};

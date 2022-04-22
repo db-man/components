@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 /**
  * https://github.com/handlebars-lang/handlebars.js/issues/1174
  * ```
@@ -8,17 +8,19 @@ import React from "react";
  * ```
  */
 // import Handlebars from "handlebars";
-import Handlebars from "handlebars/dist/handlebars";
+import Handlebars from 'handlebars/dist/handlebars';
 
-import { ImageLink, ImageLinks, Link, Links, Fragment } from "components/Links";
-import ErrorAlert from "components/ErrorAlert";
+import {
+  ImageLink, ImageLinks, Link, Links, Fragment,
+} from 'components/Links';
+import ErrorAlert from 'components/ErrorAlert';
 
 /**
  * tpl: {{#replace "foo" "bar"}}{{title}}{{/replace}}
  * input: {title:"foo"}
  * output: bar
  */
-Handlebars.registerHelper("replace", function (find, replace, options) {
+Handlebars.registerHelper('replace', function replaceHelper(find, replace, options) {
   const string = options.fn(this);
   return string.replace(find, replace);
 });
@@ -28,12 +30,12 @@ Handlebars.registerHelper("replace", function (find, replace, options) {
  * input: {"tags": ["foo", "bar"]}
  * output: "foo, bar"
  */
-Handlebars.registerHelper("join", function (arr, sep) {
-  if (!arr) return "";
+Handlebars.registerHelper('join', (arr, sep) => {
+  if (!arr) return '';
   return arr.join(sep);
 });
 
-const ddComponent = (Component) => (val, record, index, args, col) => {
+const ddComponent = (Component) => function dComponent(val, record, index, args /* , col */) {
   if (!args || !args[1]) {
     return <Component>{val}</Component>;
   }
@@ -45,15 +47,17 @@ const ddComponent = (Component) => (val, record, index, args, col) => {
     // {foo:'bar'} <= "{\"foo\":\"bar\"}"
     // "foo" <= "\"foo\""
     const props = JSON.parse(json);
-    if (typeof props === "string") {
+    if (typeof props === 'string') {
       return <Component>{props}</Component>;
     }
-    return <Component {...props} />;
+    return <Component {...props} />; // eslint-disable-line react/jsx-props-no-spreading
   } catch (err) {
-    console.error("Failed to parse JSON for tpl, err:", err, json);
+    console.error('Failed to parse JSON for tpl, err:', err, json); // eslint-disable-line no-console
     return (
       <div>
-        val: {val}
+        val:
+        {' '}
+        {val}
         <ErrorAlert json={json} error={err} tplStr={tplStr} record={record} />
       </div>
     );
@@ -83,7 +87,8 @@ const ddRenderFnMapping = {
    * Usage:
    * ```json
    * {"type:listPage": ["ImageLink",
-   *   "{\"url\":\"{{record.url}}\",\"imgSrc\":\"{{record.url}}_th.jpg\",\"tags\":\"{{record.tags}}\"}"
+   *   "{\"url\":\"{{record.url}}\",\"imgSrc\":\"{{record.url}}_th.jpg\",
+   *     \"tags\":\"{{record.tags}}\"}"
    * ]}
    * ```
    * Issues:

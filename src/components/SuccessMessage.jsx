@@ -1,16 +1,22 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const SuccessMessage = ({ url }) => {
-  console.debug("Commit link:", url);
+function SuccessMessage({ url }) {
+  console.debug('Commit link:', url); // eslint-disable-line no-console
 
   return (
     <div>
-      Item saved.{" "}
+      Item saved.
+      {' '}
       <a href={url} target="_blank" rel="noreferrer">
         Commit link
       </a>
     </div>
   );
+}
+
+SuccessMessage.propTypes = {
+  url: PropTypes.string.isRequired,
 };
 
 export default SuccessMessage;

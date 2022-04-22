@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getColumnRender should return proper value 1`] = `
+<ImageLink
+  description=""
+  imgSrc=""
+  url=""
+>
+  https://a.com/b.jpg
+</ImageLink>
+`;
+
+exports[`getColumnRender should return proper value2 1`] = `
+<ImageLink
+  description=""
+  imgSrc="https://a.com/large/b.jpg"
+  url="https://a.com/large/b.jpg"
+>
+  
+</ImageLink>
+`;

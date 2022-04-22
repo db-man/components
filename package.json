@@ -24,15 +24,26 @@
     "@babel/preset-react": "^7.16.7",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
+    "antd": "^4.19.0",
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.1.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.4.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.1"
   },
   "dependencies": {
-    "db-man": "^0.1.2",
-    "handlebars": "^4.7.7"
+    "@db-man/github": "^0.1.2",
+    "handlebars": "^4.7.7",
+    "prop-types": "^15.8.1",
+    "react-router-dom": "^6.3.0"
   },
   "peerDependencies": {
+    "antd": ">=4.19.0",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   }

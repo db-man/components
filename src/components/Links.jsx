@@ -1,64 +1,103 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
+import * as types from './types';
 
-export const Fragment = (props) => {
-  return <React.Fragment>{props.children}</React.Fragment>;
-};
+export function Fragment(props) {
+  return props.children;
+}
 
-export const Link = (props) => {
-  if (props.children) {
+export function Link({ children, href, text }) {
+  if (children) {
     return (
       <a
         className="dm-dd-link"
-        href={props.children}
+        href={children}
         target="_blank"
         rel="noreferrer"
       >
-        {props.children}
+        {children}
       </a>
     );
   }
   return (
     <a
       className="dm-dd-link"
-      href={props.href}
+      href={href}
       target="_blank"
       rel="noreferrer"
     >
-      {props.text}
+      {text}
     </a>
   );
+}
+Link.propTypes = types.linkShape;
+Link.defaultProps = {
+  children: '',
+  href: '',
+  text: '',
 };
 
-export const Links = ({ links }) => (
-  <div>
-    {links &&
-      links.map(({ href, text }, index) => (
+export function Links({ links }) {
+  return (
+    <div>
+      {links.map(({ href, text }, index) => (
+        /* eslint-disable-next-line react/no-array-index-key */
         <Link key={index} href={href} text={text} />
       ))}
-  </div>
-);
+    </div>
+  );
+}
+Links.propTypes = {
+  links: PropTypes.arrayOf(types.link),
+};
+Links.defaultProps = {
+  links: [],
+};
 
 /**
  * @param {string|string[]|undefined} props.description
  * @returns
  */
-export const ImageLink = ({ url, imgSrc, description = null }) => (
-  <div>
-    <a className="dm-dd-image-link" href={url} rel="noreferrer" target="_blank">
-      <span>{url}</span>
-      <img alt="ImageLink" src={imgSrc} />
-    </a>
-    <br />
-    {description}
-  </div>
-);
+export function ImageLink({
+  children, url, imgSrc, description,
+}) {
+  let url2 = url;
+  let imgSrc2 = imgSrc;
+  if (children) {
+    url2 = children;
+    imgSrc2 = children;
+  }
+  return (
+    <div>
+      <a className="dm-dd-image-link" href={url2} rel="noreferrer" target="_blank">
+        <span>{url2}</span>
+        <img alt="ImageLink" src={imgSrc2} />
+      </a>
+      <br />
+      {description}
+    </div>
+  );
+}
+ImageLink.propTypes = {
+  children: PropTypes.string,
+  url: PropTypes.string,
+  imgSrc: PropTypes.string,
+  description: PropTypes.string,
+};
+ImageLink.defaultProps = {
+  children: '',
+  url: '',
+  imgSrc: '',
+  description: '',
+};
 
-export const ImageLinks = ({ imgs, limit = 3 }) => {
+export function ImageLinks({ imgs, limit = 3 }) {
   if (!imgs) return null;
 
   let results = imgs;
   if (limit !== null) {
     results = imgs.slice(0, limit);
   }
+  // eslint-disable-next-line react/no-array-index-key, react/jsx-props-no-spreading
   return results.map((img, index) => <ImageLink key={index} {...img} />);
-};
+}
