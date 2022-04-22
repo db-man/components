@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { github, githubDb } from '@db-man/github';
-import * as constants from 'constants.js';
+import * as constants from '../constants';
 
 const loadDbsSchemaAsync = async (path) => {
   // Get all db names in root dir

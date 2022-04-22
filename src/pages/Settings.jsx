@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
-import * as constants from 'constants.js';
+import * as constants from '../constants';
 
 import reloadDbsSchemaAsync from './helpers';
 

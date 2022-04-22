@@ -1,4 +1,4 @@
-import * as constants from 'constants.js';
+import * as constants from '../constants';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
 export const getColumnRender = (column) => {
