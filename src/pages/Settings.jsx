@@ -121,5 +121,8 @@ export default class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
+};
+Settings.defaultProps = {
+  children: null,
 };

@@ -22,8 +22,9 @@ export default function MultipleInputs(props) {
 
 MultipleInputs.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
 };
 MultipleInputs.defaultProps = {
   value: [],
+  onChange: () => {},
 };
