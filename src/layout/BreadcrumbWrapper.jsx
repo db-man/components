@@ -26,7 +26,12 @@ export default function BreadcrumbWrapper(props) {
 }
 
 BreadcrumbWrapper.propTypes = {
-  dbName: PropTypes.string.isRequired,
-  tableName: PropTypes.string.isRequired,
-  action: PropTypes.string.isRequired,
+  dbName: PropTypes.string,
+  tableName: PropTypes.string,
+  action: PropTypes.string,
+};
+BreadcrumbWrapper.defaultProps = {
+  dbName: '',
+  tableName: '',
+  action: '',
 };
