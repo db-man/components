@@ -16,4 +16,24 @@ describe('getColumnRender', () => {
     });
     expect(view('https://a.com/large/b.jpg', { url: 'https://a.com/large/b.jpg' })).toMatchSnapshot();
   });
+
+  describe('given hidden column in a list page', () => {
+    it('should return undefined render func', () => {
+      const colFunc = getColumnRender({ 'type:listPage': 'HIDE' });
+      expect(colFunc).toBe(undefined);
+    });
+  });
 });
+
+// describe('getRenderResultByColumn', () => {
+//   test('should return proper value', () => {
+//     const el = getRenderResultByColumn(
+//       'foo',
+//       { name: 'foo' },
+//       0,
+//       'HIDE',
+//       { 'type:listPage': 'HIDE' },
+//     );
+//     expect(el).toMatchSnapshot();
+//   });
+// });
