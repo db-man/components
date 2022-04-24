@@ -35,7 +35,10 @@ Handlebars.registerHelper('join', (arr, sep) => {
   return arr.join(sep);
 });
 
-const ddComponent = (Component) => function dComponent(val, record, index, args /* , col */) {
+const ddComponent = (Component) => function dComponent(val, record, index, args) {
+  if (!record || typeof record !== 'object') {
+    console.error('[ddComponent] record should be an object!', record); // eslint-disable-line no-console
+  }
   if (!args || !args[1]) {
     return <Component>{val}</Component>;
   }

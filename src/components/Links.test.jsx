@@ -15,7 +15,8 @@ describe('Fragment', () => {
 describe('Link', () => {
   describe('given a text to child', () => {
     it('renders link with "foo" text', () => {
-      render(<Link href="https://foo.com/">https://foo.com/</Link>);
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
+      render(<Link>https://foo.com/</Link>);
       const linkElement = screen.getByText(/foo/i);
       expect(linkElement).toBeInTheDocument();
     });

@@ -1,39 +1,54 @@
 import * as constants from '../constants';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
-export const getColumnRender = (column) => {
+// Default render func when "type:listPage" not defined in table column
+const defaultRenders = {
+  [constants.STRING]: (val) => val,
+  [constants.STRING_ARRAY]: (val) => val && val.join(', '),
+};
+
+export const getRender = (args) => {
   // the column render function defined in Table component of antd
   // renderFn = (val, record, index) => ()
   let renderFn;
 
-  if (column.type === constants.STRING_ARRAY) {
-    // Default render func when "type:listPage" not defined in table column
-    renderFn = (val) => val && val.join(', ');
+  if (!args) {
+    return renderFn;
   }
 
-  if (column['type:listPage']) {
-    if (typeof column['type:listPage'] === 'string') {
-      const fn = ddRenderFnMapping[column['type:listPage']];
-      if (fn) {
-        renderFn = fn;
-      }
+  if (typeof args === 'string') {
+    const fn = ddRenderFnMapping[args];
+    if (fn) {
+      renderFn = fn;
     }
-    /**
-     * column def:
-     * {
-     *   "type:listPage": ["Link", "{{record.url}}"]
-     * }
-     */
-    if (Array.isArray(column['type:listPage'])) {
-      const [renderFnName] = column['type:listPage'];
-      renderFn = (val, record, index) => ddRenderFnMapping[renderFnName](
-        val,
-        record,
-        index,
-        column['type:listPage'],
-        column,
-      );
-    }
+  }
+
+  if (Array.isArray(args)) {
+    const [renderFnName] = args;
+    renderFn = (val, record, index) => ddRenderFnMapping[renderFnName](
+      val,
+      record,
+      index,
+      args,
+    );
+  }
+
+  return renderFn;
+};
+
+/**
+ * column def:
+ * {
+ *   "type:listPage": ["Link", "{{record.url}}"]
+ * }
+ */
+export const getColumnRender = (column) => {
+  // the column render function defined in Table component of antd
+  // renderFn = (val, record, index) => ()
+  let renderFn = defaultRenders[column.type || constants.STRING];
+  const customRender = getRender(column['type:listPage']);
+  if (customRender) {
+    renderFn = customRender;
   }
 
   return renderFn;
