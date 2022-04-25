@@ -180,17 +180,20 @@ export default class ListPageBody extends React.Component {
         if (column.referenceTable) {
           const lastRender = antdCol.render || ((val) => val);
           // If this column has ref table, then render links to ref table item
-          antdCol.render = (...args) => (
+          antdCol.render = (...args/* value, record, index */) => (
             <div>
               {lastRender(...args)}
               {' '}
-              <Popover
-                title="Ref Table Links"
-                trigger="click"
-                content={<RefTableLinks value={args[0]} column={column} />}
-              >
-                <RightSquareFilled />
-              </Popover>
+              {args[0]
+                && (
+                <Popover
+                  title="Ref Table Links"
+                  trigger="click"
+                  content={<RefTableLinks value={args[0]} column={column} />}
+                >
+                  <RightSquareFilled />
+                </Popover>
+                )}
             </div>
           );
         }
@@ -247,7 +250,7 @@ export default class ListPageBody extends React.Component {
       loading, rows, contentTableName, page, pageSize,
     } = this.state;
     const { tableName, primaryKey } = this.context;
-    if (loading) return <Spin />;
+    if (loading) return <Spin tip="Loading Data" />;
     if (!rows) return null;
     // When router changed, before loading next table rows,
     // contentTableName is old table, but this.props.tableName is new table.

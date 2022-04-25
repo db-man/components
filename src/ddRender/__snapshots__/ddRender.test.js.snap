@@ -46,12 +46,3 @@ exports[`getRender given tpl should render properly 1`] = `
   
 </Link>
 `;
-
-exports[`getRender should render properly 1`] = `
-<Link
-  href="https://foo.com"
-  text="https://foo.com"
->
-  
-</Link>
-`;

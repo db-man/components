@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import { github, githubDb } from '@db-man/github';
 import * as constants from '../constants';
 
@@ -29,14 +28,12 @@ const loadDbsSchemaAsync = async (path) => {
 const reloadDbsSchemaAsync = async () => {
   const path = localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH);
   if (!path) {
-    message.error('Repo path not found in localStorage!');
+    console.error('Repo path not found in localStorage!'); // eslint-disable-line no-console
     return;
   }
 
-  message.info('Start loading DBs schema...');
   const dbsSchema = await loadDbsSchemaAsync(path);
   localStorage.setItem(constants.LS_KEY_DBS_SCHEMA, JSON.stringify(dbsSchema));
-  message.info('Finish loading DBs schema!');
 };
 
 export default reloadDbsSchemaAsync;

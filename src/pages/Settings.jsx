@@ -1,11 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import * as constants from '../constants';
 
 import reloadDbsSchemaAsync from './helpers';
 
 const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
+const handleClick = () => {
+  message.info('Start loading DBs schema...');
+  reloadDbsSchemaAsync().then(() => {
+    message.info('Finish loading DBs schema!');
+  });
+};
 
 function DbActions() {
   if (!localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH)) {
@@ -15,7 +21,7 @@ function DbActions() {
     <div>
       Load dbs schema from github to local db
       {' '}
-      <Button onClick={reloadDbsSchemaAsync}>Load DBs</Button>
+      <Button onClick={handleClick}>Load DBs</Button>
     </div>
   );
 }
