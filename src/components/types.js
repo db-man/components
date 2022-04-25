@@ -8,3 +8,14 @@ export const linkShape = {
 };
 
 export const link = PropTypes.shape(linkShape);
+
+export const columnType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  primary: PropTypes.bool,
+  referenceTable: PropTypes.string,
+});
+
+export const tableType = PropTypes.shape({
+  name: PropTypes.string,
+});

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { dbs } from '../dbs';
 import PageContext from '../contexts/page';
+import { columnType } from './types';
 
 export default function RefTableLinks({ value, column }) {
   const { dbName } = useContext(PageContext);
@@ -37,10 +38,5 @@ export default function RefTableLinks({ value, column }) {
 
 RefTableLinks.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired,
-  column: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    primary: PropTypes.bool,
-    referenceTable: PropTypes.string,
-  }).isRequired,
+  column: columnType.isRequired,
 };
