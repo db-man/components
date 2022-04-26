@@ -36,7 +36,7 @@ export default function StringFormField(props) {
 
 StringFormField.propTypes = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   preview: PropTypes.bool,
   column: columnType.isRequired,
   inputProps: PropTypes.shape({
@@ -48,6 +48,7 @@ StringFormField.propTypes = {
 };
 
 StringFormField.defaultProps = {
+  value: '',
   preview: false,
   // Props to pass directly to antd's Input component
   inputProps: {

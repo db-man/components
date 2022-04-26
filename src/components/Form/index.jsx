@@ -115,13 +115,14 @@ export default class Form extends React.Component {
       );
     }
     if (column['type:createUpdatePage'] === 'RadioGroup') {
+      const radioValue = value || column.enum[0];
       return (
         <RadioGroupFormField
           key={column.id}
           label={column.name}
           column={column}
           disabled={saveLoading}
-          value={value}
+          value={radioValue}
           onChange={this.handleChange(column.id)}
         />
       );
@@ -221,7 +222,7 @@ export default class Form extends React.Component {
           <RefTableLink
             dbName={this.context.dbName}
             tables={dbs[this.context.dbName]}
-            value={this.props.value}
+            value={formValues[column.id]}
             column={column}
           />
           <MultipleInputs
@@ -293,14 +294,14 @@ export default class Form extends React.Component {
 }
 
 Form.propTypes = {
-  value: PropTypes.string.isRequired,
-  rows: PropTypes.array.isRequired,
+  rows: PropTypes.array,
   defaultValues: PropTypes.object.isRequired,
   saveLoading: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func,
 };
 
 Form.defaultProps = {
+  rows: [],
   onSubmit: () => {},
 };
 

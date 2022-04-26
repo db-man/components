@@ -39,6 +39,6 @@ export default class JsonEditor extends React.Component {
 }
 
 JsonEditor.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   onChange: PropTypes.func.isRequired,
 };

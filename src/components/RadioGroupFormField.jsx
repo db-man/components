@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Radio } from 'antd';
 import { columnType } from './types';
 
-function RadioGroup(props) {
+function RadioGroupFormField(props) {
   const {
     label, value, disabled, column, onChange,
   } = props;
@@ -32,16 +32,16 @@ function RadioGroup(props) {
   );
 }
 
-export default RadioGroup;
+export default RadioGroupFormField;
 
-RadioGroup.propTypes = {
+RadioGroupFormField.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  disabled: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   column: columnType.isRequired,
   onChange: PropTypes.func,
 };
 
-RadioGroup.defaultProps = {
+RadioGroupFormField.defaultProps = {
   onChange: () => {},
 };
