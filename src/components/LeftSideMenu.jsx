@@ -75,6 +75,11 @@ export default class LeftSideMenu extends React.Component {
 
 LeftSideMenu.propTypes = {
   dbName: PropTypes.string.isRequired,
-  tableName: PropTypes.string.isRequired,
-  action: PropTypes.string.isRequired,
+  tableName: PropTypes.string,
+  action: PropTypes.string,
+};
+
+LeftSideMenu.defaultProps = {
+  tableName: '',
+  action: '',
 };
