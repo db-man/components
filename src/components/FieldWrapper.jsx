@@ -36,7 +36,7 @@ export default function FieldWrapper(props) {
 
 FieldWrapper.propTypes = {
   column: columnType.isRequired,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   children: PropTypes.node.isRequired,
 };
 FieldWrapper.defaultProps = {
