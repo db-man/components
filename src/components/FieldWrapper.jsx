@@ -7,6 +7,7 @@ import PageContext from '../contexts/page';
 
 import { columnType } from './types';
 
+// TODO When value is an array, how to render RefTableLink
 export default function FieldWrapper(props) {
   const { dbName } = useContext(PageContext);
   const { column, value, children } = props;
@@ -20,7 +21,7 @@ export default function FieldWrapper(props) {
         <b>{column.name}</b>
         :
         {' '}
-        {column.referenceTable && (
+        {column.referenceTable && typeof value === 'string' && (
         <RefTableLink
           dbName={dbName}
           tables={dbs[dbName]}
@@ -37,9 +38,10 @@ export default function FieldWrapper(props) {
 FieldWrapper.propTypes = {
   column: columnType.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 FieldWrapper.defaultProps = {
   value: '',
+  children: null,
 };
 // FieldWrapper.contextType = PageContext;
