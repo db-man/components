@@ -36,7 +36,10 @@ export default function FieldWrapper(props) {
 
 FieldWrapper.propTypes = {
   column: columnType.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   children: PropTypes.node.isRequired,
 };
-FieldWrapper.contextType = PageContext;
+FieldWrapper.defaultProps = {
+  value: '',
+};
+// FieldWrapper.contextType = PageContext;
