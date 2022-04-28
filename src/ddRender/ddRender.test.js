@@ -68,19 +68,20 @@ describe('handlebars helper getTableRecordByKey', () => {
   "imgSrc":"{{this}}_th.jpg",
   "description":"{{#with (
     getTableRecordByKey
-    tables=../tables
-    tableName=../tableName
+    tables=../extra.tables
+    tableName="rates"
     primaryKeyVal=this
-    rows=../rows
+    rows=../extra.rows
   )}}{{join tags ", "}}{{/with}}"
 }
 {{/each}}
 ]`);
     const json = tpl({
       record,
-      tables,
-      rows: ratesTableRows,
-      tableName: 'rates',
+      extra: {
+        tables,
+        rows: ratesTableRows,
+      },
     });
     const result = JSON.parse(json);
     expect(result).toHaveLength(2);

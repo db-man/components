@@ -7,7 +7,11 @@ const defaultRenders = {
   [constants.STRING_ARRAY]: (val) => val && val.join(', '),
 };
 
-export const getRender = (args) => {
+/**
+ * @param {string|string[]} args
+ * @param {Object} tplExtra
+ */
+export const getRender = (args, tplExtra) => {
   // the column render function defined in Table component of antd
   // renderFn = (val, record, index) => ()
   let renderFn;
@@ -30,6 +34,7 @@ export const getRender = (args) => {
       record,
       index,
       args,
+      tplExtra,
     );
   }
 

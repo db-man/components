@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 import React from 'react';
 /**
  * https://github.com/handlebars-lang/handlebars.js/issues/1174
@@ -14,6 +16,7 @@ import { utils } from 'db-man';
 import {
   ImageLink, ImageLinks, Link, Links, Fragment,
 } from '../components/Links';
+import PhotoList from '../components/PhotoList';
 import ErrorAlert from '../components/ErrorAlert';
 
 /**
@@ -47,7 +50,7 @@ Handlebars.registerHelper('getTableRecordByKey', (options) => {
   );
 });
 
-const ddComponent = (Component) => function dComponent(val, record, index, args) {
+const ddComponent = (Component) => function dComponent(val, record, index, args, tplExtra) {
   if (!record || typeof record !== 'object') {
     console.error('[ddComponent] record should be an object!', record); // eslint-disable-line no-console
   }
@@ -57,7 +60,7 @@ const ddComponent = (Component) => function dComponent(val, record, index, args)
 
   const tplStr = args[1];
   const tpl = Handlebars.compile(tplStr);
-  const json = tpl({ record });
+  const json = tpl({ record, extra: tplExtra });
   try {
     // {foo:'bar'} <= "{\"foo\":\"bar\"}"
     // "foo" <= "\"foo\""
@@ -121,6 +124,18 @@ const ddRenderFnMapping = {
    */
   Fragment: ddComponent(Fragment),
   Links: ddComponent(Links),
+  /**
+   * Usage:
+   * ```json
+   * {
+   *   "type:getPage": [
+   *     "PhotoList",
+   *     "[{{#each record.photoUrls}}{{#if @index}},{{/if}}{\"url\":\"{{this}}\",\"imgSrc\":\"{{this}}_th.jpg\",\"description\":\"{{#with (getTableRecordByKey tables=../extra.tables tableName=\"rates\" primaryKeyVal=this rows=../extra.rows)}}{{join tags \", \"}}{{/with}}\"}{{/each}}]"
+   *   ]
+   * }
+   * ```
+   */
+  PhotoList: ddComponent(PhotoList),
 };
 
 export default ddRenderFnMapping;
