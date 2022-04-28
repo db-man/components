@@ -18,6 +18,7 @@ import {
 } from '../components/Links';
 import PhotoList from '../components/PhotoList';
 import ErrorAlert from '../components/ErrorAlert';
+import TextAreaFormFieldValue from '../components/TextAreaFormFieldValue';
 
 /**
  * tpl: {{#replace "foo" "bar"}}{{title}}{{/replace}}
@@ -136,6 +137,7 @@ const ddRenderFnMapping = {
    * ```
    */
   PhotoList: ddComponent(PhotoList),
+  TextAreaFormFieldValue: ddComponent(TextAreaFormFieldValue),
 };
 
 export default ddRenderFnMapping;

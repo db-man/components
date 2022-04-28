@@ -47,6 +47,14 @@ describe('getRender', () => {
       expect((getRender(args))(record.url, record)).toMatchSnapshot();
     });
   });
+  describe('TextAreaFormFieldValue', () => {
+    it('should match snapshot', () => {
+      const args = ['TextAreaFormFieldValue', '{"label":"{{extra.column.name}}","rows":2,"value":"{{record.note}}"}'];
+      const column = { id: 'note', name: 'Note' };
+      const record = { note: 'This is TODO' };
+      expect((getRender(args, { column }))(record.note, record)).toMatchSnapshot();
+    });
+  });
 });
 
 describe('handlebars helper getTableRecordByKey', () => {

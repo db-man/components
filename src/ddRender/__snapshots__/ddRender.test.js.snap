@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[` 1`] = `
+<TextAreaFormFieldValue
+  label="Note"
+  onChange={[Function]}
+  rows={2}
+  value="This is TODO"
+/>
+`;
+
 exports[`getColumnRender given Link should match snapshot 1`] = `
 <Link
   href="https://foo.com"
@@ -27,6 +36,15 @@ exports[`getColumnRender should return proper value2 1`] = `
 >
   
 </ImageLink>
+`;
+
+exports[`getRender TextAreaFormFieldValue should match snapshot 1`] = `
+<TextAreaFormFieldValue
+  label="Note"
+  onChange={[Function]}
+  rows={2}
+  value="This is TODO"
+/>
 `;
 
 exports[`getRender given simple arg should render properly 1`] = `
