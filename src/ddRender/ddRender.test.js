@@ -1,3 +1,4 @@
+import Handlebars from 'handlebars/dist/handlebars';
 import { getRender, getColumnRender } from './ddRender';
 
 describe('getColumnRender', () => {
@@ -45,5 +46,45 @@ describe('getRender', () => {
       const record = { url: 'https://foo.com' };
       expect((getRender(args))(record.url, record)).toMatchSnapshot();
     });
+  });
+});
+
+describe('handlebars helper getTableRecordByKey', () => {
+  it('should return proper value', () => {
+    const tables = [
+      { name: 'rates', columns: [{ id: 'url', primary: true }] },
+      { name: 'details', columns: [{ id: 'itemId', primary: true }] },
+    ];
+    const ratesTableRows = [
+      { url: 'https://foo.jpg', tags: ['foo', 'bar'] },
+      { url: 'https://bar.jpg', tags: ['foo2', 'bar2'] },
+    ];
+    const record = { itemId: '123', samples: ['https://foo.jpg', 'https://bar.jpg'] };
+    const tpl = Handlebars.compile(`[
+{{#each record.samples}}
+{{#if @index}},{{/if}}
+{
+  "url":"{{this}}",
+  "imgSrc":"{{this}}_th.jpg",
+  "description":"{{#with (
+    getTableRecordByKey
+    tables=../tables
+    tableName=../tableName
+    primaryKeyVal=this
+    rows=../rows
+  )}}{{join tags ", "}}{{/with}}"
+}
+{{/each}}
+]`);
+    const json = tpl({
+      record,
+      tables,
+      rows: ratesTableRows,
+      tableName: 'rates',
+    });
+    const result = JSON.parse(json);
+    expect(result).toHaveLength(2);
+    expect(result[0].url).toBe('https://foo.jpg');
+    expect(result[0].description).toBe('foo, bar');
   });
 });

@@ -9,6 +9,7 @@ import React from 'react';
  */
 // import Handlebars from "handlebars";
 import Handlebars from 'handlebars/dist/handlebars';
+import { utils } from 'db-man';
 
 import {
   ImageLink, ImageLinks, Link, Links, Fragment,
@@ -33,6 +34,17 @@ Handlebars.registerHelper('replace', function replaceHelper(find, replace, optio
 Handlebars.registerHelper('join', (arr, sep) => {
   if (!arr) return '';
   return arr.join(sep);
+});
+
+Handlebars.registerHelper('getTableRecordByKey', (options) => {
+  if (!options.hash.rows) return null;
+  const primaryKey = utils.getTablePrimaryKey(
+    options.hash.tables,
+    options.hash.tableName,
+  );
+  return options.hash.rows.find(
+    (row) => row[primaryKey] === options.hash.primaryKeyVal,
+  );
 });
 
 const ddComponent = (Component) => function dComponent(val, record, index, args) {
