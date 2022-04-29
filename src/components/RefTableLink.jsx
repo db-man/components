@@ -50,5 +50,9 @@ RefTableLink.propTypes = {
   dbName: PropTypes.string.isRequired,
   tables: PropTypes.arrayOf(tableType).isRequired,
   column: columnType.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+};
+
+RefTableLink.defaultProps = {
+  value: null,
 };
