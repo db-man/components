@@ -2,6 +2,9 @@
 export { default as Form } from './components/Form';
 export { default as GetPageBody } from './components/GetPageBody';
 export { default as ListPageBody } from './components/ListPageBody';
+export { default as UpdatePageBody } from './components/UpdatePageBody';
+export { default as CreatePage } from './components/CreatePage';
+export { default as CreatePageBody } from './components/CreatePageBody';
 export { default as DvPropTypes } from './components/DvPropTypes';
 export { default as ErrorAlert } from './components/ErrorAlert';
 export { default as FieldWrapper } from './components/FieldWrapper';
@@ -29,6 +32,7 @@ export { default as TagsCloudPage } from './components/TagsCloudPage';
 export { default as TagsCloudPageBody } from './components/TagsCloudPageBody';
 export { default as TextAreaFormField } from './components/TextAreaFormField';
 export { default as TextAreaFormFieldValue } from './components/TextAreaFormFieldValue';
+export { default as UpdatePage } from './components/UpdatePage';
 
 // contexts
 export * as contexts from './contexts/page';
