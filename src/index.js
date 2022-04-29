@@ -41,7 +41,14 @@ export * as contexts from './contexts/page';
 export * as ddRender from './ddRender/ddRender';
 
 // layout
+export { default as Action } from './layout/Action';
+export { default as App } from './layout/App';
+export { default as AppLayout } from './layout/AppLayout';
 export { default as BreadcrumbWrapper } from './layout/BreadcrumbWrapper';
+export { default as Database } from './layout/Database';
+export { default as IframePageWrapper } from './layout/IframePageWrapper';
+export { default as PageWrapper } from './layout/PageWrapper';
+export { default as Table } from './layout/Table';
 
 // pages
 export { default as Settings } from './pages/Settings';
