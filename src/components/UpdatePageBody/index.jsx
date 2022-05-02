@@ -21,11 +21,11 @@ export default class UpdatePageBody extends React.Component {
       errorMessage: '',
 
       // all rows in table data file
-      tableFileLoading: false,
+      tableFileLoading: '',
       rows: null,
       tableFileSha: null,
 
-      recordFileLoading: false,
+      recordFileLoading: '',
       record: {},
       recordFileSha: null,
 
@@ -44,15 +44,19 @@ export default class UpdatePageBody extends React.Component {
     this.updateRecordFileAsync(formValues);
   };
 
-  get loading() {
-    return this.state.tableFileLoading || this.state.recordFileLoading;
-  }
-
   /**
    * If primary key is "itemId", and this field value is "foo", then return "foo"
    */
   get currentId() {
     return utils.getUrlParams()[this.context.primaryKey];
+  }
+
+  get tips() {
+    const { tableFileLoading, recordFileLoading } = this.state;
+    const tips = [];
+    if (tableFileLoading) tips.push(tableFileLoading);
+    if (recordFileLoading) tips.push(recordFileLoading);
+    return tips;
   }
 
   updateTableFileAsync = async (formValues) => {
@@ -121,11 +125,12 @@ export default class UpdatePageBody extends React.Component {
   };
 
   getTableFileAsync = async () => {
-    this.setState({ tableFileLoading: true });
+    const { dbName, tableName } = this.context;
+    this.setState({ tableFileLoading: `Loading ${dbName}/${tableName} ...` });
     try {
       const { content: rows, sha: tableFileSha } = await githubDb.getTableRows(
-        this.context.dbName,
-        this.context.tableName,
+        dbName,
+        tableName,
       );
       this.setState({
         rows,
@@ -135,15 +140,16 @@ export default class UpdatePageBody extends React.Component {
       console.error('getTableRows, error:', err);
       this.setState({ errorMessage: 'Failed to get table file from server!' });
     }
-    this.setState({ tableFileLoading: false });
+    this.setState({ tableFileLoading: '' });
   };
 
   getRecordFileAsync = async () => {
-    this.setState({ recordFileLoading: true });
+    const { dbName, tableName } = this.context;
+    this.setState({ recordFileLoading: `Loading ${dbName}/${tableName}/${this.currentId}` });
     try {
       const { content, sha } = await github.getRecordFileContentAndSha(
-        this.context.dbName,
-        this.context.tableName,
+        dbName,
+        tableName,
         this.currentId,
       );
       this.setState({
@@ -154,7 +160,7 @@ export default class UpdatePageBody extends React.Component {
       console.error('getRecordFileContentAndSha, error:', err);
       this.setState({ errorMessage: 'Failed to get file from server!' });
     }
-    this.setState({ recordFileLoading: false });
+    this.setState({ recordFileLoading: '' });
   };
 
   renderAlert = () => this.state.errorMessage && (
@@ -162,11 +168,8 @@ export default class UpdatePageBody extends React.Component {
   );
 
   renderForm = () => {
-    if (this.loading) {
-      const tip = [];
-      if (this.state.tableFileLoading) tip.push('Table file');
-      if (this.state.recordFileLoading) tip.push('Record file');
-      return <Spin tip={tip.join(',')} />;
+    if (this.tips.length) {
+      return <Spin tip={this.tips.join(',')} />;
     }
     if (!this.state.record[this.context.primaryKey]) {
       return null;
@@ -184,7 +187,7 @@ export default class UpdatePageBody extends React.Component {
   render() {
     return (
       <div className="update-page-body-component">
-        <Skeleton loading={this.loading}>
+        <Skeleton loading={this.tips.length > 0}>
           {this.renderAlert()}
           {this.renderForm()}
         </Skeleton>
