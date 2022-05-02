@@ -6,6 +6,7 @@ import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 
 import { columnType } from './types';
+import { constants } from '..';
 
 // TODO When value is an array, how to render RefTableLink
 export default function FieldWrapper(props) {
@@ -18,7 +19,10 @@ export default function FieldWrapper(props) {
       data-debug={JSON.stringify(column)}
     >
       <div className="dm-field-label">
-        <b>{column.name}</b>
+        <b>
+          {column.name}
+          {column.type === constants.STRING_ARRAY ? ` (count:${value ? value.length : 0})` : null}
+        </b>
         :
         {' '}
         {column.referenceTable && typeof value === 'string' && (
