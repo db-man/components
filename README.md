@@ -6,3 +6,7 @@
 [github-action-url]: https://github.com/db-man/components/actions/workflows/test.yml
 [codecov-badge]: https://codecov.io/gh/db-man/components/branch/main/graph/badge.svg
 [codecov-url]: https://app.codecov.io/gh/db-man/components
+
+```
+yarn add @db-man/components antd
+```

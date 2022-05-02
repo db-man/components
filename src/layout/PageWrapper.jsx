@@ -6,7 +6,7 @@ import { message, Spin } from 'antd';
 import { githubDb } from '@db-man/github';
 import { utils } from 'db-man';
 
-import { dbs } from '../dbs';
+import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
 import PageContext from '../contexts/page';
 import CreatePage from '../components/CreatePage';
@@ -28,8 +28,8 @@ const mapp = {
 };
 
 export function TableList({ dbName }) {
-  if (!dbs) return null;
-  const tablesOfSelectedDb = dbs[dbName];
+  if (!getDbs()) return null;
+  const tablesOfSelectedDb = getDbs()[dbName];
   return (
     <div>
       {tablesOfSelectedDb.map(({ name: tName }) => (
@@ -78,30 +78,31 @@ export default class PageWrapper extends React.Component {
       this.getOfflineData();
     }
 
-    const { action, tableName } = this.context;
+    const { action, tableName } = this.pageInfo;
     document.title = `${action} ${tableName}`;
   }
 
   get columns() {
-    const tablesOfSelectedDb = dbs[this.props.dbName];
-    return tablesOfSelectedDb.find(
-      (table) => table.name === this.props.tableName,
-    ).columns;
+    const { dbName, tableName } = this.props;
+    const tablesOfSelectedDb = getTablesByDbName(dbName);
+    if (!tablesOfSelectedDb) return [];
+    const currentTable = tablesOfSelectedDb.find(
+      (table) => table.name === tableName,
+    );
+    if (!currentTable) return [];
+    return currentTable.columns;
   }
 
   get pageInfo() {
     const { dbName, tableName, action } = this.props;
-    const { columns } = dbs[dbName].find(
-      (table) => table.name === tableName,
-    );
     return {
-      dbs,
+      dbs: getDbs(),
       dbName,
       tableName,
       action,
-      columns,
+      columns: this.columns,
       primaryKey: utils.getPrimaryKey(this.columns),
-      tables: dbs[dbName],
+      tables: getTablesByDbName(dbName),
     };
   }
 
@@ -124,6 +125,10 @@ export default class PageWrapper extends React.Component {
   };
 
   getOfflineData = () => {
+    if (!localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)) {
+      this.setState({ errMsg: 'No DBS schema defined in localStorage!' });
+      return;
+    }
     const tables = JSON.parse(
       localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
     )[this.props.dbName];
@@ -145,7 +150,7 @@ export default class PageWrapper extends React.Component {
 
   render() {
     const { dbName, tableName, action } = this.props;
-    const { loading, tables } = this.state;
+    const { loading, tables, errMsg } = this.state;
 
     // if (!tableName) {
     //   return this.renderTableListInDb();
@@ -154,6 +159,10 @@ export default class PageWrapper extends React.Component {
     // if (!action) {
     //   return this.renderActionInTable();
     // }
+
+    if (errMsg) {
+      return <div className="dm-page-v2 err-msg">{errMsg}</div>;
+    }
 
     const PageComponent = mapp[action];
 
