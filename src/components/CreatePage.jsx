@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
 import PageContext from '../contexts/page';
-import NavBar from './NavBar';
 import CreatePageBody from './CreatePageBody';
 
 export default function CreatePage() {
@@ -17,7 +16,6 @@ export default function CreatePage() {
         {tableName}
       </h1>
       <CreatePageBody />
-      <NavBar />
     </div>
   );
 }

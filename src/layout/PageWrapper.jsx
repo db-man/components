@@ -9,6 +9,7 @@ import { utils } from 'db-man';
 import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
 import PageContext from '../contexts/page';
+import NavBar from '../components/NavBar';
 import CreatePage from '../components/CreatePage';
 import UpdatePage from '../components/UpdatePage';
 import ListPage from '../components/ListPage';
@@ -196,6 +197,7 @@ export default class PageWrapper extends React.Component {
             primaryKey={primaryKey}
             tables={tables}
           />
+          <NavBar />
         </div>
       </Provider>
     );

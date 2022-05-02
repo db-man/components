@@ -3,7 +3,6 @@
 import React from 'react';
 
 import DvPropTypes from './DvPropTypes';
-import NavBar from './NavBar';
 import GetPageBody from './GetPageBody';
 
 export default function GetPage(props) {
@@ -36,7 +35,6 @@ export default function GetPage(props) {
         primaryKey={props.primaryKey}
         tables={props.tables}
       />
-      <NavBar />
     </div>
   );
 }

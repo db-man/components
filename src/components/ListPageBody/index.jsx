@@ -37,7 +37,7 @@ export default class ListPageBody extends React.Component {
         columnKey: '', // e.g. "url"
         order: '', //  "ascend" or "descend" or undefined
       },
-      loading: false,
+      loading: '',
       rows: null,
       contentTableName: '', // the current table name of data this.state.rows
       page: Number(url.searchParams.get('page')) || defaultPage,
@@ -111,7 +111,7 @@ export default class ListPageBody extends React.Component {
 
   getData = async (tableName) => {
     const { dbName } = this.context;
-    this.setState({ loading: true });
+    this.setState({ loading: `Loading ${dbName}/${tableName} ...` });
     try {
       const { content } = await githubDb.getTableRows(
         dbName,
@@ -125,7 +125,7 @@ export default class ListPageBody extends React.Component {
     } catch (error) {
       console.error('Failed to get JSON file in List component, error:', error); // eslint-disable-line no-console
     }
-    this.setState({ loading: false });
+    this.setState({ loading: '' });
   };
 
   // Update React states and URL states
@@ -250,7 +250,7 @@ export default class ListPageBody extends React.Component {
       loading, rows, contentTableName, page, pageSize,
     } = this.state;
     const { tableName, primaryKey } = this.context;
-    if (loading) return <Spin tip="Loading Data" />;
+    if (loading) return <Spin tip={loading} />;
     if (!rows) return null;
     // When router changed, before loading next table rows,
     // contentTableName is old table, but this.props.tableName is new table.
