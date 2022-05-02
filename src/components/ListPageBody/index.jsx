@@ -21,6 +21,7 @@ import {
   getInitialSorter,
 } from './helpers';
 import RefTableLinks from '../RefTableLinks';
+import { constants } from '../..';
 
 const defaultPage = 1;
 const defaultPageSize = 10;
@@ -179,12 +180,19 @@ export default class ListPageBody extends React.Component {
 
         if (column.referenceTable) {
           const lastRender = antdCol.render || ((val) => val);
+          const hasVal = (val) => {
+            if (column.type === constants.STRING_ARRAY) {
+              if (!val || val.length === 0) return false;
+              return true;
+            }
+            return !!val;
+          };
           // If this column has ref table, then render links to ref table item
           antdCol.render = (...args/* value, record, index */) => (
             <div>
               {lastRender(...args)}
               {' '}
-              {args[0]
+              {hasVal(args[0])
                 && (
                 <Popover
                   title="Ref Table Links"
