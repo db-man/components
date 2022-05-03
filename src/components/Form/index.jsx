@@ -86,6 +86,11 @@ export default class Form extends React.Component {
     this.props.onSubmit(formValues);
   };
 
+  handleDelete = () => {
+    const { formValues } = this.state;
+    this.props.onDelete(formValues);
+  };
+
   warnPrimaryKeyInvalid = (value) => message.warn(
     <div>
       Found duplicated item in db
@@ -100,7 +105,7 @@ export default class Form extends React.Component {
   );
 
   renderStringFormField = (column) => {
-    const { saveLoading } = this.props;
+    const { loading } = this.props;
     const value = this.state.formValues[column.id];
     if (column['type:createUpdatePage'] === 'TextArea') {
       return (
@@ -108,7 +113,7 @@ export default class Form extends React.Component {
           key={column.id}
           label={column.name}
           rows={2}
-          disabled={saveLoading}
+          disabled={loading}
           value={value}
           onChange={this.handleChange(column.id)}
         />
@@ -121,7 +126,7 @@ export default class Form extends React.Component {
           key={column.id}
           label={column.name}
           column={column}
-          disabled={saveLoading}
+          disabled={loading}
           value={radioValue}
           onChange={this.handleChange(column.id)}
         />
@@ -135,7 +140,7 @@ export default class Form extends React.Component {
       <StringFormField
         key={column.id}
         inputProps={{
-          disabled: saveLoading,
+          disabled: loading,
           autoFocus: column.id === this.context.primaryKey,
           onKeyDown: this.handleKeyDown,
         }}
@@ -169,7 +174,7 @@ export default class Form extends React.Component {
             size="small"
             mode="tags"
             style={{ width: '100%' }}
-            disabled={this.props.saveLoading}
+            disabled={this.props.loading}
             value={formValues[column.id]}
             onChange={this.handleStringArrayChange(column.id)}
             onKeyDown={this.handleKeyDown}
@@ -193,7 +198,7 @@ export default class Form extends React.Component {
               <Col span={12}>
                 <MultipleInputs
                   rows={2}
-                  disabled={this.props.saveLoading}
+                  disabled={this.props.loading}
                   value={formValues[column.id]}
                   onChange={this.handleStringArrayChange(column.id)}
                 />
@@ -226,7 +231,7 @@ export default class Form extends React.Component {
             column={column}
           />
           <MultipleInputs
-            disabled={this.props.saveLoading}
+            disabled={this.props.loading}
             value={formValues[column.id]}
             onChange={this.handleStringArrayChange(column.id)}
           />
@@ -238,6 +243,7 @@ export default class Form extends React.Component {
   };
 
   render() {
+    const { loading } = this.props;
     return (
       <div className="create-update-component">
         <Tabs defaultActiveKey="form">
@@ -271,11 +277,22 @@ export default class Form extends React.Component {
         <div className="dm-action-buttons">
           <Button
             type="primary"
-            disabled={this.props.saveLoading}
-            loading={this.props.saveLoading}
+            disabled={loading}
+            loading={loading}
             onClick={this.handleFormSubmit}
           >
             Save
+          </Button>
+          {' '}
+          |
+          {' '}
+          <Button
+            danger
+            disabled={loading}
+            loading={loading}
+            onClick={this.handleDelete}
+          >
+            Delete
           </Button>
           {' '}
           |
@@ -296,13 +313,15 @@ export default class Form extends React.Component {
 Form.propTypes = {
   rows: PropTypes.array,
   defaultValues: PropTypes.object.isRequired,
-  saveLoading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 Form.defaultProps = {
   rows: [],
   onSubmit: () => {},
+  onDelete: () => {},
 };
 
 Form.contextType = PageContext;

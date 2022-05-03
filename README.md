@@ -10,3 +10,10 @@
 ```
 yarn add @db-man/components antd
 ```
+
+```jsx
+import { App } from '@db-man/components'
+export default function () {
+  return <App />
+}
+```

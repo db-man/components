@@ -46,29 +46,19 @@ export default class LeftSideMenu extends React.Component {
         openKeys={openKeys}
         style={{ height: '100%', borderRight: 0 }}
         onOpenChange={this.handleOpenChange}
-      >
-        {tablesOfSelectedDb.map(({ name: tName }) => (
-          <SubMenu key={tName} icon={<UserOutlined />} title={tName}>
-            <Menu.Item key={`${dbName}-${tName}-list`}>
-              <Link to={`/${dbName}/${tName}/list`}>List</Link>
-            </Menu.Item>
-            <Menu.Item key={`${dbName}-${tName}-create`}>
-              <Link to={`/${dbName}/${tName}/create`}>Create</Link>
-            </Menu.Item>
-            <Menu.Item key={`${dbName}-${tName}-random`}>
-              <Link to={`/${dbName}/${tName}/random`}>random</Link>
-            </Menu.Item>
-            <Menu.Item key={`${dbName}-${tName}-tagsCloud`}>
-              <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link>
-            </Menu.Item>
-            {/* <Menu.Item key={`${dbName}-${tName}-update`}>
-            <Link to={`/${dbName}/${tName}/update`}>
-              Update
-            </Link>
-          </Menu.Item> */}
-          </SubMenu>
+        items={tablesOfSelectedDb.map(({ name: tName }) => (
+          {
+            label: tName,
+            icon: <UserOutlined />,
+            children: [
+              { label: <Link to={`/${dbName}/${tName}/list`}>List</Link> },
+              { label: <Link to={`/${dbName}/${tName}/create`}>Create</Link> },
+              { label: <Link to={`/${dbName}/${tName}/random`}>Random</Link> },
+              { label: <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link> },
+            ],
+          }
         ))}
-      </Menu>
+      />
     );
   }
 }

@@ -29,7 +29,7 @@ export default class UpdatePageBody extends React.Component {
       record: {},
       recordFileSha: null,
 
-      saveLoading: false,
+      loading: '',
     };
   }
 
@@ -42,6 +42,10 @@ export default class UpdatePageBody extends React.Component {
   handleFormSubmit = (formValues) => {
     // this.updateTableFileAsync(formValues);
     this.updateRecordFileAsync(formValues);
+  };
+
+  handleDelete = (formValues) => {
+    this.deleteRecordFileAsync(formValues);
   };
 
   /**
@@ -70,7 +74,7 @@ export default class UpdatePageBody extends React.Component {
       this.currentId,
     );
 
-    this.setState({ saveLoading: true });
+    this.setState({ loading: 'Updating table file...' });
     try {
       const { commit } = await githubDb.updateTableFile(
         dbName,
@@ -87,14 +91,14 @@ export default class UpdatePageBody extends React.Component {
       });
     }
 
-    this.setState({ saveLoading: false });
+    this.setState({ loading: '' });
   };
 
   updateRecordFileAsync = async (formValues) => {
     const { dbName, tableName, primaryKey } = this.context;
     const { recordFileSha } = this.state;
 
-    this.setState({ saveLoading: true });
+    this.setState({ loading: 'Updating record file...' });
     try {
       const record = {
         ...formValues,
@@ -116,7 +120,31 @@ export default class UpdatePageBody extends React.Component {
       });
     }
 
-    this.setState({ saveLoading: false });
+    this.setState({ loading: '' });
+  };
+
+  deleteRecordFileAsync = async (formValues) => {
+    const { dbName, tableName, primaryKey } = this.context;
+    const { recordFileSha } = this.state;
+
+    this.setState({ loading: 'Deleting record file...' });
+    try {
+      const { commit } = await githubDb.deleteRecordFile(
+        dbName,
+        tableName,
+        formValues[primaryKey],
+        recordFileSha,
+      );
+
+      message.success(<SuccessMessage url={commit.html_url} />, 10);
+    } catch (err) {
+      console.error('deleteRecordFile, err:', err);
+      this.setState({
+        errorMessage: 'Failed to delete record file on server!',
+      });
+    }
+
+    this.setState({ loading: '' });
   };
 
   // Get both single record file and whole table file, the whole table file will be used to de-dup
@@ -178,8 +206,9 @@ export default class UpdatePageBody extends React.Component {
       <Form
         defaultValues={this.state.record}
         rows={this.state.rows}
-        saveLoading={this.state.saveLoading}
+        loading={!!this.state.loading}
         onSubmit={this.handleFormSubmit}
+        onDelete={this.handleDelete}
       />
     );
   };
