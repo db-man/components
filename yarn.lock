@@ -1182,13 +1182,13 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz#75b4c27948c81e88ccd3a8902047bcd797f38d32"
   integrity sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==
 
-"@db-man/github@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@db-man/github/-/github-0.1.4.tgz#e953521de25eaa5fb3cee81b79e7cf3b17bd8e32"
-  integrity sha512-krMC4Uqru+L2NDV+G6PL7MoqEI0TTpN/uS7DffxdEvcSQa7MczVtY10KvBRKRXAiLX6RT2cbnijuWh8t8ms7KA==
+"@db-man/github@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@db-man/github/-/github-0.1.6.tgz#5c89b166b10bb8c64d559213e216f6e46aa13420"
+  integrity sha512-9YkNWehtnCRMP3e9VFMMamfmkb7nKb3RqA2ElTFsH4rJxvfkj6KQ/o9zkYq0BjbXPXctWUpyyzdJEsvRVThLWA==
   dependencies:
     "@octokit/rest" "^18.12.0"
-    db-man "^0.1.2"
+    db-man "^0.1.5"
     js-base64 "^3.7.2"
 
 "@eslint/eslintrc@^1.2.1":
@@ -3557,18 +3557,10 @@ dayjs@1.x:
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.1.tgz#90b33a3dda3417258d48ad2771b415def6545eb0"
   integrity sha512-ER7EjqVAMkRRsxNCC5YqJ9d9VQYuWdGt7aiH2qA5R5wt8ZmWaP2dLUSIK6y/kVzLMlmh1Tvu5xUf4M/wdGJ5KA==
 
-db-man@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/db-man/-/db-man-0.1.2.tgz#05470f13e950e72fabf9e663d8b09e4807798a42"
-  integrity sha512-JoyiMTNAt45r+EnJP6pQy3GZOJIBmkdbxRbshhtTHPX6EK8UVXw9HnovSt8venKNUYATVzRGRIzdCKLACM74ng==
-  dependencies:
-    "@octokit/rest" "^18.12.0"
-    js-base64 "^3.7.2"
-
-db-man@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/db-man/-/db-man-0.1.4.tgz#c8fabb13de9d73919848dfb9651a291cf66b7825"
-  integrity sha512-GaptYO5n3eIY4HygpmB5VOaOfIHZbyepUDCPofyxXZh4iNhMzjCEpRl2Gmw6KcGoXJ429BCXQqzPk6S3JhlSrQ==
+db-man@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/db-man/-/db-man-0.1.5.tgz#6182721a1bd2ee5f4ba795ac7a0ebb388d34cc12"
+  integrity sha512-PZfgy6l1GRnig5febs0HI718U2EPhxvFeSYZWc5xIjvLvOfH3I2dD18+wa406i3nrnooZhee3AFlsQQ6d+P5hA==
 
 debug@2.6.9, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
