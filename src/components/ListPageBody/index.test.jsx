@@ -54,7 +54,7 @@ describe('ListPageBody', () => {
       );
     });
 
-    await screen.findByText('Loading Data');
+    await screen.findByText('Loading db-man/users ...');
 
     await waitFor(() => expect(githubDb.getTableRows).toHaveBeenCalledTimes(1));
 

@@ -92,7 +92,7 @@ describe('PageWrapper', () => {
       render(<BrowserRouter><PageWrapper dbName="iam" tableName="users" action="list" /></BrowserRouter>);
     });
 
-    await screen.findByText('Loading Data');
+    await screen.findByText('Loading iam/users ...');
 
     await waitFor(() => expect(document.title).toEqual('list users'));
     await waitFor(() => expect(githubDb.getTableRows).toHaveBeenCalledTimes(1));

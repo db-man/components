@@ -4,7 +4,7 @@ import React from 'react';
 import {
   message, Spin, Skeleton, Alert,
 } from 'antd';
-import { githubDb, github } from '@db-man/github';
+import { githubDb } from '@db-man/github';
 import { utils as dbManUtils } from 'db-man';
 
 import { validatePrimaryKey } from './Form/helpers';
@@ -80,7 +80,7 @@ export default class CreatePageBody extends React.Component {
 
     this.setState({ saveLoading: true });
     try {
-      const { commit } = await github.updateRecordFile(
+      const { commit } = await githubDb.updateRecordFile(
         dbName,
         tableName,
         primaryKey,

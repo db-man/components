@@ -5,7 +5,7 @@ import {
   message, Alert, Spin, Skeleton,
 } from 'antd';
 import { utils as dbManUtils } from 'db-man';
-import { github, githubDb } from '@db-man/github';
+import { githubDb } from '@db-man/github';
 
 import SuccessMessage from '../SuccessMessage';
 import * as utils from '../../utils';
@@ -100,7 +100,7 @@ export default class UpdatePageBody extends React.Component {
         ...formValues,
         updatedAt: dbManUtils.formatDate(new Date()),
       };
-      const { commit } = await github.updateRecordFile(
+      const { commit } = await githubDb.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
@@ -147,7 +147,7 @@ export default class UpdatePageBody extends React.Component {
     const { dbName, tableName } = this.context;
     this.setState({ recordFileLoading: `Loading ${dbName}/${tableName}/${this.currentId}` });
     try {
-      const { content, sha } = await github.getRecordFileContentAndSha(
+      const { content, sha } = await githubDb.getRecordFileContentAndSha(
         dbName,
         tableName,
         this.currentId,
