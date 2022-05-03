@@ -40,7 +40,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@db-man/github": "^0.1.4",
-    "db-man": "^0.1.3",
+    "db-man": "^0.1.4",
     "handlebars": "^4.7.7",
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.8.1",
