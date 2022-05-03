@@ -30,16 +30,13 @@ function PageHeaderContent(props) {
         mode="horizontal"
         defaultSelectedKeys={['home']}
         selectedKeys={[params.dbName]}
-      >
-        <Menu.Item key="home">
-          <Link to="/">Home</Link>
-        </Menu.Item>
-        {Object.keys(dbs || {}).map((dbName) => (
-          <Menu.Item key={dbName}>
-            <Link to={`/${dbName}`}>{dbName}</Link>
-          </Menu.Item>
-        ))}
-      </Menu>
+        items={[
+          { key: 'Home', label: <Link to="/">Home</Link> },
+          ...Object.keys(dbs || {}).map((dbName) => (
+            { key: dbName, label: <Link to={`/${dbName}`}>{dbName}</Link> }
+          )),
+        ]}
+      />
     </div>
   );
 }

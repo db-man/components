@@ -51,10 +51,10 @@ export default class LeftSideMenu extends React.Component {
             label: tName,
             icon: <UserOutlined />,
             children: [
-              { label: <Link to={`/${dbName}/${tName}/list`}>List</Link> },
-              { label: <Link to={`/${dbName}/${tName}/create`}>Create</Link> },
-              { label: <Link to={`/${dbName}/${tName}/random`}>Random</Link> },
-              { label: <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link> },
+              { key: `${dbName}-${tName}-list`, label: <Link to={`/${dbName}/${tName}/list`}>List</Link> },
+              { key: `${dbName}-${tName}-create`, label: <Link to={`/${dbName}/${tName}/create`}>Create</Link> },
+              { key: `${dbName}-${tName}-random`, label: <Link to={`/${dbName}/${tName}/random`}>Random</Link> },
+              { key: `${dbName}-${tName}-tagsCloud`, label: <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link> },
             ],
           }
         ))}
