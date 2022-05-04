@@ -19,7 +19,7 @@ export default function App({ modes }) {
 }
 
 App.propTypes = {
-  modes: PropTypes.string,
+  modes: PropTypes.arrayOf(PropTypes.string),
 };
 
 App.defaultProps = {
