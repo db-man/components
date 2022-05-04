@@ -40,12 +40,19 @@ export default class UpdatePageBody extends React.Component {
   // `updateTableFileAsync` to update the whole table file, it's too big, and take more time to get the response from server
   // `updateRecordFileAsync` to only update record file, file is small, so get response quickly, but backend (github action) need to merge several record files into big table file after this update
   handleFormSubmit = (formValues) => {
-    // this.updateTableFileAsync(formValues);
-    this.updateRecordFileAsync(formValues);
+    if (!this.isSplitTable) {
+      this.updateTableFileAsync(formValues);
+    } else {
+      this.updateRecordFileAsync(formValues);
+    }
   };
 
   handleDelete = (formValues) => {
-    this.deleteRecordFileAsync(formValues);
+    if (!this.isSplitTable) {
+      message.info('Only supported in split-table mode!');
+    } else {
+      this.deleteRecordFileAsync(formValues);
+    }
   };
 
   /**
@@ -53,6 +60,11 @@ export default class UpdatePageBody extends React.Component {
    */
   get currentId() {
     return utils.getUrlParams()[this.context.primaryKey];
+  }
+
+  get isSplitTable() {
+    const { appModes } = this.context;
+    return appModes.indexOf('split-table') !== -1;
   }
 
   get tips() {
@@ -149,7 +161,11 @@ export default class UpdatePageBody extends React.Component {
 
   // Get both single record file and whole table file, the whole table file will be used to de-dup
   getData = () => {
-    Promise.all([this.getTableFileAsync(), this.getRecordFileAsync()]);
+    const ps = [this.getTableFileAsync()];
+    if (this.isSplitTable) {
+      ps.push(this.getRecordFileAsync());
+    }
+    Promise.all(ps);
   };
 
   getTableFileAsync = async () => {
