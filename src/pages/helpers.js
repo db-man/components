@@ -1,4 +1,5 @@
 import { github, githubDb } from '@db-man/github';
+import { message } from 'antd';
 import * as constants from '../constants';
 
 const loadDbsSchemaAsync = async (path) => {
@@ -11,7 +12,7 @@ const loadDbsSchemaAsync = async (path) => {
      * - Top Nav title name
      * - Folder name in https://github.com/{user_name}/{repo_name}/tree/main/{path}
      */
-    // dbName: []
+    // dbName: [{ name: "table_name", columns: [] }]
   };
 
   await Promise.all(
@@ -25,6 +26,20 @@ const loadDbsSchemaAsync = async (path) => {
   return dbsSchema;
 };
 
+const validateDbsSchame = (dbsSchema) => {
+  Object.keys(dbsSchema).forEach((dbName) => {
+    const tables = dbsSchema[dbName];
+    tables.forEach((table, index) => {
+      if (!table.name) {
+        message.warn(`Missing table name, dbName:${dbName}, index:${index}`, 10);
+      }
+      if (!table.columns) {
+        message.warn(`Missing table columns, tableName: ${table.name}, dbName:${dbName}`, 10);
+      }
+    });
+  });
+};
+
 const reloadDbsSchemaAsync = async () => {
   const path = localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH);
   if (!path) {
@@ -33,6 +48,9 @@ const reloadDbsSchemaAsync = async () => {
   }
 
   const dbsSchema = await loadDbsSchemaAsync(path);
+
+  validateDbsSchame(dbsSchema);
+
   localStorage.setItem(constants.LS_KEY_DBS_SCHEMA, JSON.stringify(dbsSchema));
 };
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, message } from 'antd';
-import * as constants from '../constants';
 
+import * as constants from '../constants';
 import reloadDbsSchemaAsync from './helpers';
 
 const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));

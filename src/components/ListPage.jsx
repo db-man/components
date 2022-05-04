@@ -14,5 +14,4 @@ export default function ListPage(props) {
 
 ListPage.propTypes = {
   tableName: PropTypes.string.isRequired,
-
 };

@@ -184,7 +184,6 @@ export default class PageWrapper extends React.Component {
       return 'No columns found for this table!';
     }
 
-    const primaryKey = utils.getPrimaryKey(this.columns);
     return (
       <Provider value={this.pageInfo}>
         <div className="dm-page-v2">
@@ -193,8 +192,6 @@ export default class PageWrapper extends React.Component {
             dbName={dbName}
             tableName={tableName}
             action={action}
-            columns={this.columns}
-            primaryKey={primaryKey}
             tables={tables}
           />
           <NavBar />

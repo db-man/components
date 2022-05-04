@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import DvPropTypes from './DvPropTypes';
 import GetPageBody from './GetPageBody';
 
 export default function GetPage(props) {
@@ -29,16 +28,10 @@ export default function GetPage(props) {
       </h1>
       <GetPageBody
         key={key}
-        columns={props.columns}
         dbName={dbName}
         tableName={tableName}
-        primaryKey={props.primaryKey}
         tables={props.tables}
       />
     </div>
   );
 }
-
-GetPage.propTypes = {
-  columns: DvPropTypes.columns.isRequired,
-};
