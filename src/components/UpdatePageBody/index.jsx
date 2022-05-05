@@ -22,7 +22,7 @@ export default class UpdatePageBody extends React.Component {
 
       // all rows in table data file
       tableFileLoading: '',
-      rows: null,
+      rows: [],
       tableFileSha: null,
 
       recordFileLoading: '',
