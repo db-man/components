@@ -67,6 +67,13 @@ export default class UpdatePageBody extends React.Component {
     return appModes.indexOf('split-table') !== -1;
   }
 
+  get record() {
+    if (this.isSplitTable) {
+      return this.state.record;
+    }
+    return this.state.rows.find((row) => row[this.context.primaryKey] === this.currentId) || {};
+  }
+
   get tips() {
     const { tableFileLoading, recordFileLoading } = this.state;
     const tips = [];
@@ -215,12 +222,12 @@ export default class UpdatePageBody extends React.Component {
     if (this.tips.length) {
       return <Spin tip={this.tips.join(',')} />;
     }
-    if (!this.state.record[this.context.primaryKey]) {
+    if (!this.record[this.context.primaryKey]) {
       return null;
     }
     return (
       <Form
-        defaultValues={this.state.record}
+        defaultValues={this.record}
         rows={this.state.rows}
         loading={!!this.state.loading}
         onSubmit={this.handleFormSubmit}
