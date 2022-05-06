@@ -21,7 +21,7 @@ import {
   getInitialSorter,
 } from './helpers';
 import RefTableLinks from '../RefTableLinks';
-import { constants } from '../..';
+import * as constants from '../../constants';
 
 const defaultPage = 1;
 const defaultPageSize = 10;

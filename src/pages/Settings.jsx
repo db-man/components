@@ -1,10 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, message } from 'antd';
+import {
+  Button, Input, message, Table,
+} from 'antd';
 
 import * as constants from '../constants';
 import reloadDbsSchemaAsync from './helpers';
 
+const columns = [
+  {
+    key: 'owner', dataIndex: 'owner', title: 'Owner',
+  },
+  {
+    key: 'token', dataIndex: 'token', title: 'Token',
+  },
+  {
+    key: 'repoName', dataIndex: 'repoName', title: 'Repo Name',
+  },
+  {
+    key: 'repoPath', dataIndex: 'repoPath', title: 'Repo Path',
+  },
+
+];
 const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
 const handleClick = () => {
   message.info('Start loading DBs schema...');
@@ -37,6 +54,7 @@ export default class Settings extends React.Component {
       repo: '',
       personalToken: '',
       path: '',
+      dbConnections: [],
     };
   }
 
@@ -48,6 +66,7 @@ export default class Settings extends React.Component {
         constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN,
       ),
       path: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
+      dbConnections: localStorage.getItem(constants.LS_KEY_DB_CONNECTIONS) || [],
     });
   }
 
@@ -73,13 +92,14 @@ export default class Settings extends React.Component {
   render() {
     const { children } = this.props;
     const {
-      owner, personalToken, repo, path,
+      owner, personalToken, repo, path, dbConnections,
     } = this.state;
     if (dbs && children) return children;
 
     return (
       <div>
         Settings
+        <Table dataSource={dbConnections} column={columns} />
         <div>
           Owner:
           {' '}

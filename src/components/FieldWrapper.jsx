@@ -6,7 +6,7 @@ import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 
 import { columnType } from './types';
-import { constants } from '..';
+import * as constants from '../constants';
 
 // TODO When value is an array, how to render RefTableLink
 export default function FieldWrapper(props) {
