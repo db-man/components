@@ -167,12 +167,13 @@ export const getInitialFilter = (filterProp) => {
     try {
       filter = JSON.parse(filterParam);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(
         'Failed to parse filter param from URL, filterParam:',
         filterParam,
         ', error:',
         error,
-      );// eslint-disable-line no-console
+      );
     }
   }
 

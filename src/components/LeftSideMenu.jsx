@@ -6,8 +6,6 @@ import { UserOutlined } from '@ant-design/icons';
 
 import { dbs } from '../dbs';
 
-const { SubMenu } = Menu;
-
 export default class LeftSideMenu extends React.Component {
   constructor(props) {
     super(props);

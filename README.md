@@ -17,3 +17,5 @@ export default function () {
   return <App />
 }
 ```
+
+Add `@import '~antd/dist/antd.css';` to your `App.css`.

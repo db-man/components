@@ -2,10 +2,13 @@
   "name": "@db-man/components",
   "version": "0.1.50",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib/lib.js",
   "scripts": {
-    "test": "react-scripts test",
-    "build": "babel src --out-dir lib"
+    "start": "PUBLIC_URL=/ react-scripts start",
+    "build": "yarn build-lib",
+    "build-lib": "babel src --out-dir lib",
+    "build-app": "react-scripts build",
+    "test": "react-scripts test"
   },
   "repository": {
     "type": "git",
@@ -55,6 +58,18 @@
   "jest": {
     "transformIgnorePatterns": [
       "node_modules/(?!(@db-man|db-man)/)"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }
