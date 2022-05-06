@@ -31,10 +31,11 @@ function PageHeaderContent(props) {
         defaultSelectedKeys={['home']}
         selectedKeys={[params.dbName]}
         items={[
-          { key: 'Home', label: <Link to="/">Home</Link> },
+          { key: 'home', label: <Link to="/">Home</Link> },
           ...Object.keys(dbs || {}).map((dbName) => (
             { key: dbName, label: <Link to={`/${dbName}`}>{dbName}</Link> }
           )),
+          { key: 'settings', label: <Link to="/settings">Settings</Link> },
         ]}
       />
     </div>

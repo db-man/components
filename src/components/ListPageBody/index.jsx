@@ -39,6 +39,7 @@ export default class ListPageBody extends React.Component {
         order: '', //  "ascend" or "descend" or undefined
       },
       loading: '',
+      errMsg: '',
       rows: null,
       contentTableName: '', // the current table name of data this.state.rows
       page: Number(url.searchParams.get('page')) || defaultPage,
@@ -125,6 +126,7 @@ export default class ListPageBody extends React.Component {
       });
     } catch (error) {
       console.error('Failed to get JSON file in List component, error:', error); // eslint-disable-line no-console
+      this.setState({ errMsg: `Failed to get data: ${error.message}` });
     }
     this.setState({ loading: '' });
   };
@@ -255,10 +257,11 @@ export default class ListPageBody extends React.Component {
 
   renderTable = () => {
     const {
-      loading, rows, contentTableName, page, pageSize,
+      loading, rows, contentTableName, page, pageSize, errMsg,
     } = this.state;
     const { tableName, primaryKey } = this.context;
     if (loading) return <Spin tip={loading} />;
+    if (errMsg) return <div>{errMsg}</div>;
     if (!rows) return null;
     // When router changed, before loading next table rows,
     // contentTableName is old table, but this.props.tableName is new table.

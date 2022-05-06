@@ -4,10 +4,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
 import { githubDb } from '@db-man/github';
-import { utils } from 'db-man';
 
 import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
+import { getPrimaryKey } from '../utils';
 import PageContext from '../contexts/page';
 import AppContext from '../contexts/app';
 import NavBar from '../components/NavBar';
@@ -105,7 +105,7 @@ export default class PageWrapper extends React.Component {
       tableName,
       action,
       columns: this.columns,
-      primaryKey: utils.getPrimaryKey(this.columns),
+      primaryKey: getPrimaryKey(this.columns),
       tables: getTablesByDbName(dbName),
     };
   }
@@ -164,8 +164,14 @@ export default class PageWrapper extends React.Component {
     //   return this.renderActionInTable();
     // }
 
-    if (errMsg) {
-      return <div className="dm-page-v2 err-msg">{errMsg}</div>;
+    if (errMsg || getPrimaryKey(this.columns) === null) {
+      return (
+        <div className="dm-page-v2 err-msg">
+          {errMsg}
+          {' '}
+          Primary key not found on table!
+        </div>
+      );
     }
 
     const PageComponent = mapp[action];
