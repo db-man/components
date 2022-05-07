@@ -18,19 +18,20 @@ describe('PageWrapper', () => {
     expect(el).toBeInTheDocument();
   });
 
-  it('renders 404 when no props', () => {
+  it('renders 404 when url not pass dbName', () => {
     jest.spyOn(Object.getPrototypeOf(window.localStorage), 'getItem');
     jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem');
     Object.getPrototypeOf(window.localStorage).getItem = jest.fn((key) => {
       if (key === constants.LS_KEY_DBS_SCHEMA) {
-        return '{"iam":[{"name":"users"}]}';
+        return '{"iam":[{"name":"users","columns":[{"id":"email","primary":true}]}]}';
       }
       return null;
     });
     Object.getPrototypeOf(window.localStorage).setItem = jest.fn();
 
     render(<BrowserRouter><PageWrapper /></BrowserRouter>);
-    const el = screen.getByText(/404 - PageComponent Not Found/i);
+    screen.debug();
+    const el = screen.getByText(/dbName is undefined/i);
     expect(el).toBeInTheDocument();
   });
 

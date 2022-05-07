@@ -164,12 +164,24 @@ export default class PageWrapper extends React.Component {
     //   return this.renderActionInTable();
     // }
 
-    if (errMsg || getPrimaryKey(this.columns) === null) {
+    const errMsgs = [];
+    if (errMsg) {
+      errMsgs.push(errMsg);
+    }
+    if (!dbName) {
+      errMsgs.push('dbName is undefined!');
+    }
+    if (getPrimaryKey(this.columns) === null) {
+      errMsgs.push('Primary key not found on table!');
+    }
+    if (this.columns.length === 0) {
+      errMsgs.push('No columns found for this table!');
+    }
+
+    if (errMsgs.length > 0) {
       return (
         <div className="dm-page-v2 err-msg">
-          {errMsg}
-          {' '}
-          Primary key not found on table!
+          {errMsgs.join(' ,')}
         </div>
       );
     }
@@ -187,10 +199,6 @@ export default class PageWrapper extends React.Component {
 
     if (loading) {
       return <Spin tip="loading columns in PageWrapper" />;
-    }
-
-    if (this.columns.length === 0) {
-      return 'No columns found for this table!';
     }
 
     return (
