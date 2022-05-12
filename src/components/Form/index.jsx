@@ -17,6 +17,15 @@ import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
 import { validatePrimaryKey, isType } from './helpers';
 
+const renderFormFieldWrapper = (id, label, formField) => (
+  <div key={id} className="dm-form-field dm-string-form-field">
+    <b>{label}</b>
+    :
+    {' '}
+    {formField}
+  </div>
+);
+
 export default class Form extends React.Component {
   constructor(props) {
     super(props);
@@ -25,6 +34,21 @@ export default class Form extends React.Component {
         ...this.props.defaultValues,
       },
     };
+  }
+
+  componentDidMount() {
+    this.context.columns.forEach((col) => {
+      if (!this.state.formValues[col.id]) {
+        let defaultValue = '';
+        switch (col['type:createUpdatePage']) {
+          case 'RadioGroup': [defaultValue] = col.enum; break;
+          default: defaultValue = '';
+        }
+        if (defaultValue) {
+          this.setState(((prevState) => ({ ...prevState, formValues: { ...prevState.formValues, [col.id]: defaultValue } })));
+        }
+      }
+    });
   }
 
   handleChange = (key) => (value) => {
@@ -121,15 +145,16 @@ export default class Form extends React.Component {
     }
     if (column['type:createUpdatePage'] === 'RadioGroup') {
       const radioValue = value || column.enum[0];
-      return (
-        <RadioGroupFormField
-          key={column.id}
-          label={column.name}
-          column={column}
-          disabled={loading}
-          value={radioValue}
-          onChange={this.handleChange(column.id)}
-        />
+      return renderFormFieldWrapper(
+        column.id,
+        column.name, (
+          <RadioGroupFormField
+            column={column}
+            disabled={loading}
+            value={radioValue}
+            onChange={this.handleChange(column.id)}
+          />
+        ),
       );
     }
     let preview = false;
@@ -251,16 +276,10 @@ export default class Form extends React.Component {
             <div className="dm-form">
               {this.context.columns.map((column) => {
                 switch (column.type) {
-                  case constants.STRING:
-                    return this.renderStringFormField(column);
                   case constants.STRING_ARRAY:
                     return this.renderStringArrayFormField(column);
+                  case constants.STRING:
                   default:
-                    // eslint-disable-next-line no-console
-                    console.warn(
-                      'no type field found in column, fallback using string type, column:',
-                      column,
-                    );
                     return this.renderStringFormField(column);
                 }
               })}

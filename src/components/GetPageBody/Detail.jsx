@@ -74,15 +74,10 @@ export default class Detail extends React.Component {
 
   renderFieldValue = (column) => {
     switch (column.type) {
-      case constants.STRING:
-        return this.renderStringFieldValue(column);
       case constants.STRING_ARRAY:
         return this.renderStringArrayFormFieldValue(column);
+      case constants.STRING:
       default:
-        console.warn(
-          'no type field found in column, fallback using string type, column:',
-          column,
-        );
         return this.renderStringFieldValue(column);
     }
   };

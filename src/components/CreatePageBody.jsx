@@ -21,7 +21,7 @@ export default class CreatePageBody extends React.Component {
       errorMessage: '',
       // all rows in table file
       tableFileLoading: false,
-      rows: null,
+      rows: [],
       tableFileSha: null,
 
       defaultFormValues: {},
@@ -37,12 +37,20 @@ export default class CreatePageBody extends React.Component {
   // `updateTableFileAsync` to update the whole table file, it's too big, and take more time to get the response from server
   // `createRecordFileAsync` to only create record file, file is small, so get response quickly, but backend (github action) need to merge records into big table file
   handleFormSubmit = (formValues) => {
-    // this.updateTableFileAsync(formValues);
-    this.createRecordFileAsync(formValues);
+    if (!this.isSplitTable) {
+      this.updateTableFileAsync(formValues);
+    } else {
+      this.createRecordFileAsync(formValues);
+    }
   };
 
   get loading() {
     return this.state.tableFileLoading || this.state.recordFileLoading;
+  }
+
+  get isSplitTable() {
+    const { appModes } = this.context;
+    return appModes.indexOf('split-table') !== -1;
   }
 
   updateTableFileAsync = async (formValues) => {
@@ -201,7 +209,7 @@ export default class CreatePageBody extends React.Component {
       <Form
         defaultValues={this.state.defaultFormValues}
         rows={this.state.rows}
-        saveLoading={this.state.saveLoading}
+        loading={this.state.saveLoading}
         onSubmit={this.handleFormSubmit}
       />
     );
