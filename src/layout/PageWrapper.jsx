@@ -9,7 +9,6 @@ import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
 import { getPrimaryKey } from '../utils';
 import PageContext from '../contexts/page';
-import AppContext from '../contexts/app';
 import NavBar from '../components/NavBar';
 import CreatePage from '../components/CreatePage';
 import UpdatePage from '../components/UpdatePage';
@@ -97,9 +96,8 @@ export default class PageWrapper extends React.Component {
 
   get pageInfo() {
     const { dbName, tableName, action } = this.props;
-    const { modes } = this.context;
     return {
-      appModes: modes,
+      appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES) ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',') : [],
       dbs: getDbs(),
       dbName,
       tableName,
@@ -217,5 +215,3 @@ export default class PageWrapper extends React.Component {
     );
   }
 }
-
-PageWrapper.contextType = AppContext;

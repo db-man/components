@@ -23,7 +23,7 @@ beforeEach(() => {
 it('navigates settings page', () => {
   render(
     <MemoryRouter initialEntries={['/settings']}>
-      <AppLayout modes={[]} />
+      <AppLayout />
     </MemoryRouter>,
   );
   const linkElement = screen.getByText(/Settings/i);
@@ -33,7 +33,7 @@ it('navigates settings page', () => {
 it('navigates db page', () => {
   /* const { asFragment } = */ render(
     <MemoryRouter initialEntries={['/foo']}>
-      <AppLayout modes={[]} />
+      <AppLayout />
     </MemoryRouter>,
   );
   const linkElement = screen.getByText(/List of tables in DB:/i);

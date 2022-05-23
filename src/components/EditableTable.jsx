@@ -31,7 +31,7 @@ function EditableCell({
             },
           ]}
         >
-          <Input />
+          <Input placeholder={title === 'modes' ? 'split-table' : ''} />
         </Form.Item>
       ) : (
         children
@@ -66,6 +66,7 @@ function EditableTable() {
       token: '',
       repo: '',
       path: '',
+      modes: '',
     };
     newData.push({
       key: '0', // tmp row added, will delete when cancel
@@ -84,6 +85,7 @@ function EditableTable() {
       token: '',
       repo: '',
       path: '',
+      modes: '',
       ...record,
     });
     setEditingKey(record.key);
@@ -143,6 +145,7 @@ function EditableTable() {
       record.token,
     );
     localStorage.setItem(constants.LS_KEY_GITHUB_REPO_PATH, record.path);
+    localStorage.setItem(constants.LS_KEY_GITHUB_REPO_MODES, record.modes);
   };
 
   const columns = [
@@ -173,6 +176,12 @@ function EditableTable() {
     {
       title: 'path',
       dataIndex: 'path',
+      width: '10%',
+      editable: true,
+    },
+    {
+      title: 'modes',
+      dataIndex: 'modes',
       width: '10%',
       editable: true,
     },
