@@ -96,9 +96,7 @@ export default class NavBar extends React.Component {
         {' '}
         <a
           title="GitHub File Path"
-          href={githubUtils.getGitHubFullPath(
-            githubDb.getDataPath(dbName, tableName),
-          )}
+          href={githubDb.getDataUrl(dbName, tableName)}
           target="_blank"
           rel="noreferrer"
         >
