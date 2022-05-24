@@ -40,7 +40,7 @@ function EditableCell({
   );
 }
 
-function EditableTable() {
+function EditableTable({ onEnable }) {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
@@ -146,6 +146,7 @@ function EditableTable() {
     );
     localStorage.setItem(constants.LS_KEY_GITHUB_REPO_PATH, record.path);
     localStorage.setItem(constants.LS_KEY_GITHUB_REPO_MODES, record.modes);
+    onEnable();
   };
 
   const columns = [

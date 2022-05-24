@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button, Input, message,
-} from 'antd';
+import { Button, Input } from 'antd';
 
 import * as constants from '../constants';
 import reloadDbsSchemaAsync from './helpers';
@@ -10,9 +8,7 @@ import EditableTable from '../components/EditableTable';
 
 const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
 const handleClick = () => {
-  message.info('Start loading DBs schema...');
   reloadDbsSchemaAsync().then(() => {
-    message.info('Finish loading DBs schema!');
   });
 };
 
@@ -21,13 +17,17 @@ function DbActions() {
     return null;
   }
   return (
-    <div>
+    <div style={{ display: 'none' }}>
       Load dbs schema from github to local db
       {' '}
       <Button onClick={handleClick}>Load DBs</Button>
     </div>
   );
 }
+
+const onEnable = () => {
+  handleClick();
+};
 
 /**
  * To save online db tables schema in the local db, then pages could load faster
@@ -52,6 +52,13 @@ export default class Settings extends React.Component {
       ),
       path: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
     });
+
+    this.backupTitle = document.title;
+    document.title = 'Settings - db-man';
+  }
+
+  componentWillUnmount() {
+    document.title = this.backupTitle;
   }
 
   handleSavePath = () => {
@@ -84,7 +91,7 @@ export default class Settings extends React.Component {
       <div>
         <h1>Settings</h1>
         <h2>Database Connections</h2>
-        <EditableTable />
+        <EditableTable onEnable={onEnable} />
         <div style={{ display: 'none' }}>
           Owner:
           {' '}

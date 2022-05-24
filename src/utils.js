@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
+import { message } from 'antd';
+
 export const getUrlParams = () => {
   const urlSearchParams = new URLSearchParams(window.location.search);
   return Object.fromEntries(urlSearchParams.entries());
@@ -22,4 +24,9 @@ export const getTablePrimaryKey = (tables, tableName) => {
   }
 
   return getPrimaryKey(foundTable.columns);
+};
+
+export const errMsg = (msg, err) => {
+  console.error(`[db-man] ${msg}`, err); // eslint-disable-line no-console
+  message.error(msg);
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  Table, Input, Row, Col, Spin, Popover,
+  Table, Input, Row, Col, Spin, Popover, Alert,
 } from 'antd';
 import { RightSquareFilled } from '@ant-design/icons';
 import debounce from 'lodash.debounce';
@@ -261,7 +261,7 @@ export default class ListPageBody extends React.Component {
     } = this.state;
     const { tableName, primaryKey } = this.context;
     if (loading) return <Spin tip={loading} />;
-    if (errMsg) return <div>{errMsg}</div>;
+    if (errMsg) return <Alert message={errMsg} type="error" />;
     if (!rows) return null;
     // When router changed, before loading next table rows,
     // contentTableName is old table, but this.props.tableName is new table.
