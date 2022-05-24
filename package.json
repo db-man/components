@@ -6,7 +6,7 @@
   "scripts": {
     "start": "PUBLIC_URL=/ react-scripts start",
     "build": "yarn build-lib",
-    "build-lib": "babel src --out-dir lib",
+    "build-lib": "./build.sh",
     "build-app": "react-scripts build",
     "test": "react-scripts test"
   },
