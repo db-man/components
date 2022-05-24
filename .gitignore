@@ -16,4 +16,4 @@ coverage
 *.lcov
 
 # Build dir
-/lib/
+# /lib/
