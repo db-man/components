@@ -238,7 +238,7 @@ export default class UpdatePageBody extends React.Component {
 
   render() {
     return (
-      <div className="update-page-body-component">
+      <div className="dm-page update-page-body-component">
         <Skeleton loading={this.tips.length > 0}>
           {this.renderAlert()}
           {this.renderForm()}
