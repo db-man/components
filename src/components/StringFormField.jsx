@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Alert } from 'antd';
 
 import { columnType } from './types';
 import StringFormFieldValue from './StringFormFieldValue';
@@ -12,6 +13,10 @@ export default function StringFormField(props) {
     label, column, value, inputProps, preview, onChange,
   } = props;
   const { dbName } = useContext(PageContext);
+  const renderWarning = () => {
+    if (typeof value === 'string') return null;
+    return <Alert message={`(This form field type should be string, but current type is ${typeof value})`} type="warning" />;
+  };
   return (
     <div className="dm-form-field dm-string-form-field">
       <b>{label}</b>
@@ -23,6 +28,7 @@ export default function StringFormField(props) {
         dbName={dbName}
         value={value}
       />
+      {renderWarning()}
       <StringFormFieldValue
         inputProps={inputProps}
         size="small"

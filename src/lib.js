@@ -2,7 +2,6 @@
 export { default as Form } from './components/Form';
 export { default as GetPageBody } from './components/GetPageBody';
 export { default as ListPageBody } from './components/ListPageBody';
-export { default as UpdatePageBody } from './components/UpdatePageBody';
 export { default as CreatePage } from './components/CreatePage';
 export { default as DvPropTypes } from './components/DvPropTypes';
 export { default as ErrorAlert } from './components/ErrorAlert';

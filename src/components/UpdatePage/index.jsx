@@ -14,7 +14,7 @@ import PageContext from '../../contexts/page';
 
 import { getNewRows } from './helpers';
 
-export default class UpdatePageBody extends React.Component {
+export default class UpdatePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -248,4 +248,4 @@ export default class UpdatePageBody extends React.Component {
   }
 }
 
-UpdatePageBody.contextType = PageContext;
+UpdatePage.contextType = PageContext;

@@ -274,7 +274,7 @@ export default class Form extends React.Component {
         <Tabs defaultActiveKey="form">
           <Tabs.TabPane tab="Form" key="form">
             <div className="dm-form">
-              {this.context.columns.map((column) => {
+              {this.context.columns.filter((column) => column['type:createUpdatePage'] !== 'HIDE').map((column) => {
                 switch (column.type) {
                   case constants.STRING_ARRAY:
                     return this.renderStringArrayFormField(column);
