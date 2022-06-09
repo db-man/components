@@ -90,3 +90,11 @@ This props will pass to `ImageLink` component.
   ]
 }
 ```
+
+## Split table
+
+* .github/workflows/merge.yml - https://github.com/db-man/split-table-db/blob/main/.github/workflows/merge.yml
+* .github/workflows/split.yml - https://github.com/db-man/split-table-db/blob/main/.github/workflows/split.yml
+* merge.mjs - https://github.com/db-man/split-table-db/blob/main/merge.mjs
+* split.mjs - https://github.com/db-man/split-table-db/blob/main/split.mjs
+* cli/utils.mjs - https://github.com/db-man/split-table-db/blob/main/cli/utils.mjs

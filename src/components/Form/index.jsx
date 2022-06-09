@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Select, Button, message, Row, Col, Tabs,
+  Select, Button, message, Row, Col, Tabs, Popconfirm,
 } from 'antd';
 
 import StringFormField from '../StringFormField';
@@ -305,14 +305,21 @@ export default class Form extends React.Component {
           {' '}
           |
           {' '}
-          <Button
-            danger
-            disabled={loading}
-            loading={loading}
-            onClick={this.handleDelete}
+          <Popconfirm
+            title="Are you sure to delete?"
+            onConfirm={this.handleDelete}
+            onCancel={() => {}}
+            okText="Yes"
+            cancelText="No"
           >
-            Delete
-          </Button>
+            <Button
+              danger
+              disabled={loading}
+              loading={loading}
+            >
+              Delete
+            </Button>
+          </Popconfirm>
           {' '}
           |
           {' '}
