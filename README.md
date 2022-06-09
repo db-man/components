@@ -25,7 +25,12 @@ export default function () {
 }
 ```
 
-Add `@import '~antd/dist/antd.css';` to top of `src/App.css`.
+Add below 2 lines to top of `src/App.css`.
+
+```css
+@import '~db-man/components/layout/App.css';
+@import '~antd/dist/antd.css';
+```
 
 ## Column definition
 
