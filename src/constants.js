@@ -1,6 +1,8 @@
 // types
 export const STRING_ARRAY = 'STRING_ARRAY';
 export const STRING = 'STRING';
+export const NUMBER = 'NUMBER';
+export const BOOL = 'BOOL';
 
 // Localstorage keys
 export const LS_KEY_DBS_SCHEMA = 'dm_dbs_schema';

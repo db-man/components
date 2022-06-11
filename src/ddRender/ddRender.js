@@ -5,6 +5,7 @@ import ddRenderFnMapping from './ddRenderFnMapping';
 const defaultRenders = {
   [constants.STRING]: (val) => val,
   [constants.STRING_ARRAY]: (val) => val && val.join(', '),
+  [constants.BOOL]: (val) => (val === undefined ? '' : String(val)),
 };
 
 /**

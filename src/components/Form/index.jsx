@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Select, Button, message, Row, Col, Tabs, Popconfirm,
+  Select, Button, message, Row, Col, Tabs, Popconfirm, InputNumber, Switch,
 } from 'antd';
 
 import StringFormField from '../StringFormField';
@@ -267,6 +267,35 @@ export default class Form extends React.Component {
     return null;
   };
 
+  renderNumberFormField = (column) => {
+    const { loading } = this.props;
+    return renderFormFieldWrapper(
+      column.id,
+      column.name, (
+        <InputNumber
+          size="small"
+          disabled={loading}
+          autoFocus={column.id === this.context.primaryKey}
+          value={this.state.formValues[column.id]}
+          onChange={this.handleChange(column.id)}
+          onKeyDown={this.handleKeyDown}
+        />
+      ),
+    );
+  };
+
+  renderBoolFormField = (column) => renderFormFieldWrapper(
+    column.id,
+    column.name, (
+      <Switch
+        size="small"
+        disabled={this.props.loading}
+        checked={this.state.formValues[column.id]}
+        onChange={this.handleChange(column.id)}
+      />
+    ),
+  );
+
   render() {
     const { loading } = this.props;
     return (
@@ -278,6 +307,10 @@ export default class Form extends React.Component {
                 switch (column.type) {
                   case constants.STRING_ARRAY:
                     return this.renderStringArrayFormField(column);
+                  case constants.NUMBER:
+                    return this.renderNumberFormField(column);
+                  case constants.BOOL:
+                    return this.renderBoolFormField(column);
                   case constants.STRING:
                   default:
                     return this.renderStringFormField(column);

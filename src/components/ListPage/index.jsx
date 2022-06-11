@@ -27,7 +27,7 @@ const defaultPage = 1;
 const defaultPageSize = 10;
 const debouncedUpdateUrl = debounce(updateUrl, 500);
 
-export default class ListPageBody extends React.Component {
+export default class ListPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -290,7 +290,7 @@ export default class ListPageBody extends React.Component {
   render() {
     const { filter } = this.state;
     return (
-      <div className="list-component">
+      <div className="dm-list-page list-component">
         <div className="table-filter">
           <Row gutter={10}>
             {this.filterCols.map((f) => (
@@ -312,10 +312,10 @@ export default class ListPageBody extends React.Component {
   }
 }
 
-ListPageBody.propTypes = {
+ListPage.propTypes = {
   // Even tableName is now passing from context,
   // but we need to pass props.tableName to get new data from backend API
   tableName: PropTypes.string.isRequired,
 };
 
-ListPageBody.contextType = PageContext;
+ListPage.contextType = PageContext;
