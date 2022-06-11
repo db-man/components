@@ -1342,10 +1342,10 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz#75b4c27948c81e88ccd3a8902047bcd797f38d32"
   integrity sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==
 
-"@db-man/github@^0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@db-man/github/-/github-0.1.8.tgz#d06ec32eba814c1cd946d5d38c50217af176be5c"
-  integrity sha512-hz/tXs7B8MHECpWM0ZozUuyJ/CL8Wlr4NbpcpUQDGsDdL9XecHA/WIY/MpDUphU/hGO2kbSylP4RMnkewvQK1g==
+"@db-man/github@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@db-man/github/-/github-0.1.9.tgz#e4c3811268d2751c27b583b34a7d300c374eec1d"
+  integrity sha512-enSEk/xTKqv/7ZDOBH/Dl10f2DFSt64clZDEpzyM0jaO3Zich9B+M4y11iWiBCjvmYkDdk4eo2lKzCY/kzCQIg==
   dependencies:
     "@octokit/rest" "^18.12.0"
     db-man "^0.1.5"
