@@ -52,13 +52,18 @@ export default class CreatePageBody extends React.Component {
   }
 
   updateTableFileAsync = async (formValues) => {
-    let newContent = [...this.state.rows];
+    const newContent = [...this.state.rows];
 
     if (!this.formValidation(this.state.rows, formValues)) {
       return;
     }
 
-    newContent = this.getNewContent(formValues, newContent);
+    const time = dbManUtils.formatDate(new Date());
+    newContent.push({
+      ...formValues,
+      createdAt: time,
+      updatedAt: time,
+    });
 
     this.setState({ saveLoading: true });
     try {
@@ -84,13 +89,20 @@ export default class CreatePageBody extends React.Component {
     const { dbName, tableName, primaryKey } = this.context;
     const { recordFileSha } = this.state;
 
+    const time = dbManUtils.formatDate(new Date());
+    const record = ({
+      ...formValues,
+      createdAt: time,
+      updatedAt: time,
+    });
+
     this.setState({ saveLoading: true });
     try {
       const { commit } = await githubDb.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
-        formValues,
+        record,
         recordFileSha,
       );
 
@@ -151,17 +163,6 @@ export default class CreatePageBody extends React.Component {
       });
 
     return fields;
-  };
-
-  // eslint-disable-next-line class-methods-use-this
-  getNewContent = (formValues, newContent) => {
-    newContent.push({
-      ...formValues,
-      createdAt: dbManUtils.formatDate(new Date()),
-      updatedAt: dbManUtils.formatDate(new Date()),
-    });
-
-    return newContent; // eslint-disable-line consistent-return
   };
 
   formValidation = (rows, formValues) => {
