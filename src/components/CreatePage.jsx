@@ -12,7 +12,7 @@ import Form from './Form';
 import PageContext from '../contexts/page';
 import * as constants from '../constants';
 
-export default class CreatePageBody extends React.Component {
+export default class CreatePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ export default class CreatePageBody extends React.Component {
       rows: [],
       tableFileSha: null,
 
-      defaultFormValues: {},
+      defaultFormValues: null,
 
       saveLoading: false,
     };
@@ -30,6 +30,13 @@ export default class CreatePageBody extends React.Component {
 
   componentDidMount() {
     this.getData();
+
+    const fields = this.getInitialFormFields();
+    this.setState({
+      defaultFormValues: {
+        ...fields,
+      },
+    });
   }
 
   // `updateTableFileAsync` to update the whole table file, it's too big, and take more time to get the response from server
@@ -133,13 +140,6 @@ export default class CreatePageBody extends React.Component {
         rows,
         tableFileSha,
       });
-      const fields = this.getInitialFormFields();
-      this.setState({
-        defaultFormValues: {
-          ...this.state.defaultFormValues, // eslint-disable-line react/no-access-state-in-setstate
-          ...fields,
-        },
-      });
     } catch (err) {
       console.error('getTableRows, error:', err);
       this.setState({ errorMessage: 'Failed to get table file from server!' });
@@ -194,6 +194,11 @@ export default class CreatePageBody extends React.Component {
 
   render() {
     const { dbName, tableName } = this.context;
+
+    if (this.state.defaultFormValues === null) {
+      return null;
+    }
+
     return (
       <div className="dm-page">
         <h1>
@@ -234,4 +239,4 @@ export default class CreatePageBody extends React.Component {
   }
 }
 
-CreatePageBody.contextType = PageContext;
+CreatePage.contextType = PageContext;
