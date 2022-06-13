@@ -52,7 +52,7 @@ export default class Detail extends React.Component {
     const renderFn = ddRender.getRender(args, {
       tables: this.context.tables,
       rows: refTableRows,
-    });
+    }) || ((val) => val && val.join(', '));
 
     if (renderFn) {
       content = renderFn(
