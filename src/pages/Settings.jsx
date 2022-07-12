@@ -1,12 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
 
 import * as constants from '../constants';
 import reloadDbsSchemaAsync from './helpers';
 import EditableTable from '../components/EditableTable';
 
-const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
 const handleClick = () => {
   reloadDbsSchemaAsync().then(() => {
   });
@@ -81,11 +79,9 @@ export default class Settings extends React.Component {
   // };
 
   render() {
-    const { children } = this.props;
     const {
       owner, personalToken, repo, path,
     } = this.state;
-    if (dbs && children) return children;
 
     return (
       <div>
@@ -137,10 +133,3 @@ export default class Settings extends React.Component {
     );
   }
 }
-
-Settings.propTypes = {
-  children: PropTypes.node,
-};
-Settings.defaultProps = {
-  children: null,
-};

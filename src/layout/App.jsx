@@ -1,18 +1,16 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import * as constants from '../constants';
 import Settings from '../pages/Settings';
 import AppLayout from './AppLayout';
 
-// import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-// import './App.css';
-
 export default function App() {
+  const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
+  if (!dbs) return <Settings />;
   return (
     <BrowserRouter>
-      <Settings>
-        <AppLayout />
-      </Settings>
+      <AppLayout />
     </BrowserRouter>
   );
 }
