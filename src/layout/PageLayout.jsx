@@ -18,7 +18,7 @@ export default function PageLayout() {
         <PageHeaderContent />
       </Header>
       <Layout>
-        <Sider width={140} className="site-layout-background">
+        <Sider width={300} className="site-layout-background">
           {dbName ? (
             <LeftSideMenu
               dbName={dbName}
