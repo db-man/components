@@ -1,8 +1,9 @@
 import * as constants from '../constants';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
-// Default render func when "type:listPage" not defined in table column
+// Default render func when "type:listPage" or "type:getPage" not defined in db table column
 const defaultRenders = {
+  [constants.NUMBER]: (val) => val,
   [constants.STRING]: (val) => val,
   [constants.STRING_ARRAY]: (val) => val && val.join(', '),
   [constants.BOOL]: (val) => (val === undefined ? '' : String(val)),
@@ -49,15 +50,25 @@ export const getRender = (args, tplExtra) => {
  * }
  */
 export const getColumnRender = (column) => {
-  // the column render function defined in Table component of antd
-  // renderFn = (val, record, index) => ()
-  let renderFn = defaultRenders[column.type || constants.STRING];
   const customRender = getRender(column['type:listPage']);
   if (customRender) {
-    renderFn = customRender;
+    return customRender;
   }
 
-  return renderFn;
+  // the column render function defined in Table component of antd
+  // renderFn = (val, record, index) => ()
+  return defaultRenders[column.type || constants.STRING];
+};
+
+export const getDetailPageColumnRender = (column, tplExtra) => {
+  const customRender = getRender(column['type:getPage'], tplExtra);
+  if (customRender) {
+    return customRender;
+  }
+
+  // the column render function defined in Table component of antd
+  // renderFn = (val, record, index) => ()
+  return defaultRenders[column.type || constants.STRING];
 };
 
 export const getRenderResultByColumn = (value, record, index, args, column) => getColumnRender(column)(value, record, index); // eslint-disable-line max-len

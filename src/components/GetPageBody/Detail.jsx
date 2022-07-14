@@ -13,18 +13,32 @@ import StringFormFieldValue from '../StringFormFieldValue';
 const { Panel } = Collapse;
 
 export default class Detail extends React.Component {
-  renderStringFieldValue = (column) => {
-    const value = this.props.defaultValues[column.id];
-
-    if (column['type:getPage']) {
-      const renderFn = ddRender.getRender(column['type:getPage'], { column });
-      if (!renderFn) {
-        return value;
-      }
+  renderWithDdRender = (column, value) => {
+    const renderFn = ddRender.getDetailPageColumnRender(column, {
+      column,
+      tables: this.context.tables,
+      rows: this.props.refTables[`ref:${column.referenceTable}:rows`], // eslint-disable-line react/prop-types
+    });
+    if (renderFn) {
       const el = renderFn(value, this.props.defaultValues);
       if (el) {
         return el;
       }
+    }
+    return (
+      <div>
+        No render fn:
+        {' '}
+        {value}
+      </div>
+    );
+  };
+
+  renderStringFieldValue = (column) => {
+    const value = this.props.defaultValues[column.id];
+
+    if (column['type:getPage']) {
+      return this.renderWithDdRender(column, value);
     }
 
     let preview = false;
@@ -43,42 +57,15 @@ export default class Detail extends React.Component {
     );
   };
 
-  renderStringArrayFormFieldValue = (column) => {
-    let content = <span>No data</span>;
-
-    const refTableRows = this.props.refTables[`ref:${column.referenceTable}:rows`]; // eslint-disable-line react/prop-types
-
-    const args = column['type:getPage'];
-    const renderFn = ddRender.getRender(args, {
-      tables: this.context.tables,
-      rows: refTableRows,
-    }) || ((val) => val && val.join(', '));
-
-    if (renderFn) {
-      content = renderFn(
-        this.props.defaultValues[column.id],
-        this.props.defaultValues,
-      );
-    } else {
-      content = (
-        <div>
-          No Render Fn:
-          {' '}
-          {this.props.defaultValues[column.id]}
-        </div>
-      );
-    }
-
-    return <div key={column.id}>{content}</div>;
-  };
-
   renderFieldValue = (column) => {
     switch (column.type) {
-      case constants.STRING_ARRAY:
-        return this.renderStringArrayFormFieldValue(column);
       case constants.STRING:
-      default:
         return this.renderStringFieldValue(column);
+      case constants.BOOL:
+      case constants.NUMBER:
+      case constants.STRING_ARRAY:
+      default:
+        return this.renderWithDdRender(column, this.props.defaultValues[column.id]);
     }
   };
 
