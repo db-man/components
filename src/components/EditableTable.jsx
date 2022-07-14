@@ -26,7 +26,7 @@ function EditableCell({
           }}
           rules={[
             {
-              required: true,
+              required: title !== 'modes',
               message: `Please Input ${title}!`,
             },
           ]}
