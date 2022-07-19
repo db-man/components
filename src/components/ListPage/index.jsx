@@ -155,6 +155,45 @@ export default class ListPage extends React.Component {
     );
   };
 
+  alertTableDataInvalid = () => {
+    const { rows } = this.state;
+    const { primaryKey } = this.context;
+    const invalidRows = [];
+    rows.forEach(
+      (row, idx) => {
+        if (row[primaryKey] === undefined || row[primaryKey] === null) {
+          invalidRows.push({
+            rowIdx: idx,
+            rowData: row,
+          });
+        }
+      },
+    );
+    if (invalidRows.length === 0) return null;
+    return (
+      <div style={{ color: 'red' }}>
+        Invalid rows(
+        {invalidRows.length}
+        ):
+        {' '}
+        {invalidRows.map((row) => (
+          <div>
+            {`idx:${row.rowIdx}`}
+            {' '}
+            {JSON.stringify(row.rowData)}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  alertValidations = () => (
+    <div className="dm-alert-validations">
+      {this.alertDuplicatedRowKey()}
+      {this.alertTableDataInvalid()}
+    </div>
+  );
+
   getTableColumns = () => {
     const { sorter } = this.state;
     const {
@@ -196,13 +235,13 @@ export default class ListPage extends React.Component {
               {' '}
               {hasVal(args[0])
                 && (
-                <Popover
-                  title="Ref Table Links"
-                  trigger="click"
-                  content={<RefTableLinks value={args[0]} column={column} />}
-                >
-                  <RightSquareFilled />
-                </Popover>
+                  <Popover
+                    title="Ref Table Links"
+                    trigger="click"
+                    content={<RefTableLinks value={args[0]} column={column} />}
+                  >
+                    <RightSquareFilled />
+                  </Popover>
                 )}
             </div>
           );
@@ -268,7 +307,7 @@ export default class ListPage extends React.Component {
     if (contentTableName !== tableName) return null;
     return (
       <div>
-        {this.alertDuplicatedRowKey()}
+        {this.alertValidations()}
         <Table
           size="small"
           rowKey={primaryKey}

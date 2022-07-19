@@ -10,13 +10,7 @@ import * as constants from '../../constants';
 export const searchKeywordInText = (keyword, text) => text.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
 
 /**
- * Search keyword in cellValue
- * @param {string} keyword
- */
-const stringTypeFilter = (keyword, cellValue = '') => searchKeywordInText(keyword, cellValue);
-
-/**
- * Search keyword in string array
+ * Search keyword 'do' in string array ['dog', 'cat']
  * @param {string|undefined} keyword Search keyword
  * @param {string[]} tags The table cell value
  * @return {boolean}
@@ -83,7 +77,7 @@ export const isAllFilterInvalid = (filter, filterColumnIds) => {
 };
 
 const filterFnMapping = {
-  [constants.STRING]: stringTypeFilter,
+  [constants.STRING]: searchKeywordInText,
   [constants.STRING_ARRAY]: stringArrayFilter,
 };
 
@@ -96,7 +90,7 @@ const searchByFilter = (filterColumns, filterKeyVals) => (row) => filterColumns.
   const keyword = filterKeyVals[column.id];
   let matched = true;
   if (keyword) {
-    matched = filterFnMapping[column.type](keyword, row[column.id]);
+    matched = filterFnMapping[column.type](keyword, row[column.id] || '');
   }
   return prev && matched;
 }, true);
