@@ -156,10 +156,7 @@ test('getFilteredData should return proper value', () => {
   expect(
     getFilteredData(
       [
-        {
-          id: 'name',
-          type: 'STRING',
-        },
+        { id: 'name', type: 'STRING' },
         { id: 'tags', type: 'STRING_ARRAY' },
       ],
       { name: 'foo', tags: 'bar' },

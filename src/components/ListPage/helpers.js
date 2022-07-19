@@ -80,6 +80,10 @@ const filterFnMapping = {
   [constants.STRING]: searchKeywordInText,
   [constants.STRING_ARRAY]: stringArrayFilter,
 };
+const defaultValueMapping = {
+  [constants.STRING]: '',
+  [constants.STRING_ARRAY]: [],
+};
 
 /**
  * @param {Object} filterKeyVals
@@ -90,7 +94,7 @@ const searchByFilter = (filterColumns, filterKeyVals) => (row) => filterColumns.
   const keyword = filterKeyVals[column.id];
   let matched = true;
   if (keyword) {
-    matched = filterFnMapping[column.type](keyword, row[column.id] || '');
+    matched = filterFnMapping[column.type](keyword, row[column.id] || defaultValueMapping[column.type]);
   }
   return prev && matched;
 }, true);
