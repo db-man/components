@@ -25,6 +25,11 @@ export default class LeftSideMenu extends React.Component {
 
     const { dbName, tableName, action } = this.props;
     const tablesOfSelectedDb = dbs[dbName];
+
+    if (!tablesOfSelectedDb) {
+      return null;
+    }
+
     const firstTableOfSelectedDb = tablesOfSelectedDb[0];
 
     const selectedKeys = [`${dbName}-${tableName}-${action}`];
@@ -53,6 +58,7 @@ export default class LeftSideMenu extends React.Component {
               { key: `${dbName}-${tName}-create`, label: <Link to={`/${dbName}/${tName}/create`}>Create</Link> },
               { key: `${dbName}-${tName}-random`, label: <Link to={`/${dbName}/${tName}/random`}>Random</Link> },
               { key: `${dbName}-${tName}-tagsCloud`, label: <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link> },
+              { key: `${dbName}-${tName}-tableConfig`, label: <Link to={`/${dbName}/${tName}/tableConfig`}>tableConfig</Link> },
             ],
           }
         ))}

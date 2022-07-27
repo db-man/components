@@ -168,6 +168,7 @@ export default class Form extends React.Component {
           disabled: loading,
           autoFocus: column.id === this.context.primaryKey,
           onKeyDown: this.handleKeyDown,
+          placeholder: column.placeholder,
         }}
         preview={preview}
         label={column.name}

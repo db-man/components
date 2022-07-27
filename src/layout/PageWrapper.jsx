@@ -16,6 +16,7 @@ import ListPage from '../components/ListPage';
 import RandomPage from '../components/RandomPage';
 import TagsCloudPage from '../components/TagsCloudPage';
 import GetPage from '../components/GetPage';
+import TableConfigPage from '../components/TableConfigPage';
 
 const { Provider } = PageContext;
 
@@ -26,6 +27,7 @@ const mapp = {
   update: UpdatePage,
   get: GetPage,
   tagsCloud: TagsCloudPage,
+  tableConfig: TableConfigPage,
 };
 
 export function TableList({ dbName }) {
