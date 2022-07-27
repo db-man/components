@@ -26,4 +26,4 @@ jobs:
           start: yarn start
           wait-on: "http://localhost:3000"
           # Specify Browser since container image is compile with Firefox
-          browser: firefox
+          browser: chrome
