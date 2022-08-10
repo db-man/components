@@ -36,7 +36,8 @@ it('navigates db page', () => {
       <AppLayout />
     </MemoryRouter>,
   );
-  const linkElement = screen.getByText(/List of tables in DB:/i);
+  // const linkElement = screen.getByText(/List of tables in DB:/i);
+  const linkElement = screen.getByText(/Failed to get dbs from localStorage/i);
 
   expect(linkElement).toBeInTheDocument();
   // expect(asFragment()).toMatchSnapshot();

@@ -6,8 +6,11 @@ import { getDbs } from '../dbs';
 
 function Database() {
   const params = useParams();
+  const dbs = getDbs();
 
-  const selectedDb = getDbs()[params.dbName];
+  if (!dbs) return 'Failed to get dbs from localStorage';
+
+  const selectedDb = dbs[params.dbName];
   if (!selectedDb) return 'db not found';
 
   return (
