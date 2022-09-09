@@ -91,11 +91,13 @@ ImageLink.defaultProps = {
   description: '',
 };
 
+// eslint-disable-next-line react/prop-types
 export function ImageLinks({ imgs, limit = 3 }) {
   if (!imgs) return null;
 
   let results = imgs;
   if (limit !== null) {
+    // eslint-disable-next-line react/prop-types
     results = imgs.slice(0, limit);
   }
   // eslint-disable-next-line react/no-array-index-key, react/jsx-props-no-spreading
