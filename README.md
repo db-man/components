@@ -9,8 +9,6 @@
 
 A database portal to manage GitHub database.
 
-A sample GitHub database: [https://github.com/db-man/db](https://github.com/db-man/db)
-
 ## How to use
 
 ```
