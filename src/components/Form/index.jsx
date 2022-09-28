@@ -26,6 +26,8 @@ const renderFormFieldWrapper = (id, label, formField) => (
   </div>
 );
 
+const filterOutHiddenFields = (column) => column['type:createUpdatePage'] !== 'HIDE';
+
 export default class Form extends React.Component {
   constructor(props) {
     super(props);
@@ -297,36 +299,48 @@ export default class Form extends React.Component {
     ),
   );
 
+  fieldRender = (column) => {
+    switch (column.type) {
+      case constants.STRING_ARRAY:
+        return this.renderStringArrayFormField(column);
+      case constants.NUMBER:
+        return this.renderNumberFormField(column);
+      case constants.BOOL:
+        return this.renderBoolFormField(column);
+      case constants.STRING:
+      default:
+        return this.renderStringFormField(column);
+    }
+  };
+
   render() {
     const { loading } = this.props;
+    const tabsItems = [
+      {
+        label: 'Form',
+        key: 'form',
+        children: (
+          <div className="dm-form">
+            {this.context.columns
+              .filter(filterOutHiddenFields)
+              .map(this.fieldRender)}
+          </div>
+        ),
+      },
+      {
+        label: 'JSON',
+        key: 'json',
+        children: (
+          <JsonEditor
+            value={this.state.formValues}
+            onChange={this.handleJsonEditorChange}
+          />
+        ),
+      },
+    ];
     return (
       <div className="create-update-component">
-        <Tabs defaultActiveKey="form">
-          <Tabs.TabPane tab="Form" key="form">
-            <div className="dm-form">
-              {this.context.columns.filter((column) => column['type:createUpdatePage'] !== 'HIDE').map((column) => {
-                switch (column.type) {
-                  case constants.STRING_ARRAY:
-                    return this.renderStringArrayFormField(column);
-                  case constants.NUMBER:
-                    return this.renderNumberFormField(column);
-                  case constants.BOOL:
-                    return this.renderBoolFormField(column);
-                  case constants.STRING:
-                  default:
-                    return this.renderStringFormField(column);
-                }
-              })}
-            </div>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="JSON" key="json">
-            <JsonEditor
-              value={this.state.formValues}
-              onChange={this.handleJsonEditorChange}
-            />
-          </Tabs.TabPane>
-        </Tabs>
-
+        <Tabs defaultActiveKey="form" items={tabsItems} />
         <div className="dm-action-buttons">
           <Button
             type="primary"
@@ -342,7 +356,7 @@ export default class Form extends React.Component {
           <Popconfirm
             title="Are you sure to delete?"
             onConfirm={this.handleDelete}
-            onCancel={() => {}}
+            onCancel={() => { }}
             okText="Yes"
             cancelText="No"
           >
@@ -380,8 +394,8 @@ Form.propTypes = {
 
 Form.defaultProps = {
   rows: [],
-  onSubmit: () => {},
-  onDelete: () => {},
+  onSubmit: () => { },
+  onDelete: () => { },
 };
 
 Form.contextType = PageContext;
