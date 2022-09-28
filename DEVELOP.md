@@ -9,8 +9,8 @@ yarn start
 Publish
 
 ```
-yarn test --watchAll=false
-yarn build
+CI=true npm test
+npm run build
 git add . && git commit -m 'Build'
 npm version patch
 git push && git push origin v0.1.2
