@@ -166,6 +166,7 @@ function EditableTable({ onEnable }) {
       title: 'token',
       dataIndex: 'token',
       width: '10%',
+      render: (token) => <textarea style={{ resize: 'none' }} rows={1} cols={10} defaultValue={token} />,
       editable: true,
     },
     {
