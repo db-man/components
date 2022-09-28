@@ -99,6 +99,7 @@ export default class PageWrapper extends React.Component {
   get pageInfo() {
     const { dbName, tableName, action } = this.props;
     return {
+      // e.g. ['split-table']
       appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES) ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',') : [],
       dbs: getDbs(),
       dbName,

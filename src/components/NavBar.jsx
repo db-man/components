@@ -49,7 +49,7 @@ export default class NavBar extends React.Component {
     return (
       <div className="dm-nav-bar">
         NavBar: github(
-        {id ? (
+        {/* Only when appModes have "split-table" */id ? (
           <a
             title="GitHub File Path"
             href={githubUtils.getGitHubFullPath(
@@ -89,10 +89,10 @@ export default class NavBar extends React.Component {
           List
         </Link>
         ) | Ref tables:
-        {' '}
+        (
         {this.renderReferenceTableLink()}
-        {githubDb.getDataPath(dbName, tableName)}
-        :
+        )
+        |
         {' '}
         <a
           title="GitHub File Path"
@@ -100,11 +100,9 @@ export default class NavBar extends React.Component {
           target="_blank"
           rel="noreferrer"
         >
-          GitHub Path
+          {githubDb.getDataPath(dbName, tableName)}
         </a>
-        {' '}
-        |
-        {' '}
+        (
         <a
           title="Commit History"
           href={githubUtils.getGitHubHistoryPath(
@@ -113,8 +111,9 @@ export default class NavBar extends React.Component {
           target="_blank"
           rel="noreferrer"
         >
-          Commit History
+          history
         </a>
+        )
       </div>
     );
   }
