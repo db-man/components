@@ -40,6 +40,16 @@ const columns = [{
   // render: (cell) => (cell === true ? 'Yes' : 'No'),
 }];
 
+const footer = ({ page }) => function TableFooter() {
+  return (
+    <div>
+      Table column definition:
+      {' '}
+      <a href={`https://github.com/${localStorage.getItem('dm_github_owner')}/${localStorage.getItem('dm_github_repo_name')}/blob/main/${localStorage.getItem('dm_github_repo_path')}/${page.dbName}/columns.json`} target="_blank" rel="noreferrer">columns.json</a>
+    </div>
+  );
+};
+
 export default function TableConfigPage() {
   const page = useContext(PageContext);
   console.debug('TableConfigPage', page.columns); // eslint-disable-line no-console
@@ -50,8 +60,8 @@ export default function TableConfigPage() {
         dataSource={page.columns}
         columns={columns}
         pagination={false}
+        footer={footer({ page })}
       />
-      <div><a href={`https://github.com/${localStorage.getItem('dm_github_owner')}/${localStorage.getItem('dm_github_repo_name')}/blob/main/${localStorage.getItem('dm_github_repo_path')}/${page.dbName}/columns.json`} target="_blank" rel="noreferrer">columns.json</a></div>
     </div>
   );
 }
