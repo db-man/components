@@ -69,18 +69,22 @@ export default class Form extends React.Component {
         [key]: event.target.value,
       },
     });
-    // validate the primary field in form, e.g. duplication check
-    // TODO maybe do this in antd Form component
-    // TODO why do we assume the type of primary column in a table is always `string`?
-    if (key === this.context.primaryKey) {
-      if (
-        !validatePrimaryKey(
-          event.target.value,
-          this.props.rows,
-          this.context.primaryKey,
-        )
-      ) {
-        this.warnPrimaryKeyInvalid(event.target.value);
+    // When mode is split-table, thats because table file too big.
+    // Will not download big table file, so no checking about duplicated item.
+    if (!this.isSplitTable) {
+      // validate the primary field in form, e.g. duplication check
+      // TODO maybe do this in antd Form component
+      // TODO why do we assume the type of primary column in a table is always `string`?
+      if (key === this.context.primaryKey) {
+        if (
+          !validatePrimaryKey(
+            event.target.value,
+            this.props.rows,
+            this.context.primaryKey,
+          )
+        ) {
+          this.warnPrimaryKeyInvalid(event.target.value);
+        }
       }
     }
   };
@@ -117,7 +121,12 @@ export default class Form extends React.Component {
     this.props.onDelete(formValues);
   };
 
-  warnPrimaryKeyInvalid = (value) => message.warn(
+  get isSplitTable() {
+    const { appModes } = this.context;
+    return appModes.indexOf('split-table') !== -1;
+  }
+
+  warnPrimaryKeyInvalid = (value) => message.warning(
     <div>
       Found duplicated item in db
       {' '}

@@ -37,21 +37,26 @@ export default class UpdatePage extends React.Component {
     this.getData();
   }
 
-  // `updateTableFileAsync` to update the whole table file, it's too big, and take more time to get the response from server
-  // `updateRecordFileAsync` to only update record file, file is small, so get response quickly, but backend (github action) need to merge several record files into big table file after this update
+  /**
+   * `updateTableFileAsync`
+   *   to update the whole table file, it's too big, and take more time to get the response from server
+   * `updateRecordFileAsync`
+   *   to only update record file, file is small, so get response quickly,
+   *   but backend (github action) need to merge several record files into big table file after this update
+   */
   handleFormSubmit = (formValues) => {
-    if (!this.isSplitTable) {
-      this.updateTableFileAsync(formValues);
-    } else {
+    if (this.isSplitTable) {
       this.updateRecordFileAsync(formValues);
+    } else {
+      this.updateTableFileAsync(formValues);
     }
   };
 
   handleDelete = (formValues) => {
-    if (!this.isSplitTable) {
-      message.info('Only supported in split-table mode!');
-    } else {
+    if (this.isSplitTable) {
       this.deleteRecordFileAsync(formValues);
+    } else {
+      message.info('Only supported in split-table mode!');
     }
   };
 
@@ -166,11 +171,14 @@ export default class UpdatePage extends React.Component {
     this.setState({ loading: '' });
   };
 
-  // Get both single record file and whole table file, the whole table file will be used to de-dup
+  // Get both single record file or whole table file
   getData = () => {
-    const ps = [this.getTableFileAsync()];
+    const ps = [];
     if (this.isSplitTable) {
+      // When in split-table mode, whole table file is too big to download and cost a lot of time to download
       ps.push(this.getRecordFileAsync());
+    } else {
+      ps.push(this.getTableFileAsync());
     }
     Promise.all(ps);
   };
@@ -215,7 +223,7 @@ export default class UpdatePage extends React.Component {
   };
 
   renderAlert = () => this.state.errorMessage && (
-  <Alert message={this.state.errorMessage} type="error" />
+    <Alert message={this.state.errorMessage} type="error" />
   );
 
   renderForm = () => {

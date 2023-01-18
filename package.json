@@ -21,14 +21,14 @@
   },
   "homepage": "https://github.com/db-man/components#readme",
   "devDependencies": {
-    "@ant-design/icons": "^4.7.0",
+    "@ant-design/icons": "^5.0.0",
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.19.3",
     "@babel/preset-env": "^7.19.3",
     "@babel/preset-react": "^7.16.7",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
-    "antd": "^4.23.3",
+    "antd": "^5.1.5",
     "cypress": "^10.9.0",
     "eslint": "^8.24.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -38,8 +38,8 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
   },
   "dependencies": {
@@ -49,8 +49,8 @@
     "handlebars": "^4.7.7",
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.8.1",
-    "react-router": "^6.4.1",
-    "react-router-dom": "^6.4.1"
+    "react-router": "^6.6.2",
+    "react-router-dom": "^6.6.2"
   },
   "peerDependencies": {
     "antd": ">=4.19.0",

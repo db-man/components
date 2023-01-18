@@ -179,7 +179,7 @@ export default class CreatePage extends React.Component {
     return true;
   };
 
-  warnPrimaryKeyInvalid = (value) => message.warn(
+  warnPrimaryKeyInvalid = (value) => message.warning(
     <div>
       Found duplicated item in db
       {' '}
