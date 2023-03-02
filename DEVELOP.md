@@ -1,9 +1,15 @@
 ## dev
 
+Install
+
+```
+npm i
+```
+
 Dev
 
 ```
-yarn start
+npm start
 ```
 
 Publish
