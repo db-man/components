@@ -6,22 +6,24 @@ import { Breadcrumb } from 'antd';
 export default function BreadcrumbWrapper(props) {
   const { dbName, tableName, action } = props;
   return (
-    <Breadcrumb style={{ margin: '16px 0' }}>
-      <Breadcrumb.Item>
-        <Link to="/">Home</Link>
-      </Breadcrumb.Item>
-      {dbName ? (
-        <Breadcrumb.Item>
-          <Link to={`/${dbName}`}>{dbName}</Link>
-        </Breadcrumb.Item>
-      ) : null}
-      {tableName ? (
-        <Breadcrumb.Item>
-          <Link to={`/${dbName}/${tableName}`}>{tableName}</Link>
-        </Breadcrumb.Item>
-      ) : null}
-      {action ? <Breadcrumb.Item>{action}</Breadcrumb.Item> : null}
-    </Breadcrumb>
+    <Breadcrumb
+      style={{ margin: '16px 0' }}
+      items={[
+        { title: <Link to="/">Home</Link> }, {
+          title: (
+            dbName ? (
+              <Link to={`/${dbName}`}>{dbName}</Link>
+            ) : null
+          ),
+        }, {
+          title: (tableName ? (
+            <Link to={`/${dbName}/${tableName}`}>{tableName}</Link>
+          ) : null),
+        },
+        {
+          title: action || null,
+        }]}
+    />
   );
 }
 
