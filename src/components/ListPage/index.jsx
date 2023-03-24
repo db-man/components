@@ -279,7 +279,9 @@ export default class ListPage extends React.Component {
           >
             Update
           </Link>
+          {' '}
           |
+          {' '}
           <Link
             to={{
               pathname: `/${dbName}/${tableName}/get`,
