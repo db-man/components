@@ -310,6 +310,7 @@ export default class ListPage extends React.Component {
         {this.alertValidations()}
         <Table
           size="small"
+          showSorterTooltip={false}
           rowKey={primaryKey}
           columns={this.getTableColumns()}
           dataSource={this.filteredSortedData}
