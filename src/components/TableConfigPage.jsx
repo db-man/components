@@ -52,12 +52,13 @@ const footer = ({ page }) => function TableFooter() {
 
 export default function TableConfigPage() {
   const page = useContext(PageContext);
-  console.debug('TableConfigPage', page.columns); // eslint-disable-line no-console
+  const { columns: dbTableColumns } = page;
+  console.debug('TableConfigPage', dbTableColumns); // eslint-disable-line no-console
   return (
     <div className="table-config-page">
       <Table
         rowKey="id"
-        dataSource={page.columns}
+        dataSource={dbTableColumns}
         columns={columns}
         pagination={false}
         footer={footer({ page })}
