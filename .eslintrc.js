@@ -4,11 +4,7 @@ module.exports = {
     es2021: true,
     'jest/globals': true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-    'plugin:cypress/recommended',
-  ],
+  extends: ['plugin:react/recommended', 'airbnb', 'plugin:cypress/recommended'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -16,10 +12,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    'jest',
-  ],
+  plugins: ['react', 'jest'],
   rules: {
     'jest/no-disabled-tests': 'warn',
     'jest/no-focused-tests': 'error',
@@ -27,6 +20,7 @@ module.exports = {
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'object-curly-newline': 'off',
   },
   settings: {
     'import/resolver': {

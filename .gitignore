@@ -17,3 +17,5 @@ coverage
 
 # Build dir
 # /lib/
+
+.DS_Store

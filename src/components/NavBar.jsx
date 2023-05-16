@@ -24,10 +24,7 @@ export default class NavBar extends React.Component {
           Create
         </a>,
         ',',
-        <a
-          key="list-link"
-          href={`/${dbName}/${column.referenceTable}/list`}
-        >
+        <a key="list-link" href={`/${dbName}/${column.referenceTable}/list`}>
           List
         </a>,
         ') | ',
@@ -35,9 +32,7 @@ export default class NavBar extends React.Component {
   };
 
   render() {
-    const {
-      dbName, tableName, action, primaryKey,
-    } = this.context;
+    const { dbName, tableName, action, primaryKey } = this.context;
 
     const id = getUrlParams()[primaryKey];
     const filter = encodeURIComponent(
@@ -46,54 +41,78 @@ export default class NavBar extends React.Component {
       }),
     );
 
+    // Only when appModes have "split-table"
+    const aaa = id ? (
+      <a
+        title="GitHub File Path"
+        href={githubUtils.getGitHubFullPath(
+          `${localStorage.getItem(
+            constants.LS_KEY_GITHUB_REPO_PATH,
+          )}/${dbName}/${tableName}/${githubDb.validFilename(id)}.json`,
+        )}
+        target="_blank"
+        rel="noreferrer"
+      >
+        GitHub Path
+      </a>
+    ) : null;
+
+    const createLink = (
+      <Link to={{ pathname: `/${dbName}/${tableName}/create` }}>Create</Link>
+    );
+    const updateOrGetLink = (
+      <Link
+        to={{
+          pathname: `/${dbName}/${tableName}/${
+            action === 'get' ? 'update' : 'get'
+          }`,
+          search: `?${primaryKey}=${id}`,
+        }}
+      >
+        {action === 'get' ? 'Update' : 'Get'}
+      </Link>
+    );
+    const listLink = (
+      <Link
+        to={{
+          pathname: `/${dbName}/${tableName}/list`,
+          search: `?filter=${filter}`,
+        }}
+      >
+        List
+      </Link>
+    );
+
     return (
       <div className="dm-nav-bar">
-        NavBar: github(
-        {/* Only when appModes have "split-table" */id ? (
-          <a
-            title="GitHub File Path"
-            href={githubUtils.getGitHubFullPath(
-              `${localStorage.getItem(
-                constants.LS_KEY_GITHUB_REPO_PATH,
-              )}/${dbName}/${tableName}/${githubDb.validFilename(id)}.json`,
-            )}
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub Path
-          </a>
-        ) : null}
-        )
-        {' '}
-        {tableName}
-        (
-        <Link to={{ pathname: `/${dbName}/${tableName}/create` }}>Create</Link>
-        ,
-        <Link
-          to={{
-            pathname: `/${dbName}/${tableName}/${
-              action === 'get' ? 'update' : 'get'
-            }`,
-            search: `?${primaryKey}=${id}`,
-          }}
-        >
-          {action === 'get' ? 'Update' : 'Get'}
-        </Link>
-        ,
-        <Link
-          to={{
-            pathname: `/${dbName}/${tableName}/list`,
-            search: `?filter=${filter}`,
-          }}
-        >
-          List
-        </Link>
-        ) | Ref tables:
-        (
-        {this.renderReferenceTableLink()}
-        )
-        |
-        {' '}
+        NavBar:
+        <span> </span>
+        <span>
+          <span>github</span>
+          <span>(</span>
+          <span>{aaa}</span>
+          <span>)</span>
+        </span>
+        <span> </span>
+        <span>
+          <span>{tableName}</span>
+          <span>( </span>
+          <span>{createLink}</span>
+          <span>,</span>
+          <span>{updateOrGetLink}</span>
+          <span>,</span>
+          <span>{listLink}</span>
+          <span>)</span>
+        </span>
+        <span> | </span>
+        <span>
+          <span>Ref tables</span>
+          <span>: </span>
+          <span>(</span>
+          <span>{this.renderReferenceTableLink()}</span>
+          <span>)</span>
+        </span>
+        <span> | </span>
         <a
           title="GitHub File Path"
           href={githubDb.getDataUrl(dbName, tableName)}
@@ -102,7 +121,7 @@ export default class NavBar extends React.Component {
         >
           {githubDb.getDataPath(dbName, tableName)}
         </a>
-        (
+        {/* (
         <a
           title="Commit History"
           href={githubUtils.getGitHubHistoryPath(
@@ -113,7 +132,7 @@ export default class NavBar extends React.Component {
         >
           history
         </a>
-        )
+        ) */}
       </div>
     );
   }
