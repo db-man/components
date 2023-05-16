@@ -21,6 +21,7 @@ module.exports = {
     'jest/valid-expect': 'error',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'object-curly-newline': 'off',
+    'react/jsx-one-expression-per-line': 'off',
   },
   settings: {
     'import/resolver': {

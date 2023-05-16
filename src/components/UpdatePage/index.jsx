@@ -1,9 +1,7 @@
 /* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods */
 
 import React from 'react';
-import {
-  message, Alert, Spin, Skeleton,
-} from 'antd';
+import { message, Alert, Spin, Skeleton } from 'antd';
 import { utils as dbManUtils } from 'db-man';
 import { githubDb } from '@db-man/github';
 
@@ -76,7 +74,11 @@ export default class UpdatePage extends React.Component {
     if (this.isSplitTable) {
       return this.state.record;
     }
-    return this.state.rows.find((row) => row[this.context.primaryKey] === this.currentId) || {};
+    return (
+      this.state.rows.find(
+        (row) => row[this.context.primaryKey] === this.currentId,
+      ) || {}
+    );
   }
 
   get tips() {
@@ -204,7 +206,9 @@ export default class UpdatePage extends React.Component {
 
   getRecordFileAsync = async () => {
     const { dbName, tableName } = this.context;
-    this.setState({ recordFileLoading: `Loading ${dbName}/${tableName}/${this.currentId}` });
+    this.setState({
+      recordFileLoading: `Loading ${dbName}/${tableName}/${this.currentId}`,
+    });
     try {
       const { content, sha } = await githubDb.getRecordFileContentAndSha(
         dbName,
@@ -222,13 +226,16 @@ export default class UpdatePage extends React.Component {
     this.setState({ recordFileLoading: '' });
   };
 
-  renderAlert = () => this.state.errorMessage && (
-    <Alert message={this.state.errorMessage} type="error" />
-  );
+  renderAlert = () => {
+    if (!this.state.errorMessage) {
+      return null;
+    }
+    return <Alert message={this.state.errorMessage} type="error" />;
+  };
 
   renderForm = () => {
     if (this.tips.length) {
-      return <Spin tip={this.tips.join(',')} />;
+      return <Spin tip={this.tips.join(',')}>Loading...</Spin>;
     }
     if (!this.record[this.context.primaryKey]) {
       return null;

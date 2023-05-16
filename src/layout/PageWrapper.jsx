@@ -100,7 +100,9 @@ export default class PageWrapper extends React.Component {
     const { dbName, tableName, action } = this.props;
     return {
       // e.g. ['split-table']
-      appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES) ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',') : [],
+      appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES)
+        ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',')
+        : [],
       dbs: getDbs(),
       dbName,
       tableName,
@@ -180,11 +182,7 @@ export default class PageWrapper extends React.Component {
     }
 
     if (errMsgs.length > 0) {
-      return (
-        <div className="dm-page-v2 err-msg">
-          {errMsgs.join(' ,')}
-        </div>
-      );
+      return <div className="dm-page-v2 err-msg">{errMsgs.join(' ,')}</div>;
     }
 
     const PageComponent = mapp[action];
@@ -199,7 +197,7 @@ export default class PageWrapper extends React.Component {
     }
 
     if (loading) {
-      return <Spin tip="loading columns in PageWrapper" />;
+      return <Spin tip="loading columns in PageWrapper">Loading...</Spin>;
     }
 
     return (

@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import {
-  Table, Input, Row, Col, Spin, Popover, Alert,
-} from 'antd';
+import { Table, Input, Row, Col, Spin, Popover, Alert } from 'antd';
 import { RightSquareFilled } from '@ant-design/icons';
 import debounce from 'lodash.debounce';
 import { githubDb } from '@db-man/github';
@@ -95,11 +93,7 @@ export default class ListPage extends React.Component {
 
   get filteredSortedData() {
     const { filter, sorter, rows } = this.state;
-    const filteredData = getFilteredData(
-      this.filterCols,
-      filter,
-      rows,
-    );
+    const filteredData = getFilteredData(this.filterCols, filter, rows);
     if (sorter.columnKey && sorter.order !== undefined) {
       return getSortedData(filteredData, sorter);
     }
@@ -148,9 +142,7 @@ export default class ListPage extends React.Component {
       <div style={{ color: 'red' }}>
         Duplicated row keys(
         {duplicatedRowKeys.length}
-        ):
-        {' '}
-        {duplicatedRowKeys.join(', ')}
+        ): {duplicatedRowKeys.join(', ')}
       </div>
     );
   };
@@ -159,28 +151,23 @@ export default class ListPage extends React.Component {
     const { rows } = this.state;
     const { primaryKey } = this.context;
     const invalidRows = [];
-    rows.forEach(
-      (row, idx) => {
-        if (row[primaryKey] === undefined || row[primaryKey] === null) {
-          invalidRows.push({
-            rowIdx: idx,
-            rowData: row,
-          });
-        }
-      },
-    );
+    rows.forEach((row, idx) => {
+      if (row[primaryKey] === undefined || row[primaryKey] === null) {
+        invalidRows.push({
+          rowIdx: idx,
+          rowData: row,
+        });
+      }
+    });
     if (invalidRows.length === 0) return null;
     return (
       <div style={{ color: 'red' }}>
         Invalid rows(
         {invalidRows.length}
-        ):
-        {' '}
+        ):{' '}
         {invalidRows.map((row) => (
           <div>
-            {`idx:${row.rowIdx}`}
-            {' '}
-            {JSON.stringify(row.rowData)}
+            {`idx:${row.rowIdx}`} {JSON.stringify(row.rowData)}
           </div>
         ))}
       </div>
@@ -196,9 +183,7 @@ export default class ListPage extends React.Component {
 
   getTableColumns = () => {
     const { sorter } = this.state;
-    const {
-      columns, primaryKey, dbName, tableName,
-    } = this.context;
+    const { columns, primaryKey, dbName, tableName } = this.context;
 
     const cols = columns
       .filter((column) => column['type:listPage'] !== 'HIDE')
@@ -229,20 +214,18 @@ export default class ListPage extends React.Component {
             return !!val;
           };
           // If this column has ref table, then render links to ref table item
-          antdCol.render = (...args/* value, record, index */) => (
+          antdCol.render = (...args /* value, record, index */) => (
             <div>
-              {lastRender(...args)}
-              {' '}
-              {hasVal(args[0])
-                && (
-                  <Popover
-                    title="Ref Table Links"
-                    trigger="click"
-                    content={<RefTableLinks value={args[0]} column={column} />}
-                  >
-                    <RightSquareFilled />
-                  </Popover>
-                )}
+              {lastRender(...args)}{' '}
+              {hasVal(args[0]) && (
+                <Popover
+                  title="Ref Table Links"
+                  trigger="click"
+                  content={<RefTableLinks value={args[0]} column={column} />}
+                >
+                  <RightSquareFilled />
+                </Popover>
+              )}
             </div>
           );
         }
@@ -278,10 +261,8 @@ export default class ListPage extends React.Component {
             }}
           >
             Update
-          </Link>
-          {' '}
-          |
-          {' '}
+          </Link>{' '}
+          |{' '}
           <Link
             to={{
               pathname: `/${dbName}/${tableName}/get`,
@@ -297,11 +278,10 @@ export default class ListPage extends React.Component {
   };
 
   renderTable = () => {
-    const {
-      loading, rows, contentTableName, page, pageSize, errMsg,
-    } = this.state;
+    const { loading, rows, contentTableName } = this.state;
+    const { page, pageSize, errMsg } = this.state;
     const { tableName, primaryKey } = this.context;
-    if (loading) return <Spin tip={loading} />;
+    if (loading) return <Spin tip={loading}>Loading...</Spin>;
     if (errMsg) return <Alert message={errMsg} type="error" />;
     if (!rows) return null;
     // When router changed, before loading next table rows,
