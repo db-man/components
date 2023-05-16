@@ -54,6 +54,8 @@ export default class ListPage extends React.Component {
       filter: getInitialFilter(this.filterCols),
       sorter: getInitialSorter(),
     });
+
+    window.addEventListener('keydown', this.handleKeyDown, false);
   }
 
   componentDidUpdate(prevProps) {
@@ -66,7 +68,27 @@ export default class ListPage extends React.Component {
   componentWillUnmount() {
     // Cancel all HTTP requests in this page
     this.controller.abort();
+
+    window.removeEventListener('keydown', this.handleKeyDown, false);
   }
+
+  handleKeyDown = (e) => {
+    const currentPage = this.state.page;
+
+    if (
+      e.key === 'ArrowRight' &&
+      currentPage < this.filteredSortedData.length / this.state.pageSize
+    ) {
+      this.updateState({
+        page: this.state.page + 1,
+      });
+    } else if (e.key === 'ArrowLeft' && currentPage > 1) {
+      this.updateState({
+        page: this.state.page - 1,
+      });
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   handleFilterChange = (key) => (event) => {
     const { filter } = this.state;

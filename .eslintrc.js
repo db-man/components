@@ -22,6 +22,8 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'object-curly-newline': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    'react/destructuring-assignment': 'off',
+    'operator-linebreak': 'off',
   },
   settings: {
     'import/resolver': {
