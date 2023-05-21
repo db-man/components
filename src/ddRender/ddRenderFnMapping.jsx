@@ -14,7 +14,11 @@ import Handlebars from 'handlebars/dist/handlebars';
 import { utils } from 'db-man';
 
 import {
-  ImageLink, ImageLinks, Link, Links, Fragment,
+  ImageLink,
+  ImageLinks,
+  Link,
+  Links,
+  Fragment,
 } from '../components/Links';
 import PhotoList from '../components/PhotoList';
 import ErrorAlert from '../components/ErrorAlert';
@@ -25,10 +29,13 @@ import TextAreaFormFieldValue from '../components/TextAreaFormFieldValue';
  * input: {title:"foo"}
  * output: bar
  */
-Handlebars.registerHelper('replace', function replaceHelper(find, replace, options) {
-  const string = options.fn(this);
-  return string.replace(find, replace);
-});
+Handlebars.registerHelper(
+  'replace',
+  function replaceHelper(find, replace, options) {
+    const string = options.fn(this);
+    return string.replace(find, replace);
+  },
+);
 
 /**
  * tpl: {{join record.tags ", "}}
@@ -51,37 +58,36 @@ Handlebars.registerHelper('getTableRecordByKey', (options) => {
   );
 });
 
-const ddComponent = (Component) => function dComponent(val, record, index, args, tplExtra) {
-  if (!record || typeof record !== 'object') {
-    console.error('[ddComponent] record should be an object!', record); // eslint-disable-line no-console
-  }
-  if (!args || !args[1]) {
-    return <Component>{val}</Component>;
-  }
-
-  const tplStr = args[1];
-  const tpl = Handlebars.compile(tplStr);
-  const json = tpl({ record, extra: tplExtra });
-  try {
-    // {foo:'bar'} <= "{\"foo\":\"bar\"}"
-    // "foo" <= "\"foo\""
-    const props = JSON.parse(json);
-    if (typeof props === 'string') {
-      return <Component>{props}</Component>;
+const ddComponent = (Component) =>
+  function dComponent(val, record, index, args, tplExtra) {
+    if (!record || typeof record !== 'object') {
+      console.error('[ddComponent] record should be an object!', record); // eslint-disable-line no-console
     }
-    return <Component {...props} />; // eslint-disable-line react/jsx-props-no-spreading
-  } catch (err) {
-    console.error('Failed to parse JSON for tpl, err:', err, json); // eslint-disable-line no-console
-    return (
-      <div>
-        val:
-        {' '}
-        {val}
-        <ErrorAlert json={json} error={err} tplStr={tplStr} record={record} />
-      </div>
-    );
-  }
-};
+    if (!args || !args[1]) {
+      return <Component>{val}</Component>;
+    }
+
+    const tplStr = args[1];
+    const tpl = Handlebars.compile(tplStr);
+    const json = tpl({ record, extra: tplExtra });
+    try {
+      // {foo:'bar'} <= "{\"foo\":\"bar\"}"
+      // "foo" <= "\"foo\""
+      const props = JSON.parse(json);
+      if (typeof props === 'string') {
+        return <Component>{props}</Component>;
+      }
+      return <Component {...props} />; // eslint-disable-line react/jsx-props-no-spreading
+    } catch (err) {
+      console.error('Failed to parse JSON for tpl, err:', err, json); // eslint-disable-line no-console
+      return (
+        <div>
+          val: {val}
+          <ErrorAlert json={json} error={err} tplStr={tplStr} record={record} />
+        </div>
+      );
+    }
+  };
 
 /**
  * Data Driving Render Function Mapping

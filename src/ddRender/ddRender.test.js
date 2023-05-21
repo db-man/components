@@ -7,20 +7,60 @@ describe('getColumnRender', () => {
       id: 'url',
       'type:listPage': 'ImageLink',
     });
-    expect(view('https://a.com/b.jpg', { url: 'https://a.com/b.jpg' }, 1)).toMatchSnapshot();
+    expect(
+      view('https://a.com/b.jpg', { url: 'https://a.com/b.jpg' }, 1),
+    ).toMatchSnapshot();
   });
 
   test('should return proper value2', () => {
     const view = getColumnRender({
       id: 'yrl',
-      'type:listPage': ['ImageLink', '{"url":"{{record.url}}","imgSrc":"{{record.url}}"}'],
+      'type:listPage': [
+        'ImageLink',
+        '{"url":"{{record.url}}","imgSrc":"{{record.url}}"}',
+      ],
     });
-    expect(view('https://a.com/large/b.jpg', { url: 'https://a.com/large/b.jpg' })).toMatchSnapshot();
+    expect(
+      view('https://a.com/large/b.jpg', { url: 'https://a.com/large/b.jpg' }),
+    ).toMatchSnapshot();
   });
 
   describe('given Link', () => {
     it('should match snapshot', () => {
-      expect((getColumnRender({ 'type:listPage': ['Link', '{"href":"{{record.url}}","text":"{{record.url}}"}'] }))('https://foo.com', { url: 'https://foo.com' })).toMatchSnapshot();
+      expect(
+        getColumnRender({
+          'type:listPage': [
+            'Link',
+            '{"href":"{{record.url}}","text":"{{record.url}}"}',
+          ],
+        })('https://foo.com', { url: 'https://foo.com' }),
+      ).toMatchSnapshot();
+    });
+  });
+
+  describe('given ImageLink', () => {
+    it('should match snapshot', () => {
+      expect(
+        getColumnRender({
+          'type:listPage': [
+            'ImageLink',
+            '{"url":"{{record.photos.[0]}}","imgSrc":"{{record.photos.[0]}}"}',
+          ],
+        })('https://foo.com/a.jpg', {
+          id: 'foo',
+          photos: ['https://foo.com/a.jpg'],
+        }),
+      ).toMatchSnapshot();
+    });
+    it('should match snapshot when photos is undefined', () => {
+      expect(
+        getColumnRender({
+          'type:listPage': [
+            'ImageLink',
+            '{"url":"{{record.photos.[0]}}","imgSrc":"record.photos.[0]"}',
+          ],
+        })('', { id: 'foo' }),
+      ).toMatchSnapshot();
     });
   });
 
@@ -37,22 +77,30 @@ describe('getRender', () => {
     it('should render properly', () => {
       const args = 'Link';
       const record = { url: 'https://foo.com' };
-      expect((getRender(args))(record.url, record)).toMatchSnapshot();
+      expect(getRender(args)(record.url, record)).toMatchSnapshot();
     });
   });
   describe('given tpl', () => {
     it('should render properly', () => {
-      const args = ['Link', '{"href":"{{record.url}}","text":"{{record.url}}"}'];
+      const args = [
+        'Link',
+        '{"href":"{{record.url}}","text":"{{record.url}}"}',
+      ];
       const record = { url: 'https://foo.com' };
-      expect((getRender(args))(record.url, record)).toMatchSnapshot();
+      expect(getRender(args)(record.url, record)).toMatchSnapshot();
     });
   });
   describe('TextAreaFormFieldValue', () => {
     it('should match snapshot', () => {
-      const args = ['TextAreaFormFieldValue', '{"label":"{{extra.column.name}}","rows":2,"value":"{{record.note}}"}'];
+      const args = [
+        'TextAreaFormFieldValue',
+        '{"label":"{{extra.column.name}}","rows":2,"value":"{{record.note}}"}',
+      ];
       const column = { id: 'note', name: 'Note' };
       const record = { note: 'This is TODO' };
-      expect((getRender(args, { column }))(record.note, record)).toMatchSnapshot();
+      expect(
+        getRender(args, { column })(record.note, record),
+      ).toMatchSnapshot();
     });
   });
 });
@@ -67,7 +115,10 @@ describe('handlebars helper getTableRecordByKey', () => {
       { url: 'https://foo.jpg', tags: ['foo', 'bar'] },
       { url: 'https://bar.jpg', tags: ['foo2', 'bar2'] },
     ];
-    const record = { itemId: '123', samples: ['https://foo.jpg', 'https://bar.jpg'] };
+    const record = {
+      itemId: '123',
+      samples: ['https://foo.jpg', 'https://bar.jpg'],
+    };
     const tpl = Handlebars.compile(`[
 {{#each record.samples}}
 {{#if @index}},{{/if}}

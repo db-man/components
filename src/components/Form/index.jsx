@@ -3,7 +3,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Select, Button, message, Row, Col, Tabs, Popconfirm, InputNumber, Switch,
+  Select,
+  Button,
+  message,
+  Row,
+  Col,
+  Tabs,
+  Popconfirm,
+  InputNumber,
+  Switch,
 } from 'antd';
 
 import StringFormField from '../StringFormField';
@@ -16,17 +24,16 @@ import { dbs } from '../../dbs';
 import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
 import { validatePrimaryKey, isType } from './helpers';
+import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
 
 const renderFormFieldWrapper = (id, label, formField) => (
   <div key={id} className="dm-form-field dm-string-form-field">
-    <b>{label}</b>
-    :
-    {' '}
-    {formField}
+    <b>{label}</b>: {formField}
   </div>
 );
 
-const filterOutHiddenFields = (column) => column['type:createUpdatePage'] !== 'HIDE';
+const filterOutHiddenFields = (column) =>
+  column['type:createUpdatePage'] !== 'HIDE';
 
 export default class Form extends React.Component {
   constructor(props) {
@@ -43,11 +50,17 @@ export default class Form extends React.Component {
       if (!this.state.formValues[col.id]) {
         let defaultValue = '';
         switch (col['type:createUpdatePage']) {
-          case 'RadioGroup': [defaultValue] = col.enum; break;
-          default: defaultValue = '';
+          case 'RadioGroup':
+            [defaultValue] = col.enum;
+            break;
+          default:
+            defaultValue = '';
         }
         if (defaultValue) {
-          this.setState(((prevState) => ({ ...prevState, formValues: { ...prevState.formValues, [col.id]: defaultValue } })));
+          this.setState((prevState) => ({
+            ...prevState,
+            formValues: { ...prevState.formValues, [col.id]: defaultValue },
+          }));
         }
       }
     });
@@ -93,12 +106,13 @@ export default class Form extends React.Component {
    * @param {string} id Column name
    * @param {string[]} value Cell value
    */
-  handleStringArrayChange = (id) => (value) => this.setState({
-    formValues: {
-      ...this.state.formValues,
-      [id]: value,
-    },
-  });
+  handleStringArrayChange = (id) => (value) =>
+    this.setState({
+      formValues: {
+        ...this.state.formValues,
+        [id]: value,
+      },
+    });
 
   handleJsonEditorChange = (formValues) => {
     this.setState({ formValues });
@@ -126,18 +140,18 @@ export default class Form extends React.Component {
     return appModes.indexOf('split-table') !== -1;
   }
 
-  warnPrimaryKeyInvalid = (value) => message.warning(
-    <div>
-      Found duplicated item in db
-      {' '}
-      <a
-        href={`/${this.context.dbName}/${this.context.tableName}/update?${this.context.primaryKey}=${value}`}
-      >
-        {value}
-      </a>
-    </div>,
-    10,
-  );
+  warnPrimaryKeyInvalid = (value) =>
+    message.warning(
+      <div>
+        Found duplicated item in db{' '}
+        <a
+          href={`/${this.context.dbName}/${this.context.tableName}/update?${this.context.primaryKey}=${value}`}
+        >
+          {value}
+        </a>
+      </div>,
+      10,
+    );
 
   renderStringFormField = (column) => {
     const { loading } = this.props;
@@ -158,14 +172,13 @@ export default class Form extends React.Component {
       const radioValue = value || column.enum[0];
       return renderFormFieldWrapper(
         column.id,
-        column.name, (
-          <RadioGroupFormField
-            column={column}
-            disabled={loading}
-            value={radioValue}
-            onChange={this.handleChange(column.id)}
-          />
-        ),
+        column.name,
+        <RadioGroupFormField
+          column={column}
+          disabled={loading}
+          value={radioValue}
+          onChange={this.handleChange(column.id)}
+        />,
       );
     }
     let preview = false;
@@ -196,17 +209,15 @@ export default class Form extends React.Component {
     const { formValues } = this.state;
 
     if (
-      !column['type:createUpdatePage']
-      || column['type:createUpdatePage'] === 'Select'
+      !column['type:createUpdatePage'] ||
+      column['type:createUpdatePage'] === 'Select'
     ) {
       return (
         <div
           key={column.id}
           className="dm-form-field dm-string-array-form-field"
         >
-          <b>{column.name}</b>
-          :
-          {' '}
+          <b>{column.name}</b>:{' '}
           <Select
             size="small"
             mode="tags"
@@ -220,17 +231,12 @@ export default class Form extends React.Component {
       );
     }
 
-    const { is: isMultipleInputs, preview: isMultipleInputsWithPreview } = isType(column, 'MultipleInputs');
+    const { is: isMultipleInputs, preview: isMultipleInputsWithPreview } =
+      isType(column, 'MultipleInputs');
     if (isMultipleInputs) {
       if (isMultipleInputsWithPreview) {
         return (
-          <div
-            key={column.id}
-            className="dm-form-field dm-string-array-form-field"
-          >
-            <b>{column.name}</b>
-            :
-            {' '}
+          <FieldWrapperForCreateUpdatePage key={column.id} column={column}>
             <Row>
               <Col span={12}>
                 <MultipleInputs
@@ -241,15 +247,15 @@ export default class Form extends React.Component {
                 />
               </Col>
               <Col span={12}>
-                {formValues[column.id]
-                  && formValues[column.id].map((img) => (
+                {formValues[column.id] &&
+                  formValues[column.id].map((img) => (
                     <a key={img} href={img} target="_blank" rel="noreferrer">
                       <img width="200px" src={img} alt="img" />
                     </a>
                   ))}
               </Col>
             </Row>
-          </div>
+          </FieldWrapperForCreateUpdatePage>
         );
       }
 
@@ -258,9 +264,7 @@ export default class Form extends React.Component {
           key={column.id}
           className="dm-form-field dm-string-array-form-field"
         >
-          <b>{column.name}</b>
-          :
-          {' '}
+          <b>{column.name}</b>:{' '}
           <RefTableLink
             dbName={this.context.dbName}
             tables={dbs[this.context.dbName]}
@@ -283,30 +287,29 @@ export default class Form extends React.Component {
     const { loading } = this.props;
     return renderFormFieldWrapper(
       column.id,
-      column.name, (
-        <InputNumber
-          size="small"
-          disabled={loading}
-          autoFocus={column.id === this.context.primaryKey}
-          value={this.state.formValues[column.id]}
-          onChange={this.handleChange(column.id)}
-          onKeyDown={this.handleKeyDown}
-        />
-      ),
+      column.name,
+      <InputNumber
+        size="small"
+        disabled={loading}
+        autoFocus={column.id === this.context.primaryKey}
+        value={this.state.formValues[column.id]}
+        onChange={this.handleChange(column.id)}
+        onKeyDown={this.handleKeyDown}
+      />,
     );
   };
 
-  renderBoolFormField = (column) => renderFormFieldWrapper(
-    column.id,
-    column.name, (
+  renderBoolFormField = (column) =>
+    renderFormFieldWrapper(
+      column.id,
+      column.name,
       <Switch
         size="small"
         disabled={this.props.loading}
         checked={this.state.formValues[column.id]}
         onChange={this.handleChange(column.id)}
-      />
-    ),
-  );
+      />,
+    );
 
   fieldRender = (column) => {
     switch (column.type) {
@@ -358,35 +361,26 @@ export default class Form extends React.Component {
             onClick={this.handleFormSubmit}
           >
             Save
-          </Button>
-          {' '}
-          |
-          {' '}
+          </Button>{' '}
+          |{' '}
           <Popconfirm
             title="Are you sure to delete?"
             onConfirm={this.handleDelete}
-            onCancel={() => { }}
+            onCancel={() => {}}
             okText="Yes"
             cancelText="No"
           >
-            <Button
-              danger
-              disabled={loading}
-              loading={loading}
-            >
+            <Button danger disabled={loading} loading={loading}>
               Delete
             </Button>
-          </Popconfirm>
-          {' '}
-          |
-          {' '}
+          </Popconfirm>{' '}
+          |{' '}
           <Button
             type="link"
             href={`/${this.context.dbName}/${this.context.tableName}/create`}
           >
             Reset
-          </Button>
-          {' '}
+          </Button>{' '}
         </div>
       </div>
     );
@@ -403,8 +397,8 @@ Form.propTypes = {
 
 Form.defaultProps = {
   rows: [],
-  onSubmit: () => { },
-  onDelete: () => { },
+  onSubmit: () => {},
+  onDelete: () => {},
 };
 
 Form.contextType = PageContext;

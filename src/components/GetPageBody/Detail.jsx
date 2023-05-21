@@ -7,7 +7,7 @@ import { Input, Collapse } from 'antd';
 import PageContext from '../../contexts/page';
 import * as constants from '../../constants';
 import * as ddRender from '../../ddRender/ddRender';
-import FieldWrapper from '../FieldWrapper';
+import FieldWrapperForDetailPage from '../FieldWrapperForDetailPage';
 import StringFormFieldValue from '../StringFormFieldValue';
 
 const { Panel } = Collapse;
@@ -25,13 +25,7 @@ export default class Detail extends React.Component {
         return el;
       }
     }
-    return (
-      <div>
-        No render fn:
-        {' '}
-        {value}
-      </div>
-    );
+    return <div>No render fn: {value}</div>;
   };
 
   renderStringFieldValue = (column) => {
@@ -65,7 +59,10 @@ export default class Detail extends React.Component {
       case constants.NUMBER:
       case constants.STRING_ARRAY:
       default:
-        return this.renderWithDdRender(column, this.props.defaultValues[column.id]);
+        return this.renderWithDdRender(
+          column,
+          this.props.defaultValues[column.id],
+        );
     }
   };
 
@@ -91,13 +88,13 @@ export default class Detail extends React.Component {
       <div className="get-page-body-detail-component">
         <div>
           {columns.map((column) => (
-            <FieldWrapper
+            <FieldWrapperForDetailPage
               key={column.id}
               column={column}
               value={this.props.defaultValues[column.id]}
             >
               {this.renderFieldValue(column)}
-            </FieldWrapper>
+            </FieldWrapperForDetailPage>
           ))}
         </div>
         {this.renderDebugJson()}

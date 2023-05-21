@@ -24,6 +24,10 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'react/destructuring-assignment': 'off',
     'operator-linebreak': 'off',
+    'implicit-arrow-linebreak': 'off',
+    'react/function-component-definition': 'off',
+    'react/prop-types': 'off',
+    'arrow-body-style': 'off',
   },
   settings: {
     'import/resolver': {
