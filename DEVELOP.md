@@ -1,6 +1,6 @@
-## dev
+# Develop
 
-Install
+## Install
 
 ```
 npm i
@@ -12,7 +12,7 @@ Dev
 npm start
 ```
 
-Publish
+## Publish
 
 ```
 CI=true npm test
@@ -22,3 +22,7 @@ npm version patch
 git push && git push origin v0.1.2
 npm publish --access=public
 ```
+
+## Preview demos
+
+- http://localhost:3000/demos
