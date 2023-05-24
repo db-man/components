@@ -3,7 +3,7 @@ import { getRender, getColumnRender } from './ddRender';
 
 describe('getColumnRender', () => {
   test('should return proper value', () => {
-    const view = getColumnRender({
+    const view = getColumnRender('type:listPage', {
       id: 'url',
       'type:listPage': 'ImageLink',
     });
@@ -13,7 +13,7 @@ describe('getColumnRender', () => {
   });
 
   test('should return proper value2', () => {
-    const view = getColumnRender({
+    const view = getColumnRender('type:listPage', {
       id: 'yrl',
       'type:listPage': [
         'ImageLink',
@@ -28,7 +28,7 @@ describe('getColumnRender', () => {
   describe('given Link', () => {
     it('should match snapshot', () => {
       expect(
-        getColumnRender({
+        getColumnRender('type:listPage', {
           'type:listPage': [
             'Link',
             '{"href":"{{record.url}}","text":"{{record.url}}"}',
@@ -41,7 +41,7 @@ describe('getColumnRender', () => {
   describe('given ImageLink', () => {
     it('should match snapshot', () => {
       expect(
-        getColumnRender({
+        getColumnRender('type:listPage', {
           'type:listPage': [
             'ImageLink',
             '{"url":"{{record.photos.[0]}}","imgSrc":"{{record.photos.[0]}}"}',
@@ -54,7 +54,7 @@ describe('getColumnRender', () => {
     });
     it('should match snapshot when photos is undefined', () => {
       expect(
-        getColumnRender({
+        getColumnRender('type:listPage', {
           'type:listPage': [
             'ImageLink',
             '{"url":"{{record.photos.[0]}}","imgSrc":"record.photos.[0]"}',
@@ -66,7 +66,9 @@ describe('getColumnRender', () => {
 
   describe('given hidden column in a list page', () => {
     it('should return default render func', () => {
-      const colFunc = getColumnRender({ 'type:listPage': 'HIDE' });
+      const colFunc = getColumnRender('type:listPage', {
+        'type:listPage': 'HIDE',
+      });
       expect(colFunc('foo')).toBe('foo');
     });
   });

@@ -221,7 +221,7 @@ export default class ListPage extends React.Component {
           ...column.tableProps,
         };
 
-        const renderFn = getColumnRender(column);
+        const renderFn = getColumnRender('type:listPage', column);
         if (renderFn) {
           antdCol.render = renderFn;
         }

@@ -12,7 +12,9 @@
 ```
 
 ### `id` (Required)
+
 ### `name` (Required)
+
 ### `type` (Optional)
 
 Fill "STRING" or "STRING_ARRAY".
@@ -70,13 +72,30 @@ This props will pass to `ImageLink` component.
 
 ## Split table
 
-* .github/workflows/merge.yml - https://github.com/db-man/split-table-db/blob/main/.github/workflows/merge.yml
-* .github/workflows/split.yml - https://github.com/db-man/split-table-db/blob/main/.github/workflows/split.yml
-* merge.mjs - https://github.com/db-man/split-table-db/blob/main/merge.mjs
-* split.mjs - https://github.com/db-man/split-table-db/blob/main/split.mjs
-* cli/utils.mjs - https://github.com/db-man/split-table-db/blob/main/cli/utils.mjs
+- .github/workflows/merge.yml - https://github.com/db-man/split-table-db/blob/main/.github/workflows/merge.yml
+- .github/workflows/split.yml - https://github.com/db-man/split-table-db/blob/main/.github/workflows/split.yml
+- merge.mjs - https://github.com/db-man/split-table-db/blob/main/merge.mjs
+- split.mjs - https://github.com/db-man/split-table-db/blob/main/split.mjs
+- cli/utils.mjs - https://github.com/db-man/split-table-db/blob/main/cli/utils.mjs
 
 ## Database examples
 
-* [https://github.com/db-man/db](https://github.com/db-man/db)
-* [https://github.com/db-man/split-table-db](https://github.com/db-man/split-table-db)
+- [https://github.com/db-man/db](https://github.com/db-man/db)
+- [https://github.com/db-man/split-table-db](https://github.com/db-man/split-table-db)
+
+## Glossary
+
+```json
+{
+  "id": "product_id",
+  "type:listPage": [
+    "ImageLink",
+    "{\"url\":\"https://brickset.com/{{record.product_id}}-1\",\"imgSrc\":\"https://img.brickset.com/{{record.product_id}}-1.jpg\"}"
+  ]
+}
+```
+
+- `"type:listPage"` - render key
+- `["ImageLink","{\"url\":\"http://a.com/{{record.id}}\",\"imgSrc\":\"http://b.com/{{record.name}}.jpg\"}"]` - render expression
+  - `ImageLink` - render expression built-in function name
+  - `"{\"url\":\"http://a.com/{{record.id}}\",\"imgSrc\":\"http://b.com/{{record.name}}.jpg\"}"]` - render expression function template

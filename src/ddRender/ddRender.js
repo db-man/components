@@ -31,13 +31,8 @@ export const getRender = (args, tplExtra) => {
 
   if (Array.isArray(args)) {
     const [renderFnName] = args;
-    renderFn = (val, record, index) => ddRenderFnMapping[renderFnName](
-      val,
-      record,
-      index,
-      args,
-      tplExtra,
-    );
+    renderFn = (val, record, index) =>
+      ddRenderFnMapping[renderFnName](val, record, index, args, tplExtra);
   }
 
   return renderFn;
@@ -49,8 +44,8 @@ export const getRender = (args, tplExtra) => {
  *   "type:listPage": ["Link", "{{record.url}}"]
  * }
  */
-export const getColumnRender = (column) => {
-  const customRender = getRender(column['type:listPage']);
+export const getColumnRender = (renderKey, column, tplExtra) => {
+  const customRender = getRender(column[renderKey], tplExtra);
   if (customRender) {
     return customRender;
   }
@@ -60,15 +55,5 @@ export const getColumnRender = (column) => {
   return defaultRenders[column.type || constants.STRING];
 };
 
-export const getDetailPageColumnRender = (column, tplExtra) => {
-  const customRender = getRender(column['type:getPage'], tplExtra);
-  if (customRender) {
-    return customRender;
-  }
-
-  // the column render function defined in Table component of antd
-  // renderFn = (val, record, index) => ()
-  return defaultRenders[column.type || constants.STRING];
-};
-
-export const getRenderResultByColumn = (value, record, index, args, column) => getColumnRender(column)(value, record, index); // eslint-disable-line max-len
+export const getRenderResultByColumn = (value, record, index, args, column) =>
+  getColumnRender('type:listPage', column)(value, record, index); // eslint-disable-line max-len

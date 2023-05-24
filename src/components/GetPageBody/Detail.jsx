@@ -14,7 +14,7 @@ const { Panel } = Collapse;
 
 export default class Detail extends React.Component {
   renderWithDdRender = (column, value) => {
-    const renderFn = ddRender.getDetailPageColumnRender(column, {
+    const renderFn = ddRender.getColumnRender('type:getPage', column, {
       column,
       tables: this.context.tables,
       rows: this.props.refTables[`ref:${column.referenceTable}:rows`], // eslint-disable-line react/prop-types

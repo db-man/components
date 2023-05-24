@@ -58,10 +58,16 @@ Handlebars.registerHelper('getTableRecordByKey', (options) => {
   );
 });
 
-const ddComponent = (Component) =>
+/**
+ * Generate a render function based on the passing component,
+ * so we can later call this render function by passing an Handlebars template to dynamic render component based on the passing record
+ * @param {*} Component
+ * @returns {()=><Component/>} render function
+ */
+const genRenderFunc = (Component) =>
   function dComponent(val, record, index, args, tplExtra) {
     if (!record || typeof record !== 'object') {
-      console.error('[ddComponent] record should be an object!', record); // eslint-disable-line no-console
+      console.error('[genRenderFunc] record should be an object!', record); // eslint-disable-line no-console
     }
     if (!args || !args[1]) {
       return <Component>{val}</Component>;
@@ -107,7 +113,7 @@ const ddRenderFnMapping = {
    * 2. "type:listPage": ["Link", "{\"href\":\"https://github.com/{{record.org}}/{{record.repo}}\",\"text\":\"{{record.repo}}\"}"]
    * 3. "type:listPage": "Link"
    */
-  Link: ddComponent(Link),
+  Link: genRenderFunc(Link),
   /**
    * Usage:
    * ```json
@@ -121,16 +127,16 @@ const ddRenderFnMapping = {
    *   By using `{{record.url}}` will generate "https://foo.com/get?foo&#x3D;bar".
    *   To prevent this issue, `{{{record.url}}}` could be used. (https://handlebarsjs.com/guide/expressions.html#html-escaping)
    */
-  ImageLink: ddComponent(ImageLink),
-  ImageLinks: ddComponent(ImageLinks),
+  ImageLink: genRenderFunc(ImageLink),
+  ImageLinks: genRenderFunc(ImageLinks),
   /**
    * Usage:
    * ```json
    * {"type:listPage": ["Fragment", "{{join record.tags \", \"}}"]}
    * ```
    */
-  Fragment: ddComponent(Fragment),
-  Links: ddComponent(Links),
+  Fragment: genRenderFunc(Fragment),
+  Links: genRenderFunc(Links),
   /**
    * Usage:
    * ```json
@@ -142,8 +148,8 @@ const ddRenderFnMapping = {
    * }
    * ```
    */
-  PhotoList: ddComponent(PhotoList),
-  TextAreaFormFieldValue: ddComponent(TextAreaFormFieldValue),
+  PhotoList: genRenderFunc(PhotoList),
+  TextAreaFormFieldValue: genRenderFunc(TextAreaFormFieldValue),
 };
 
 export default ddRenderFnMapping;

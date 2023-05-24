@@ -6,7 +6,7 @@ import { getColumnRender } from '../ddRender/ddRender';
 const { Panel } = Collapse;
 
 const Demos = () => {
-  const fn = getColumnRender({
+  const fn = getColumnRender('type:listPage', {
     id: 'photos',
     name: 'Photos',
     type: 'STRING_ARRAY',
