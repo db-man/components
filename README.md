@@ -14,16 +14,16 @@ A database portal to manage GitHub database.
 ```
 npx create-react-app my-app
 cd my-app
-yarn add @db-man/components antd
+npm add @db-man/components antd
 ```
 
 Modify `src/App.jsx`
 
 ```jsx
-import { App } from '@db-man/components'
-import './App.css'
+import { App } from '@db-man/components';
+import './App.css';
 export default function () {
-  return <App />
+  return <App />;
 }
 ```
 
@@ -36,4 +36,4 @@ Add below 2 lines to top of `src/App.css`.
 
 ## Topics
 
-* [Table column definition](DOC.md)
+- [Table column definition](DOC.md)

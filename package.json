@@ -5,7 +5,7 @@
   "main": "lib/lib.js",
   "scripts": {
     "start": "PUBLIC_URL=/ react-scripts start",
-    "build": "yarn build-lib",
+    "build": "npm run build-lib",
     "build-lib": "./build.sh",
     "build-app": "react-scripts build",
     "test": "react-scripts test"
