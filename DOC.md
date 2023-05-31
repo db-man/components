@@ -17,7 +17,7 @@
 
 ### `type` (Optional)
 
-Fill "STRING" or "STRING_ARRAY".
+One of "STRING", "STRING_ARRAY", "NUMBER" or "BOOL". Default is "STRING".
 
 ### `primary`
 
