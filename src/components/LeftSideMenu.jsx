@@ -49,19 +49,40 @@ export default class LeftSideMenu extends React.Component {
         openKeys={openKeys}
         style={{ height: '100%', borderRight: 0 }}
         onOpenChange={this.handleOpenChange}
-        items={tablesOfSelectedDb.map(({ name: tName }) => (
-          {
-            label: tName,
-            icon: <UserOutlined />,
-            children: [
-              { key: `${dbName}-${tName}-list`, label: <Link to={`/${dbName}/${tName}/list`}>List</Link> },
-              { key: `${dbName}-${tName}-create`, label: <Link to={`/${dbName}/${tName}/create`}>Create</Link> },
-              { key: `${dbName}-${tName}-random`, label: <Link to={`/${dbName}/${tName}/random`}>Random</Link> },
-              { key: `${dbName}-${tName}-tagsCloud`, label: <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link> },
-              { key: `${dbName}-${tName}-tableConfig`, label: <Link to={`/${dbName}/${tName}/tableConfig`}>tableConfig</Link> },
-            ],
-          }
-        ))}
+        items={tablesOfSelectedDb.map(({ name: tName }) => ({
+          label: tName,
+          icon: <UserOutlined />,
+          children: [
+            {
+              key: `${dbName}-${tName}-list`,
+              label: <Link to={`/${dbName}/${tName}/list`}>List</Link>,
+            },
+            {
+              key: `${dbName}-${tName}-create`,
+              label: <Link to={`/${dbName}/${tName}/create`}>Create</Link>,
+            },
+            {
+              key: `${dbName}-${tName}-random`,
+              label: <Link to={`/${dbName}/${tName}/random`}>Random</Link>,
+            },
+            {
+              key: `${dbName}-${tName}-tagsCloud`,
+              label: (
+                <Link to={`/${dbName}/${tName}/tagsCloud`}>tagsCloud</Link>
+              ),
+            },
+            {
+              key: `${dbName}-${tName}-tableConfig`,
+              label: (
+                <Link to={`/${dbName}/${tName}/tableConfig`}>tableConfig</Link>
+              ),
+            },
+            {
+              key: `${dbName}-${tName}-query`,
+              label: <Link to={`/${dbName}/${tName}/query`}>Query</Link>,
+            },
+          ],
+        }))}
       />
     );
   }

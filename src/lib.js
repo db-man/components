@@ -27,6 +27,7 @@ export { default as StringFormFieldValue } from './components/StringFormFieldVal
 export { default as SuccessMessage } from './components/SuccessMessage';
 export { default as TagsCloudPage } from './components/TagsCloudPage';
 export { default as TagsCloudPageBody } from './components/TagsCloudPageBody';
+export { default as QueryPage } from './components/QueryPage';
 export { default as TextAreaFormField } from './components/TextAreaFormField';
 export { default as TextAreaFormFieldValue } from './components/TextAreaFormFieldValue';
 export { default as UpdatePage } from './components/UpdatePage';

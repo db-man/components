@@ -17,6 +17,7 @@ import RandomPage from '../components/RandomPage';
 import TagsCloudPage from '../components/TagsCloudPage';
 import GetPage from '../components/GetPage';
 import TableConfigPage from '../components/TableConfigPage';
+import QueryPage from '../components/QueryPage';
 
 const { Provider } = PageContext;
 
@@ -28,6 +29,7 @@ const mapp = {
   get: GetPage,
   tagsCloud: TagsCloudPage,
   tableConfig: TableConfigPage,
+  query: QueryPage,
 };
 
 export function TableList({ dbName }) {
