@@ -6,11 +6,12 @@ import { githubDb } from '@db-man/github';
 import PageContext from '../contexts/page';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
+const defaultCode = 'return input;';
+
 export default function QueryPage() {
   const { dbName, tableName } = useContext(PageContext);
-  const [value, setValue] = React.useState('');
-  const [errMsg, setErrMsg] = React.useState('');
-  const [result, setResult] = React.useState('');
+  const [code, setCode] = React.useState(defaultCode);
+  const [result, setResult] = React.useState({ obj: '', err: '' });
   const [content, setContent] = React.useState([]);
 
   useEffect(() => {
@@ -19,37 +20,33 @@ export default function QueryPage() {
     });
   }, []);
 
-  const handleChange = (val) => {
-    setValue(val);
-
+  useEffect(() => {
     try {
       // eslint-disable-next-line no-new-func
-      const fn = Function('input', val);
+      const fn = Function('input', code);
 
       const output = fn(content);
-      setResult(JSON.stringify(output));
-      setErrMsg('');
+      setResult({ obj: JSON.stringify(output), err: '' });
     } catch (err) {
       // console.log('[ERROR] Failed to eval function!');
 
-      setResult('');
-      setErrMsg(err.message);
+      setResult({ obj: '', err: err.message });
     }
-  };
+  }, [content, code]);
 
   return (
     <div className="dm-query-page">
       <Row>
         <Col span={16}>
           Code:
-          <ReactSimpleCodeEditor value={value} onChange={handleChange} />
+          <ReactSimpleCodeEditor value={code} onChange={setCode} />
           <br />
         </Col>
         <Col span={8}>
           <div>Error:</div>
-          <div style={{ color: 'red' }}>{errMsg}</div>
+          <div style={{ color: 'red' }}>{result.err}</div>
           <div>Result:</div>
-          {result && <ReactJson src={JSON.parse(result)} />}
+          {result.obj && <ReactJson src={JSON.parse(result.obj)} />}
         </Col>
       </Row>
     </div>
