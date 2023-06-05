@@ -5,7 +5,7 @@ import { Input } from 'antd';
 const str2arr = (str) => str.split('\n');
 const arr2str = (arr) => arr.join('\n');
 
-export default function MultipleInputs(props) {
+export default function MultiLineInputBox(props) {
   const { value, onChange } = props;
   const handleChange = (event) => {
     onChange(str2arr(event.target.value));
@@ -20,11 +20,11 @@ export default function MultipleInputs(props) {
   );
 }
 
-MultipleInputs.propTypes = {
+MultiLineInputBox.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func,
 };
-MultipleInputs.defaultProps = {
+MultiLineInputBox.defaultProps = {
   value: [],
   onChange: () => {},
 };

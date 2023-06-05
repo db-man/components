@@ -10,7 +10,7 @@ const Demos = () => {
     id: 'photos',
     name: 'Photos',
     type: 'STRING_ARRAY',
-    'type:createUpdatePage': ['MultipleInputs', 'WithPreview'],
+    'type:createUpdatePage': ['MultiLineInputBox', 'WithPreview'],
     'type:listPage': [
       'ImageLink',
       '{"url":"{{record.photos.[0]}}","imgSrc":"{{record.photos.[0]}}"}',

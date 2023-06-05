@@ -19,7 +19,7 @@ import RadioGroupFormField from '../RadioGroupFormField';
 import JsonEditor from '../JsonEditor';
 import RefTableLink from '../RefTableLink';
 import PageContext from '../../contexts/page';
-import MultipleInputs from '../MultipleInputs';
+import MultiLineInputBox from '../MultiLineInputBox';
 import { dbs } from '../../dbs';
 import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
@@ -232,14 +232,14 @@ export default class Form extends React.Component {
     }
 
     const { is: isMultipleInputs, preview: isMultipleInputsWithPreview } =
-      isType(column, 'MultipleInputs');
+      isType(column, 'MultiLineInputBox');
     if (isMultipleInputs) {
       if (isMultipleInputsWithPreview) {
         return (
           <FieldWrapperForCreateUpdatePage key={column.id} column={column}>
             <Row>
               <Col span={12}>
-                <MultipleInputs
+                <MultiLineInputBox
                   rows={2}
                   disabled={this.props.loading}
                   value={formValues[column.id]}
@@ -271,7 +271,7 @@ export default class Form extends React.Component {
             value={formValues[column.id]}
             column={column}
           />
-          <MultipleInputs
+          <MultiLineInputBox
             disabled={this.props.loading}
             value={formValues[column.id]}
             onChange={this.handleStringArrayChange(column.id)}
