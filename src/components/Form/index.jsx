@@ -218,6 +218,22 @@ export default class Form extends React.Component {
           className="dm-form-field dm-string-array-form-field"
         >
           <b>{column.name}</b>:{' '}
+          {(column.quickOptions || []).map((opt) => (
+            <>
+              <Button
+                key={opt}
+                size="small"
+                onClick={() => {
+                  this.handleStringArrayChange(column.id)([
+                    ...(this.state.formValues[column.id] || []),
+                    opt,
+                  ]);
+                }}
+              >
+                {opt}
+              </Button>{' '}
+            </>
+          ))}{' '}
           <Select
             size="small"
             mode="tags"

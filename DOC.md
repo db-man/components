@@ -19,6 +19,15 @@
 
 One of "STRING", "STRING_ARRAY", "NUMBER" or "BOOL". Default is "STRING".
 
+| type         | Default UI Component |
+| ------------ | -------------------- |
+| STRING       | Input                |
+| STRING_ARRAY | Select mode="tags"   |
+| NUMBER       | InputNumber          |
+| BOOL         | Switch               |
+
+`{"type": "STRING_ARRAY"}` is the same as `{"type": "STRING_ARRAY","type:createUpdatePage":"Select"}`
+
 ### `primary`
 
 Only one column in table should have this field.
@@ -30,14 +39,24 @@ Only used in CreatePage or UpdatePage, only used in Input component (of type=STR
 
 ### `enum`
 
+Used when `type="STRING"`, and `type:createUpdatePage="RadioGroup"`.
+Only used on create/update page.
+To render some Radio components with given text, click one of the Radio to fill the text in input box.
+
 ```json
 {
   "id": "vehicleType",
   "name": "Vehicle Type",
-  "type": "string",
+  "type": "STRING",
   "enum": ["car", "bike"]
 }
 ```
+
+### `quickOptions`
+
+Used when `type="STRING_ARRAY"`, and default UI component `Select` is used.
+Only used on create/update page.
+To render some buttons on top of the dropdown, click button to quick input a new tag into dropdown.
 
 ### `type:listPage`
 
