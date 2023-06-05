@@ -219,9 +219,8 @@ export default class Form extends React.Component {
         >
           <b>{column.name}</b>:{' '}
           {(column.quickOptions || []).map((opt) => (
-            <>
+            <span key={opt}>
               <Button
-                key={opt}
                 size="small"
                 onClick={() => {
                   this.handleStringArrayChange(column.id)([
@@ -232,7 +231,7 @@ export default class Form extends React.Component {
               >
                 {opt}
               </Button>{' '}
-            </>
+            </span>
           ))}{' '}
           <Select
             size="small"
