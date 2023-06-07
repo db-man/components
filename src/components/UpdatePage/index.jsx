@@ -173,7 +173,7 @@ export default class UpdatePage extends React.Component {
     this.setState({ loading: '' });
   };
 
-  // Get both single record file or whole table file
+  // Get single record file or whole table file
   getData = () => {
     const ps = [];
     if (this.isSplitTable) {

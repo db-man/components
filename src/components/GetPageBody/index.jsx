@@ -14,8 +14,6 @@ export default class GetPageBody extends React.Component {
     this.state = {
       contentLoading: false,
       contentLoaded: false,
-      // table rows from github db
-      rows: null,
       refTables: {},
 
       errorMessage: '',
@@ -40,14 +38,22 @@ export default class GetPageBody extends React.Component {
   //   }
   // }
 
-  fetchData = (dbName, tableName) => {
-    this.setState({ contentLoading: true });
-    const defaultTableRequestPromise = githubDb
+  get isSplitTable() {
+    const { appModes } = this.context;
+    return appModes.indexOf('split-table') !== -1;
+  }
+
+  /**
+   * If primary key is "itemId", and this field value is "foo", then return "foo"
+   */
+  get currentId() {
+    return utils.getUrlParams()[this.context.primaryKey];
+  }
+
+  getTableRowsAsync = async ({ dbName, tableName }) => {
+    return githubDb
       .getTableRows(dbName, tableName)
       .then(({ content }) => {
-        this.setState({
-          rows: content,
-        });
         return content;
       })
       .then((tableRows) => {
@@ -60,31 +66,63 @@ export default class GetPageBody extends React.Component {
         console.error('getTableRows failed, err:', err);
         message.error('something wrong in getTableRows');
       });
+  };
+
+  getSingleRecordAsync = async ({ dbName, tableName }) => {
+    return githubDb
+      .getRecordFileContentAndSha(dbName, tableName, this.currentId)
+      .then(({ content }) => {
+        this.setState({
+          contentLoaded: true,
+          record: content,
+        });
+      })
+      .catch((err) => {
+        console.error('githubDb.getRecordFileContentAndSha failed, err:', err);
+        message.error('something wrong in githubDb.getRecordFileContentAndSha');
+      });
+  };
+
+  fetchData = (dbName, tableName) => {
+    this.setState({ contentLoading: true });
+    const ps = [];
+
+    if (this.isSplitTable) {
+      ps.push(this.getSingleRecordAsync({ dbName, tableName }));
+    } else {
+      ps.push(this.getTableRowsAsync({ dbName, tableName }));
+    }
 
     const getRefTablePromises = this.context.columns
       .filter(({ referenceTable }) => referenceTable)
-      .map(({ referenceTable }) => githubDb.getTableRows(dbName, referenceTable).then(({ content }) => {
-        const { refTables } = this.state;
-        refTables[`ref:${referenceTable}:rows`] = content; // TODO
-        this.setState({
-          refTables,
-        });
-      }));
+      .map(({ referenceTable }) => {
+        return githubDb
+          .getTableRows(dbName, referenceTable)
+          .then(({ content }) => {
+            const { refTables } = this.state;
+            refTables[`ref:${referenceTable}:rows`] = content; // TODO
+            this.setState({
+              refTables,
+            });
+          });
+      });
 
     console.debug('Start getting all table data...');
-    Promise.all([defaultTableRequestPromise, ...getRefTablePromises]).then(
-      () => {
+    Promise.all([...ps, ...getRefTablePromises])
+      .then(() => {
         console.debug('Finish getting all table data...');
+      })
+      .finally(() => {
         this.setState({ contentLoading: false });
-      },
-    );
+      });
   };
 
   // Create the initial form fields according to whether create/update.
   getInitialFormFields = (tableRows) => {
     const foundRows = tableRows.filter(
-      (item) => item[this.context.primaryKey]
-        === utils.getUrlParams()[this.context.primaryKey],
+      (item) =>
+        item[this.context.primaryKey] ===
+        utils.getUrlParams()[this.context.primaryKey],
     );
 
     if (foundRows.length === 0) {
@@ -101,9 +139,10 @@ export default class GetPageBody extends React.Component {
     };
   };
 
-  renderAlert = () => this.state.errorMessage && (
-  <Alert message={this.state.errorMessage} type="error" />
-  );
+  renderAlert = () =>
+    this.state.errorMessage && (
+      <Alert message={this.state.errorMessage} type="error" />
+    );
 
   renderDetail = () => {
     if (this.state.record === null) {
@@ -112,7 +151,6 @@ export default class GetPageBody extends React.Component {
     return (
       <Detail
         defaultValues={this.state.record}
-        rows={this.state.rows}
         tables={this.context.tables}
         refTables={this.state.refTables}
       />
