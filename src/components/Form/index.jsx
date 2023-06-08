@@ -218,7 +218,7 @@ export default class Form extends React.Component {
           className="dm-form-field dm-string-array-form-field"
         >
           <b>{column.name}</b>:{' '}
-          {(column.quickOptions || []).map((opt) => (
+          {(column['ui:presets'] || []).map((opt) => (
             <span key={opt}>
               <Button
                 size="small"

@@ -52,7 +52,7 @@ To render some Radio components with given text, click one of the Radio to fill 
 }
 ```
 
-### `quickOptions`
+### `ui:presets`
 
 Used when `type="STRING_ARRAY"`, and default UI component `Select` is used.
 Only used on create/update page.
