@@ -1,7 +1,6 @@
 import { Row, Col } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import ReactJson from 'react-json-view';
-import { githubDb } from '@db-man/github';
 
 import PageContext from '../contexts/page';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
@@ -9,7 +8,7 @@ import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 const defaultCode = 'return input;';
 
 export default function QueryPage() {
-  const { dbName, tableName } = useContext(PageContext);
+  const { dbName, tableName, githubDb } = useContext(PageContext);
   const [code, setCode] = React.useState(defaultCode);
   const [result, setResult] = React.useState({ obj: '', err: '' });
   const [content, setContent] = React.useState([]);

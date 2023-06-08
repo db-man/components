@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { message, Spin, Alert } from 'antd';
-import { githubDb } from '@db-man/github';
 import { utils as dbManUtils } from 'db-man';
 
 import { validatePrimaryKey } from './Form/helpers';
@@ -74,7 +73,7 @@ export default class CreatePage extends React.Component {
 
     this.setState({ saveLoading: true });
     try {
-      const { commit } = await githubDb.updateTableFile(
+      const { commit } = await this.context.githubDb.updateTableFile(
         this.context.dbName,
         this.context.tableName,
         newContent,
@@ -105,7 +104,7 @@ export default class CreatePage extends React.Component {
 
     this.setState({ saveLoading: true });
     try {
-      const { commit } = await githubDb.updateRecordFile(
+      const { commit } = await this.context.githubDb.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
@@ -212,7 +211,7 @@ export default class CreatePage extends React.Component {
               <div>
                 Loading file:{' '}
                 <a
-                  href={githubDb.getDataUrl(dbName, tableName)}
+                  href={this.context.githubDb.getDataUrl(dbName, tableName)}
                   target="_blank"
                   rel="noreferrer"
                 >

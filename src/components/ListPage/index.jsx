@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Table, Input, Row, Col, Spin, Popover, Alert } from 'antd';
 import { RightSquareFilled } from '@ant-design/icons';
 import debounce from 'lodash.debounce';
-import { githubDb } from '@db-man/github';
 
 import PageContext from '../../contexts/page';
 import { getColumnRender } from '../../ddRender/ddRender';
@@ -131,7 +130,7 @@ export default class ListPage extends React.Component {
     const { dbName } = this.context;
     this.setState({ loading: `Loading ${dbName}/${tableName} ...` });
     try {
-      const { content } = await githubDb.getTableRows(
+      const { content } = await this.context.githubDb.getTableRows(
         dbName,
         tableName,
         this.controller.signal,

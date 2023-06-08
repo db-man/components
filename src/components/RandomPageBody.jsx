@@ -3,7 +3,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { List, Card } from 'antd';
-import { githubDb } from '@db-man/github';
 
 // import { contexts as PageContext, ddRender } from '@db-man/components';
 import PageContext from '../contexts/page';
@@ -41,7 +40,7 @@ export default class RandomPageBody extends React.Component {
 
   getDataAsync = async () => {
     try {
-      const { content } = await githubDb.getTableRows(
+      const { content } = await this.context.githubDb.getTableRows(
         this.context.dbName,
         this.context.tableName,
       );

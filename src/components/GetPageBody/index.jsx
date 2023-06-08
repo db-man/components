@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { message, Alert, Spin } from 'antd';
-import { githubDb } from '@db-man/github';
 import * as utils from '../../utils';
 import PageContext from '../../contexts/page';
 
@@ -51,7 +50,7 @@ export default class GetPageBody extends React.Component {
   }
 
   getTableRowsAsync = async ({ dbName, tableName }) => {
-    return githubDb
+    return this.context.githubDb
       .getTableRows(dbName, tableName)
       .then(({ content }) => {
         return content;
@@ -69,7 +68,7 @@ export default class GetPageBody extends React.Component {
   };
 
   getSingleRecordAsync = async ({ dbName, tableName }) => {
-    return githubDb
+    return this.context.githubDb
       .getRecordFileContentAndSha(dbName, tableName, this.currentId)
       .then(({ content }) => {
         this.setState({
@@ -96,7 +95,7 @@ export default class GetPageBody extends React.Component {
     const getRefTablePromises = this.context.columns
       .filter(({ referenceTable }) => referenceTable)
       .map(({ referenceTable }) => {
-        return githubDb
+        return this.context.githubDb
           .getTableRows(dbName, referenceTable)
           .then(({ content }) => {
             const { refTables } = this.state;

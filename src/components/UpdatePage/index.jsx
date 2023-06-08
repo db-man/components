@@ -3,7 +3,6 @@
 import React from 'react';
 import { message, Alert, Spin, Skeleton } from 'antd';
 import { utils as dbManUtils } from 'db-man';
-import { githubDb } from '@db-man/github';
 
 import SuccessMessage from '../SuccessMessage';
 import * as utils from '../../utils';
@@ -102,7 +101,7 @@ export default class UpdatePage extends React.Component {
 
     this.setState({ loading: 'Updating table file...' });
     try {
-      const { commit } = await githubDb.updateTableFile(
+      const { commit } = await this.context.githubDb.updateTableFile(
         dbName,
         tableName,
         newRows,
@@ -130,7 +129,7 @@ export default class UpdatePage extends React.Component {
         ...formValues,
         updatedAt: dbManUtils.formatDate(new Date()),
       };
-      const { commit } = await githubDb.updateRecordFile(
+      const { commit } = await this.context.githubDb.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
@@ -155,7 +154,7 @@ export default class UpdatePage extends React.Component {
 
     this.setState({ loading: 'Deleting record file...' });
     try {
-      const { commit } = await githubDb.deleteRecordFile(
+      const { commit } = await this.context.githubDb.deleteRecordFile(
         dbName,
         tableName,
         formValues[primaryKey],
@@ -189,7 +188,7 @@ export default class UpdatePage extends React.Component {
     const { dbName, tableName } = this.context;
     this.setState({ tableFileLoading: `Loading ${dbName}/${tableName} ...` });
     try {
-      const { content: rows, sha: tableFileSha } = await githubDb.getTableRows(
+      const { content: rows, sha: tableFileSha } = await this.context.githubDb.getTableRows(
         dbName,
         tableName,
       );
@@ -210,7 +209,7 @@ export default class UpdatePage extends React.Component {
       recordFileLoading: `Loading ${dbName}/${tableName}/${this.currentId}`,
     });
     try {
-      const { content, sha } = await githubDb.getRecordFileContentAndSha(
+      const { content, sha } = await this.context.githubDb.getRecordFileContentAndSha(
         dbName,
         tableName,
         this.currentId,

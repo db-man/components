@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { utils as githubUtils, githubDb } from '@db-man/github';
+import { githubDb } from '@db-man/github';
 
 import * as constants from '../constants';
 import { getUrlParams } from '../utils';
@@ -45,7 +45,7 @@ export default class NavBar extends React.Component {
     const aaa = id ? (
       <a
         title="GitHub File Path"
-        href={githubUtils.getGitHubFullPath(
+        href={this.context.githubDb.getGitHubFullPath(
           `${localStorage.getItem(
             constants.LS_KEY_GITHUB_REPO_PATH,
           )}/${dbName}/${tableName}/${githubDb.validFilename(id)}.json`,
@@ -115,17 +115,17 @@ export default class NavBar extends React.Component {
         <span> | </span>
         <a
           title="GitHub File Path"
-          href={githubDb.getDataUrl(dbName, tableName)}
+          href={this.context.githubDb.getDataUrl(dbName, tableName)}
           target="_blank"
           rel="noreferrer"
         >
-          {githubDb.getDataPath(dbName, tableName)}
+          {this.context.githubDb.getDataPath(dbName, tableName)}
         </a>
         {/* (
         <a
           title="Commit History"
           href={githubUtils.getGitHubHistoryPath(
-            githubDb.getDataPath(dbName, tableName),
+            this.context.githubDb.getDataPath(dbName, tableName),
           )}
           target="_blank"
           rel="noreferrer"

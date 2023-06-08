@@ -3,7 +3,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { List } from 'antd';
-import { githubDb } from '@db-man/github';
 
 import PageContext from '../contexts/page';
 
@@ -23,7 +22,7 @@ export default class TagsCloudPageBody extends React.Component {
   getDataAsync = async () => {
     try {
       this.setState({ loading: true });
-      const { content } = await githubDb.getTableRows(
+      const { content } = await this.context.githubDb.getTableRows(
         this.context.dbName,
         this.context.tableName,
       );
