@@ -10,6 +10,7 @@ const PageContext = React.createContext({
   columns: [],
   primaryKey: '', // primary key of current db table
   tables: [],
+  githubDb: null, // GitHubDb from @db-man/github
 });
 
 export default PageContext;

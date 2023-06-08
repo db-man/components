@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { message, Spin, Alert } from 'antd';
-import { GithubDbV2, githubDb } from '@db-man/github';
+import { githubDb } from '@db-man/github';
 import { utils as dbManUtils } from 'db-man';
 
 import { validatePrimaryKey } from './Form/helpers';
@@ -26,13 +26,6 @@ export default class CreatePage extends React.Component {
 
       saveLoading: false,
     };
-
-    this.githubDb = new GithubDbV2({
-      repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
-      owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
-      repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
-      dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
-    });
   }
 
   componentDidMount() {
@@ -140,7 +133,7 @@ export default class CreatePage extends React.Component {
     this.setState({ tableFileLoading: true });
     try {
       const { content: rows, sha: tableFileSha } =
-        await this.githubDb.getTableRows(
+        await this.context.githubDb.getTableRows(
           this.context.dbName,
           this.context.tableName,
         );

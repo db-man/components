@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
-import { githubDb } from '@db-man/github';
+import { githubDb, GithubDbV2 } from '@db-man/github';
 
 import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
@@ -70,6 +70,13 @@ export default class PageWrapper extends React.Component {
       tables: [],
       loading: false,
     };
+
+    this.githubDb = new GithubDbV2({
+      repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
+      owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
+      repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
+      dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
+    });
   }
 
   componentDidMount() {
@@ -112,6 +119,7 @@ export default class PageWrapper extends React.Component {
       columns: this.columns,
       primaryKey: getPrimaryKey(this.columns),
       tables: getTablesByDbName(dbName),
+      githubDb: this.githubDb,
     };
   }
 
