@@ -1,8 +1,8 @@
-/* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods */
+/* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods, react/jsx-wrap-multilines */
 
 import React from 'react';
 import { message, Spin, Alert } from 'antd';
-import { githubDb } from '@db-man/github';
+import { GithubDbV2, githubDb } from '@db-man/github';
 import { utils as dbManUtils } from 'db-man';
 
 import { validatePrimaryKey } from './Form/helpers';
@@ -26,6 +26,13 @@ export default class CreatePage extends React.Component {
 
       saveLoading: false,
     };
+
+    this.githubDb = new GithubDbV2({
+      repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
+      owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
+      repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
+      dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
+    });
   }
 
   componentDidMount() {
@@ -97,11 +104,11 @@ export default class CreatePage extends React.Component {
     const { recordFileSha } = this.state;
 
     const time = dbManUtils.formatDate(new Date());
-    const record = ({
+    const record = {
       ...formValues,
       createdAt: time,
       updatedAt: time,
-    });
+    };
 
     this.setState({ saveLoading: true });
     try {
@@ -132,10 +139,11 @@ export default class CreatePage extends React.Component {
   getTableFileAsync = async () => {
     this.setState({ tableFileLoading: true });
     try {
-      const { content: rows, sha: tableFileSha } = await githubDb.getTableRows(
-        this.context.dbName,
-        this.context.tableName,
-      );
+      const { content: rows, sha: tableFileSha } =
+        await this.githubDb.getTableRows(
+          this.context.dbName,
+          this.context.tableName,
+        );
       this.setState({
         rows,
         tableFileSha,
@@ -179,18 +187,18 @@ export default class CreatePage extends React.Component {
     return true;
   };
 
-  warnPrimaryKeyInvalid = (value) => message.warning(
-    <div>
-      Found duplicated item in db
-      {' '}
-      <a
-        href={`/${this.context.dbName}/${this.context.tableName}/update?${this.context.primaryKey}=${value}`}
-      >
-        {value}
-      </a>
-    </div>,
-    10,
-  );
+  warnPrimaryKeyInvalid = (value) =>
+    message.warning(
+      <div>
+        Found duplicated item in db{' '}
+        <a
+          href={`/${this.context.dbName}/${this.context.tableName}/update?${this.context.primaryKey}=${value}`}
+        >
+          {value}
+        </a>
+      </div>,
+      10,
+    );
 
   render() {
     const { dbName, tableName } = this.context;
@@ -202,26 +210,23 @@ export default class CreatePage extends React.Component {
     return (
       <div className="dm-page">
         <h1>
-          Create
-          {' '}
-          {dbName}
-          {' '}
-          {tableName}
+          Create {dbName} {tableName}
         </h1>
         <div className="create-page-body-component">
           <Spin
             spinning={this.loading}
-            tip={(
+            tip={
               <div>
-                Loading file:
-                {' '}
-                <a href={githubDb.getDataUrl(dbName, tableName)} target="_blank" rel="noreferrer">
-                  {dbName}
-                  /
-                  {tableName}
+                Loading file:{' '}
+                <a
+                  href={githubDb.getDataUrl(dbName, tableName)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {dbName}/{tableName}
                 </a>
               </div>
-            )}
+            }
           >
             {this.state.errorMessage && (
               <Alert message={this.state.errorMessage} type="error" />
