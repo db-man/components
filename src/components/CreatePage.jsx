@@ -1,4 +1,4 @@
-/* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods, react/jsx-wrap-multilines */
+/* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods */
 
 import React from 'react';
 import { message, Spin, Alert } from 'antd';
@@ -215,7 +215,7 @@ export default class CreatePage extends React.Component {
         <div className="create-page-body-component">
           <Spin
             spinning={this.loading}
-            tip={
+            tip={(
               <div>
                 Loading file:{' '}
                 <a
@@ -226,7 +226,7 @@ export default class CreatePage extends React.Component {
                   {dbName}/{tableName}
                 </a>
               </div>
-            }
+            )}
           >
             {this.state.errorMessage && (
               <Alert message={this.state.errorMessage} type="error" />

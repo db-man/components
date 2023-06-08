@@ -1,5 +1,8 @@
 {
   "search.exclude": {
     "/lib/**": true
-  }
+  },
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true
 }
