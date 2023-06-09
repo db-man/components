@@ -1,4 +1,4 @@
-import { formatDate } from '../../utils';
+import { utils as githubUtils } from '@db-man/github';
 
 export const getNewRows = (formValues, oldRows, primaryKey, currentId) => oldRows.map((row) => {
   if (row[primaryKey] !== currentId) {
@@ -8,6 +8,6 @@ export const getNewRows = (formValues, oldRows, primaryKey, currentId) => oldRow
   return {
     ...row,
     ...formValues,
-    updatedAt: formatDate(new Date()),
+    updatedAt: githubUtils.formatDate(new Date()),
   };
 });
