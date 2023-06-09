@@ -6,6 +6,7 @@ import '@testing-library/jest-dom'; // eslint-disable-line import/no-extraneous-
 
 const localStorageMock = (function mock() {
   let store = {
+    dm_github_personal_access_token: '',
     dm_github_repo_path: 'dbs',
     dm_github_owner: 'db-man',
     dm_github_repo_name: 'db',
@@ -15,7 +16,7 @@ const localStorageMock = (function mock() {
 
   return {
     getItem(key) {
-      return store[key] || null;
+      return store[key] ?? null;
     },
     setItem(key, value) {
       store[key] = value.toString();
