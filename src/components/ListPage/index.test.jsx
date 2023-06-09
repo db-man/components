@@ -3,7 +3,6 @@ import { BrowserRouter } from 'react-router-dom';
 import {
   render, act, /* screen,  waitFor, */
 } from '@testing-library/react';
-// import { githubDb } from '@db-man/github';
 
 import ListPageBody from './index';
 import PageContext from '../../contexts/page';

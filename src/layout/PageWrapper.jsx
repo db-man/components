@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
-import { githubDb, GithubDbV2 } from '@db-man/github';
+import { GithubDbV2 } from '@db-man/github';
 
 import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
@@ -126,7 +126,7 @@ export default class PageWrapper extends React.Component {
   getOnlineData = async () => {
     try {
       this.setState({ loading: true });
-      const tables = await githubDb.getDbTablesSchemaAsync(this.props.dbName);
+      const tables = await this.githubDb.getDbTablesSchemaAsync(this.props.dbName);
       console.debug('use online columns', tables);
       this.setState({
         tables,
