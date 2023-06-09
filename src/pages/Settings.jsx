@@ -8,6 +8,7 @@ import EditableTable from '../components/EditableTable';
 
 const handleClick = () => {
   const githubDb = new GithubDbV2({
+    personalAccessToken: localStorage.getItem(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN),
     repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
     owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
     repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
