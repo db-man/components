@@ -11,7 +11,6 @@ import React from 'react';
  */
 // import Handlebars from "handlebars";
 import Handlebars from 'handlebars/dist/handlebars';
-import { utils } from 'db-man';
 
 import {
   ImageLink,
@@ -23,6 +22,7 @@ import {
 import PhotoList from '../components/PhotoList';
 import ErrorAlert from '../components/ErrorAlert';
 import TextAreaFormFieldValue from '../components/TextAreaFormFieldValue';
+import { getTablePrimaryKey } from '../utils';
 
 /**
  * tpl: {{#replace "foo" "bar"}}{{title}}{{/replace}}
@@ -49,7 +49,7 @@ Handlebars.registerHelper('join', (arr, sep) => {
 
 Handlebars.registerHelper('getTableRecordByKey', (options) => {
   if (!options.hash.rows) return null;
-  const primaryKey = utils.getTablePrimaryKey(
+  const primaryKey = getTablePrimaryKey(
     options.hash.tables,
     options.hash.tableName,
   );

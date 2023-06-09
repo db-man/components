@@ -1,6 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-
-import { utils } from 'db-man';
+import { formatDate } from '../../utils';
 
 export const getNewRows = (formValues, oldRows, primaryKey, currentId) => oldRows.map((row) => {
   if (row[primaryKey] !== currentId) {
@@ -10,6 +8,6 @@ export const getNewRows = (formValues, oldRows, primaryKey, currentId) => oldRow
   return {
     ...row,
     ...formValues,
-    updatedAt: utils.formatDate(new Date()),
+    updatedAt: formatDate(new Date()),
   };
 });

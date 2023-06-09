@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { message, Spin, Alert } from 'antd';
-import { utils as dbManUtils } from 'db-man';
 
 import { validatePrimaryKey } from './Form/helpers';
 import SuccessMessage from './SuccessMessage';
@@ -64,7 +63,7 @@ export default class CreatePage extends React.Component {
       return;
     }
 
-    const time = dbManUtils.formatDate(new Date());
+    const time = utils.formatDate(new Date());
     newContent.push({
       ...formValues,
       createdAt: time,
@@ -95,7 +94,7 @@ export default class CreatePage extends React.Component {
     const { dbName, tableName, primaryKey } = this.context;
     const { recordFileSha } = this.state;
 
-    const time = dbManUtils.formatDate(new Date());
+    const time = utils.formatDate(new Date());
     const record = {
       ...formValues,
       createdAt: time,

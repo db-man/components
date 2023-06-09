@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { message, Alert, Spin, Skeleton } from 'antd';
-import { utils as dbManUtils } from 'db-man';
 
 import SuccessMessage from '../SuccessMessage';
 import * as utils from '../../utils';
@@ -127,7 +126,7 @@ export default class UpdatePage extends React.Component {
     try {
       const record = {
         ...formValues,
-        updatedAt: dbManUtils.formatDate(new Date()),
+        updatedAt: utils.formatDate(new Date()),
       };
       const { commit } = await this.context.githubDb.updateRecordFile(
         dbName,

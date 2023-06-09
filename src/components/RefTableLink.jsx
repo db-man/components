@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { utils } from 'db-man';
 
 import { columnType, tableType } from './types';
+import { getTablePrimaryKey } from '../utils';
 
 function RefTableLink({
   dbName, tables, value, column,
@@ -13,7 +13,7 @@ function RefTableLink({
     return null;
   }
 
-  const referenceTablePrimaryKey = utils.getTablePrimaryKey(
+  const referenceTablePrimaryKey = getTablePrimaryKey(
     tables,
     referenceTable,
   );
