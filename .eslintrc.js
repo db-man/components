@@ -14,7 +14,7 @@ module.exports = {
   },
   plugins: ['react', 'jest'],
   rules: {
-    'jest/no-disabled-tests': 'warn',
+    'jest/no-disabled-tests': 'off',
     'jest/no-focused-tests': 'error',
     'jest/no-identical-title': 'error',
     'jest/prefer-to-have-length': 'warn',
@@ -28,6 +28,7 @@ module.exports = {
     'react/function-component-definition': 'off',
     'react/prop-types': 'off',
     'arrow-body-style': 'off',
+
   },
   settings: {
     'import/resolver': {

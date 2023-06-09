@@ -1,9 +1,8 @@
-import { github, githubDb } from '@db-man/github';
 import { message } from 'antd';
 import * as constants from '../constants';
 import { errMsg } from '../utils';
 
-const loadDbsSchemaAsync = async (path) => {
+const loadDbsSchemaAsync = async (github, githubDb, path) => {
   // Get all db names in root dir, db name is sub dir name
   const files = await github.getFile(path);
 
@@ -42,7 +41,7 @@ const validateDbsSchame = (dbsSchema) => {
   });
 };
 
-const reloadDbsSchemaAsync = async () => {
+const reloadDbsSchemaAsync = async (github, githubDb) => {
   message.info('Start loading DBs schema...');
 
   const path = localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH);
@@ -53,7 +52,7 @@ const reloadDbsSchemaAsync = async () => {
 
   let dbsSchema;
   try {
-    dbsSchema = await loadDbsSchemaAsync(path);
+    dbsSchema = await loadDbsSchemaAsync(github, githubDb, path);
   } catch (err) {
     errMsg(`Failed to get DB schema! Maybe you need to create this file: https://github.com/${localStorage.getItem(constants.LS_KEY_GITHUB_OWNER)}/${localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME)}/${path}`, err);
     return;

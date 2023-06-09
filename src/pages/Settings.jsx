@@ -1,12 +1,20 @@
 import React from 'react';
 import { Button, Input } from 'antd';
 
+import { GithubDbV2 } from '@db-man/github';
 import * as constants from '../constants';
 import reloadDbsSchemaAsync from './helpers';
 import EditableTable from '../components/EditableTable';
 
 const handleClick = () => {
-  reloadDbsSchemaAsync().then(() => {
+  const githubDb = new GithubDbV2({
+    repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
+    owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
+    repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
+    dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
+  });
+  const { github } = githubDb;
+  reloadDbsSchemaAsync(github, githubDb).then(() => {
   });
 };
 
