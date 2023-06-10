@@ -1,44 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Input, message } from 'antd';
+import { Input } from 'antd';
 
-export default class JsonEditor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      jsonStr: JSON.stringify(props.value, null, '  '),
-    };
-  }
+const JsonEditor = (props) => {
+  const [jsonStr, setJsonStr] = useState(JSON.stringify(props.value, null, '  '));
+  const [errMsg, setErrMsg] = useState('');
 
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const { value } = event.target;
-    const { onChange } = this.props;
+    const { onChange } = props;
 
+    setErrMsg('');
     try {
       const obj = JSON.parse(value);
       onChange(obj);
     } catch (error) {
-      message.error(
-        `There is something wrong in JSON text, detail: ${error.message}`,
-      );
+      setErrMsg(`There is something wrong in JSON text, detail: ${error.message}`);
     }
 
-    this.setState({ jsonStr: value });
+    setJsonStr(value);
   };
 
-  render() {
-    const { jsonStr } = this.state;
-    return (
+  return (
+    <div>
       <Input.TextArea
         autoSize
         value={jsonStr}
-        onChange={this.handleChange}
+        onChange={handleChange}
       />
-    );
-  }
-}
+      {errMsg && <div style={{ color: 'red' }}>{errMsg}</div>}
+    </div>
+  );
+};
 
 JsonEditor.propTypes = {
   value: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   onChange: PropTypes.func.isRequired,
 };
+
+export default JsonEditor;
