@@ -10,7 +10,9 @@ export default class StringFormFieldValue extends React.Component {
         {...inputProps} /* eslint-disable-line react/jsx-props-no-spreading */
         size="small"
         value={value}
-        onChange={onChange}
+        onChange={(event) => {
+          onChange(event.target.value, event);
+        }}
       />
     );
   };

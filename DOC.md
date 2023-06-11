@@ -54,9 +54,11 @@ To render some Radio components with given text, click one of the Radio to fill 
 
 ### `ui:presets`
 
-Used when `type="STRING_ARRAY"`, and default UI component `Select` is used.
-Only used on create/update page.
-To render some buttons on top of the dropdown, click button to quick input a new tag into dropdown.
+* Only used on create/update page.
+  * When `type="STRING_ARRAY"`, and default UI component `Select` is used.
+    * To render some buttons on top of the dropdown, click button to quick input a new tag into dropdown.
+  * When `type="STRING"`, and default UI component `Input` is used.
+    * To render some buttons on top of the input box, click button to quick input a new text into input box.
 
 ### `type:listPage`
 

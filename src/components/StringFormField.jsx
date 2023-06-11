@@ -7,6 +7,7 @@ import StringFormFieldValue from './StringFormFieldValue';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import { dbs } from '../dbs';
+import PresetsButtons from './PresetsButtons';
 
 export default function StringFormField(props) {
   const {
@@ -22,6 +23,7 @@ export default function StringFormField(props) {
       <b>{label}</b>
       :
       {' '}
+      <PresetsButtons column={column} onChange={onChange} />{' '}
       <RefTableLink
         column={column}
         tables={dbs[dbName]}

@@ -25,6 +25,7 @@ import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
 import { validatePrimaryKey, isType } from './helpers';
 import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
+import PresetsButtons from '../PresetsButtons';
 
 const renderFormFieldWrapper = (id, label, formField) => (
   <div key={id} className="dm-form-field dm-string-form-field">
@@ -75,11 +76,11 @@ export default class Form extends React.Component {
     });
   };
 
-  handleInputChange = (key) => (event) => {
+  handleInputChange = (key) => (val /* ,event */) => {
     this.setState({
       formValues: {
         ...this.state.formValues,
-        [key]: event.target.value,
+        [key]: val,
       },
     });
     // When mode is split-table, thats because table file too big.
@@ -91,12 +92,12 @@ export default class Form extends React.Component {
       if (key === this.context.primaryKey) {
         if (
           !validatePrimaryKey(
-            event.target.value,
+            val,
             this.props.rows,
             this.context.primaryKey,
           )
         ) {
-          this.warnPrimaryKeyInvalid(event.target.value);
+          this.warnPrimaryKeyInvalid(val);
         }
       }
     }
@@ -218,21 +219,16 @@ export default class Form extends React.Component {
           className="dm-form-field dm-string-array-form-field"
         >
           <b>{column.name}</b>:{' '}
-          {(column['ui:presets'] || []).map((opt) => (
-            <span key={opt}>
-              <Button
-                size="small"
-                onClick={() => {
-                  this.handleStringArrayChange(column.id)([
-                    ...(this.state.formValues[column.id] || []),
-                    opt,
-                  ]);
-                }}
-              >
-                {opt}
-              </Button>{' '}
-            </span>
-          ))}{' '}
+          <PresetsButtons
+            column={column}
+            onChange={(val) => {
+              this.handleStringArrayChange(column.id)([
+                ...(this.state.formValues[column.id] || []),
+                val,
+              ]);
+            }}
+          />
+          {' '}
           <Select
             size="small"
             mode="tags"

@@ -12,3 +12,6 @@ export const LS_KEY_GITHUB_REPO_NAME = 'dm_github_repo_name';
 export const LS_KEY_GITHUB_REPO_PATH = 'dm_github_repo_path';
 export const LS_KEY_GITHUB_REPO_MODES = 'dm_github_repo_modes';
 export const LS_KEY_DB_CONNECTIONS = 'dm_db_connections';
+
+// Table column definitions
+export const COL_UI_PRESETS = 'ui:presets';
