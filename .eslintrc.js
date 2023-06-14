@@ -29,6 +29,7 @@ module.exports = {
     'react/prop-types': 'off',
     'arrow-body-style': 'off',
     'import/prefer-default-export': 'off',
+    'no-alert': 'off',
   },
   settings: {
     'import/resolver': {

@@ -40,13 +40,13 @@ function EditableCell({
   );
 }
 
-function EditableTable({ onEnable }) {
+function EditableTable({ storage, onEnable }) {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
 
   useEffect(() => {
-    const connections = localStorage.getItem(constants.LS_KEY_DB_CONNECTIONS);
+    const connections = storage.get(constants.LS_KEY_DB_CONNECTIONS);
     if (connections) {
       setData(JSON.parse(connections));
     }
@@ -56,7 +56,7 @@ function EditableTable({ onEnable }) {
 
   const saveData = (d) => {
     setData(d);
-    localStorage.setItem(constants.LS_KEY_DB_CONNECTIONS, JSON.stringify(d));
+    storage.set(constants.LS_KEY_DB_CONNECTIONS, JSON.stringify(d));
   };
 
   const handleAddRow = () => {
@@ -117,7 +117,7 @@ function EditableTable({ onEnable }) {
         saveData(newData);
         setEditingKey('');
       } else {
-        console.log('TODO'); // eslint-disable-line no-console
+        alert('TODO');
         // newData.push({
         //   ...row,
         //   key: data.length === 0 ? 1 : Math.max(...data.map(({ key: k }) => k)) + 1,
@@ -138,14 +138,14 @@ function EditableTable({ onEnable }) {
   };
 
   const handleEnable = (record) => {
-    localStorage.setItem(constants.LS_KEY_GITHUB_OWNER, record.owner);
-    localStorage.setItem(constants.LS_KEY_GITHUB_REPO_NAME, record.repo);
-    localStorage.setItem(
+    storage.set(constants.LS_KEY_GITHUB_OWNER, record.owner);
+    storage.set(constants.LS_KEY_GITHUB_REPO_NAME, record.repo);
+    storage.set(
       constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN,
       record.token,
     );
-    localStorage.setItem(constants.LS_KEY_GITHUB_REPO_PATH, record.path);
-    localStorage.setItem(constants.LS_KEY_GITHUB_REPO_MODES, record.modes);
+    storage.set(constants.LS_KEY_GITHUB_REPO_PATH, record.path);
+    storage.set(constants.LS_KEY_GITHUB_REPO_MODES, record.modes);
     onEnable();
   };
 
