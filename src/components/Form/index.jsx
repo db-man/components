@@ -77,6 +77,11 @@ export default class Form extends React.Component {
   };
 
   handleInputChange = (key) => (val /* ,event */) => {
+    // if key is primary key, check if has space
+    if (key === this.context.primaryKey && val.includes(' ')) {
+      message.error('Primary key cannot contain space');
+    }
+
     this.setState({
       formValues: {
         ...this.state.formValues,
