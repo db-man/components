@@ -1,5 +1,52 @@
 # DOC
 
+## Table of content
+
+<!-- toc -->
+
+## Database connections
+
+| key | owner | token | repo | path | modes |
+| --- | --- | --- | --- | --- | --- |
+|1|db-man|...|db|dbs||
+|2|db-man|...|split-table-db|dbs|split-table|
+
+When a database is set `split-table`, when update a table record, will only update the table record file, not the whole table file.
+
+## Database structure
+
+* dbs/iam/columns.json All tables in this database, and all columns in each table
+* dbs/iam/users.data.json Table data file
+* dbs/iam/users/*.json Table record files. These files are split from `users.data.json` file. (Only in `split-table` mode)
+
+## Table definition
+
+Table is defined in `columns.json` file.
+
+```json
+{
+  "name": "users",
+  "columns": [
+    { "id": "userId", "name": "User ID", "primary": true },
+    { "id": "name", "name": "Name" },
+    { "id": "age", "name": "Age", "type": "NUMBER" },
+    { "id": "active", "name": "Active", "type": "BOOL" },
+    { "id": "tags", "name": "Tags", "type": "STRING_ARRAY" },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "type": "STRING",
+      "type:createUpdatePage": "TextArea"
+    }
+  ],
+  "large": true
+}
+```
+
+* table.name - Table name
+* table.columns - Array of column definition
+* table.large - Optional, default is false. Set to true for large table file which is more than 1MB.
+
 ## Column definition
 
 ```json
