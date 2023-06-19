@@ -25,7 +25,9 @@ npm publish --access=public
 
 ## Preview demos
 
-- http://localhost:3000/demos
+- http://localhost:3000/ - The whole App example
+- http://localhost:3000/demos - Other examples
+- http://localhost:3000/?example=dbconnections - Access example one by one
 
 ## FAQ
 

@@ -13,7 +13,7 @@ export default function Example() {
   };
   const Comp = mmap[example];
   if (!Comp) {
-    return 'Put "?example=app" in the URL';
+    return <App />;
   }
   return <Comp />;
 }
