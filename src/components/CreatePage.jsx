@@ -18,6 +18,7 @@ export default class CreatePage extends React.Component {
       errorMessage: '',
       // all rows in table file
       tableFileLoading: false,
+      // all rows in whole table, in split table mode, it's empty
       rows: [],
       tableFileSha: null,
 
@@ -116,7 +117,7 @@ export default class CreatePage extends React.Component {
     } catch (err) {
       console.error('updateRecordFile, err:', err);
       this.setState({
-        errorMessage: 'Failed to update record file on server!',
+        errorMessage: 'Failed to create record file on server!',
       });
     }
 
@@ -125,7 +126,12 @@ export default class CreatePage extends React.Component {
 
   // Get single record file, the whole table file will be used to de-dup
   getData = () => {
-    Promise.all([this.getTableFileAsync()]);
+    const ps = [];
+    // Whole table file is too big, so only get it when it's not split table
+    if (!this.isSplitTable) {
+      ps.push(this.getTableFileAsync());
+    }
+    Promise.all(ps);
   };
 
   getTableFileAsync = async () => {
