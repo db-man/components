@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import {
   render, screen, act, /* waitFor, */
 } from '@testing-library/react';
-// import { GithubDbV2 } from '@db-man/github';
+// import { GithubDb } from '@db-man/github';
 
 // import * as constants from '../constants';
 import { setDbs } from '../dbs';

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
-import { GithubDbV2 } from '@db-man/github';
+import { GithubDb } from '@db-man/github';
 
 import { getDbs, getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
@@ -71,7 +71,7 @@ export default class PageWrapper extends React.Component {
       loading: false,
     };
 
-    this.githubDb = new GithubDbV2({
+    this.githubDb = new GithubDb({
       personalAccessToken: localStorage.getItem(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN),
       repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
       owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),

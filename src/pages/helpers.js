@@ -4,7 +4,7 @@ import { errMsg } from '../utils';
 
 const loadDbsSchemaAsync = async (github, githubDb, path) => {
   // Get all db names in root dir, db name is sub dir name
-  const files = await github.getFile(path);
+  const files = await github.getPath(path);
 
   const dbsSchema = {
     /**

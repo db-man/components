@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GithubDbV2 } from '@db-man/github';
+import { GithubDb } from '@db-man/github';
 import * as constants from '../constants';
 import reloadDbsSchemaAsync from '../pages/helpers';
 import EditableTable from './EditableTable';
@@ -11,7 +11,7 @@ import EditableTable from './EditableTable';
 export default class DbConnections extends React.Component {
   handleLoadDbsClick = () => {
     const { storage } = this.props;
-    const githubDb = new GithubDbV2({
+    const githubDb = new GithubDb({
       personalAccessToken: storage.get(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN),
       repoPath: storage.get(constants.LS_KEY_GITHUB_REPO_PATH),
       owner: storage.get(constants.LS_KEY_GITHUB_OWNER),
