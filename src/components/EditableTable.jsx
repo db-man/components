@@ -5,6 +5,7 @@ import {
   Table, Input, Popconfirm, Form, Typography, Button,
 } from 'antd';
 
+import { CheckCircleOutlined } from '@ant-design/icons';
 import * as constants from '../constants';
 
 function EditableCell({
@@ -228,7 +229,25 @@ function EditableTable({ storage, onEnable }) {
   ];
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
-      return col;
+      if (col.dataIndex !== 'key') {
+        return col;
+      }
+      return {
+        ...col,
+        render: (text, record) => {
+          if (record.owner === storage.get(constants.LS_KEY_GITHUB_OWNER)
+            && record.repo === storage.get(constants.LS_KEY_GITHUB_REPO_NAME)) {
+            return (
+              <span>
+                {text}
+                {' '}
+                <CheckCircleOutlined />
+              </span>
+            );
+          }
+          return text;
+        },
+      };
     }
 
     return {
