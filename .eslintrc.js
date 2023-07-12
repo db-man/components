@@ -1,10 +1,26 @@
 module.exports = {
-  // env: {
-  //   browser: true,
-  //   es2021: true,
-  //   'jest/globals': true,
-  // },
-  extends: ['react-app', 'react-app/jest'],
+  "root": true,
+  env: {
+    browser: true,
+    es2021: true,
+    'jest/globals': true,
+  },
+  "parser": "@typescript-eslint/parser",
+  parserOptions: {
+    project: './tsconfig.json',
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  extends: [
+    'react-app',
+    'react-app/jest',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/strict",
+    'airbnb-base',
+    'airbnb-typescript/base',
+  ],
   // parserOptions: {
   //   ecmaFeatures: {
   //     jsx: true,
