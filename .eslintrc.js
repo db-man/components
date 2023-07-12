@@ -1,18 +1,18 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-    'jest/globals': true,
-  },
-  extends: ['plugin:react/recommended', 'airbnb', 'plugin:cypress/recommended'],
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-  },
-  plugins: ['react', 'jest'],
+  // env: {
+  //   browser: true,
+  //   es2021: true,
+  //   'jest/globals': true,
+  // },
+  extends: ['react-app', 'react-app/jest'],
+  // parserOptions: {
+  //   ecmaFeatures: {
+  //     jsx: true,
+  //   },
+  //   ecmaVersion: 'latest',
+  //   sourceType: 'module',
+  // },
+  // plugins: ['react', 'jest'],
   rules: {
     'jest/no-disabled-tests': 'off',
     'jest/no-focused-tests': 'error',
@@ -31,11 +31,11 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-alert': 'off',
   },
-  settings: {
-    'import/resolver': {
-      node: {
-        paths: ['src'],
-      },
-    },
-  },
+  // settings: {
+  //   'import/resolver': {
+  //     node: {
+  //       paths: ['src'],
+  //     },
+  //   },
+  // },
 };
