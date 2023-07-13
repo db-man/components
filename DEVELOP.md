@@ -15,9 +15,7 @@ npm start
 ## Publish
 
 ```
-CI=true npm test && npm run build && git add . && git commit -m 'Build' && npm version patch
-git push && git git push --tags
-npm publish --access=public
+npm run release
 ```
 
 ## Preview demos
