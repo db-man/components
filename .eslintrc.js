@@ -46,6 +46,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'import/prefer-default-export': 'off',
     'no-alert': 'off',
+    'import/extensions': 'off',
   },
   // settings: {
   //   'import/resolver': {

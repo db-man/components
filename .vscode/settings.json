@@ -1,6 +1,6 @@
 {
   "search.exclude": {
-    "/lib/**": true
+    "/dist/**": true
   },
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.formatOnSave": true,

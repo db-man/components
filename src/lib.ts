@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-
 // components
 export { default as DbConnections } from './components/DbConnections';
 export { default as Form } from './components/Form';
@@ -57,3 +55,8 @@ export { default as Settings } from './pages/Settings';
 export * as constants from './constants';
 export * as dbs from './dbs';
 export * as utils from './utils';
+
+// TODO just testing for ts types export
+export interface IPageProps {
+  page: string;
+}

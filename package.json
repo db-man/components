@@ -2,7 +2,8 @@
   "name": "@db-man/components",
   "version": "0.1.77",
   "description": "",
-  "main": "lib/lib.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/db-man/components.git"
@@ -15,7 +16,7 @@
   "homepage": "https://github.com/db-man/components#readme",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
-    "@db-man/github": "^0.1.21",
+    "@db-man/github": "^0.1.25",
     "handlebars": "^4.7.7",
     "lodash.debounce": "^4.0.8",
     "prismjs": "^1.29.0",
@@ -37,6 +38,8 @@
     "@types/node": "^16.18.38",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "antd": "^5.6.2",
     "cypress": "^10.11.0",
     "eslint": "^8.36.0",

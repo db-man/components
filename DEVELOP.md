@@ -28,5 +28,5 @@ npm publish --access=public
 
 ## FAQ
 
-* Why `lib` dir should be pushed to repo?
+* Why `dist` dir should be pushed to repo?
   * Because in github.com/db-man/db-man.github.io, it depends current package from direct GitHub repo like this: `... "dependencies": { "@db-man/components": "github:db-man/components", ...`

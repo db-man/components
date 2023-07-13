@@ -12,7 +12,7 @@ jspm_packages/
 
 # production
 /build
-# /lib/
+# /dist/
 
 # misc
 .DS_Store

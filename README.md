@@ -30,7 +30,7 @@ export default function () {
 Add below 2 lines to top of `src/App.css`.
 
 ```css
-@import '~@db-man/components/lib/layout/App.css';
+@import '~@db-man/components/dist/layout/App.css';
 @import '~antd/dist/antd.css';
 @import '~prismjs/themes/prism.css';
 ```

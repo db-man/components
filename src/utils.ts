@@ -1,0 +1,31 @@
+import { types } from '@db-man/github';
+import { message } from 'antd';
+
+export const getUrlParams = () => {
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  return Object.fromEntries(urlSearchParams.entries());
+};
+
+/**
+ *
+ * @param {*} columns
+ * @returns {string|null}
+ */
+export const getPrimaryKey = (columns: types.Column[]) => {
+  const foundCol = columns.find((col) => col.primary);
+  return foundCol ? foundCol.id : null;
+};
+
+export const getTablePrimaryKey = (tables: types.Table[], tableName: string) => {
+  const foundTable = tables.find((table) => table.name === tableName);
+  if (!foundTable) {
+    return null;
+  }
+
+  return getPrimaryKey(foundTable.columns);
+};
+
+export const errMsg = (msg: string, err: Error) => {
+  console.error(`[db-man] ${msg}`, err); // eslint-disable-line no-console
+  message.error(msg);
+};
