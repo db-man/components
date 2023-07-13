@@ -1,82 +1,31 @@
 {
-  "name": "@db-man/components",
-  "version": "0.1.77",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/db-man/components.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/db-man/components/issues"
-  },
-  "homepage": "https://github.com/db-man/components#readme",
+  "name": "my-app2",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "@ant-design/icons": "^5.0.1",
-    "@db-man/github": "^0.1.25",
-    "handlebars": "^4.7.7",
-    "lodash.debounce": "^4.0.8",
-    "prismjs": "^1.29.0",
-    "prop-types": "^15.8.1",
-    "react-json-view": "^1.21.3",
-    "react-router": "^6.6.2",
-    "react-router-dom": "^6.9.0",
-    "react-simple-code-editor": "^0.13.1"
-  },
-  "devDependencies": {
-    "@ant-design/icons": "^5.0.1",
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.3",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.38",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "antd": "^5.6.2",
-    "cypress": "^10.11.0",
-    "eslint": "^8.36.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^27.2.1",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5"
-  },
-  "peerDependencies": {
-    "antd": ">=4.19.0",
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "PUBLIC_URL=/ react-scripts start",
-    "build": "npm run build-lib",
-    "build-lib": "./build.sh",
-    "build-app": "react-scripts build",
-    "test": "react-scripts test"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "overrides": {
-    "react-json-view": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    }
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "node_modules/(?!(@db-man|db-man)/)"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
     ]
   },
   "browserslist": {
