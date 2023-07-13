@@ -22,3 +22,4 @@ export default class Form extends React.Component {
     fieldRender: (column: any) => import("react/jsx-runtime").JSX.Element | null;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=index.d.ts.map

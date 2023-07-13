@@ -6,3 +6,4 @@ export default class Detail extends React.Component {
     renderDebugJson: () => import("react/jsx-runtime").JSX.Element;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=Detail.d.ts.map

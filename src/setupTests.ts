@@ -4,7 +4,7 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'; // eslint-disable-line import/no-extraneous-dependencies
+import '@testing-library/jest-dom';
 
 const localStorageMock = (function mock() {
   let store = {
@@ -12,8 +12,10 @@ const localStorageMock = (function mock() {
     dm_github_repo_path: 'dbs',
     dm_github_owner: 'db-man',
     dm_github_repo_name: 'db',
-    dm_dbs_schema: '{"iam":[{"name":"users","columns":[{"id":"userId","name":"User ID","primary":true},{"id":"name","name":"Name"},{"id":"age","name":"Age","type":"NUMBER"},{"id":"active","name":"Active","type":"BOOL"},{"id":"tags","name":"Tags","type":"STRING_ARRAY"}]}]}',
-    dm_db_connections: '[{"key":"1","owner":"db-man","token":"123","repo":"db","path":"dbs","modes":""}]',
+    dm_dbs_schema:
+      '{"iam":[{"name":"users","columns":[{"id":"userId","name":"User ID","primary":true},{"id":"name","name":"Name"},{"id":"age","name":"Age","type":"NUMBER"},{"id":"active","name":"Active","type":"BOOL"},{"id":"tags","name":"Tags","type":"STRING_ARRAY"}]}]}',
+    dm_db_connections:
+      '[{"key":"1","owner":"db-man","token":"123","repo":"db","path":"dbs","modes":""}]',
   };
 
   return {
@@ -30,7 +32,7 @@ const localStorageMock = (function mock() {
       store = {};
     },
   };
-}());
+})();
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,

@@ -48,3 +48,4 @@ export * as utils from './utils';
 export interface IPageProps {
     page: string;
 }
+//# sourceMappingURL=lib.d.ts.map

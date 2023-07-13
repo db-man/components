@@ -12,3 +12,4 @@ declare namespace ReactSimpleCodeEditor {
     };
 }
 export default ReactSimpleCodeEditor;
+//# sourceMappingURL=ReactSimpleCodeEditor.d.ts.map

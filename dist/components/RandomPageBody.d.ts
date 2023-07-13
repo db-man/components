@@ -7,3 +7,4 @@ export default class RandomPageBody extends React.Component {
     renderList: () => import("react/jsx-runtime").JSX.Element | null;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=RandomPageBody.d.ts.map

@@ -12,3 +12,4 @@ export declare const isType: (column: any, uiType: any) => {
     is: boolean;
     preview: boolean;
 };
+//# sourceMappingURL=helpers.d.ts.map

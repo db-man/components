@@ -13,3 +13,4 @@ declare namespace BreadcrumbWrapper {
     };
 }
 export default BreadcrumbWrapper;
+//# sourceMappingURL=BreadcrumbWrapper.d.ts.map

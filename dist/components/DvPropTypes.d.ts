@@ -16,3 +16,4 @@ declare const DvPropTypes: {
     }> | null | undefined)[]>;
 };
 export default DvPropTypes;
+//# sourceMappingURL=DvPropTypes.d.ts.map

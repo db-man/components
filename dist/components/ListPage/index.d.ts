@@ -18,3 +18,4 @@ export default class ListPage extends React.Component {
     renderTable: () => import("react/jsx-runtime").JSX.Element | null;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=index.d.ts.map

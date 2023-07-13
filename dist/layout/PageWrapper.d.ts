@@ -30,3 +30,4 @@ export default class PageWrapper extends React.Component {
     renderActionInTable: () => import("react/jsx-runtime").JSX.Element;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=PageWrapper.d.ts.map

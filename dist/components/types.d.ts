@@ -18,3 +18,4 @@ export declare const columnType: PropTypes.Requireable<PropTypes.InferProps<{
 export declare const tableType: PropTypes.Requireable<PropTypes.InferProps<{
     name: PropTypes.Requireable<string>;
 }>>;
+//# sourceMappingURL=types.d.ts.map

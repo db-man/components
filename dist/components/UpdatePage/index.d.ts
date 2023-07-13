@@ -28,3 +28,4 @@ export default class UpdatePage extends React.Component {
     renderForm: () => import("react/jsx-runtime").JSX.Element | null;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=index.d.ts.map

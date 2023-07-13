@@ -8,3 +8,4 @@ declare namespace SuccessMessage {
     };
 }
 export default SuccessMessage;
+//# sourceMappingURL=SuccessMessage.d.ts.map

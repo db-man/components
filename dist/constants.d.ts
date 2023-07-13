@@ -10,3 +10,4 @@ export declare const LS_KEY_GITHUB_REPO_PATH = "dm_github_repo_path";
 export declare const LS_KEY_GITHUB_REPO_MODES = "dm_github_repo_modes";
 export declare const LS_KEY_DB_CONNECTIONS = "dm_db_connections";
 export declare const COL_UI_PRESETS = "ui:presets";
+//# sourceMappingURL=constants.d.ts.map

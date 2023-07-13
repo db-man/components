@@ -21,3 +21,4 @@ export default class GetPageBody extends React.Component {
     renderDetail: () => import("react/jsx-runtime").JSX.Element | null;
     render(): import("react/jsx-runtime").JSX.Element | null;
 }
+//# sourceMappingURL=index.d.ts.map

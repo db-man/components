@@ -14,3 +14,4 @@ export default class CreatePage extends React.Component {
     warnPrimaryKeyInvalid: (value: any) => import("antd/es/message/interface").MessageType;
     render(): import("react/jsx-runtime").JSX.Element | null;
 }
+//# sourceMappingURL=CreatePage.d.ts.map

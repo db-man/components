@@ -15,3 +15,4 @@ declare namespace RefTableLinks {
     };
 }
 export default RefTableLinks;
+//# sourceMappingURL=RefTableLinks.d.ts.map

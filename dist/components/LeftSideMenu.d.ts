@@ -4,3 +4,4 @@ export default class LeftSideMenu extends React.Component {
     handleOpenChange: (openKeys: any) => void;
     render(): import("react/jsx-runtime").JSX.Element | null;
 }
+//# sourceMappingURL=LeftSideMenu.d.ts.map

@@ -3,3 +3,4 @@ declare function EditableTable({ storage, onEnable }: {
     onEnable: any;
 }): import("react/jsx-runtime").JSX.Element;
 export default EditableTable;
+//# sourceMappingURL=EditableTable.d.ts.map

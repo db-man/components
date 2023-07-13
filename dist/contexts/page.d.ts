@@ -10,3 +10,4 @@ declare const PageContext: React.Context<{
     githubDb: null;
 }>;
 export default PageContext;
+//# sourceMappingURL=page.d.ts.map

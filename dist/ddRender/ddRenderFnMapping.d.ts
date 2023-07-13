@@ -52,3 +52,4 @@ declare const ddRenderFnMapping: {
     TextAreaFormFieldValue: (val: any, record: any, index: any, args: any, tplExtra: any) => import("react/jsx-runtime").JSX.Element;
 };
 export default ddRenderFnMapping;
+//# sourceMappingURL=ddRenderFnMapping.d.ts.map

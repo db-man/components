@@ -7,3 +7,4 @@ export default class DbConnections extends React.Component {
     handleDbConnectionEnable: () => void;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=DbConnections.d.ts.map

@@ -60,3 +60,4 @@ export declare function ImageLinks({ imgs, limit }: {
     imgs: any;
     limit?: number | undefined;
 }): any;
+//# sourceMappingURL=Links.d.ts.map

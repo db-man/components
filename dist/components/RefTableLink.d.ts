@@ -24,3 +24,4 @@ declare namespace RefTableLink {
     };
 }
 export default RefTableLink;
+//# sourceMappingURL=RefTableLink.d.ts.map

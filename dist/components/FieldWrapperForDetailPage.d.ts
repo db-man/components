@@ -25,3 +25,4 @@ declare const FieldWrapperForDetailPage: {
     };
 };
 export default FieldWrapperForDetailPage;
+//# sourceMappingURL=FieldWrapperForDetailPage.d.ts.map

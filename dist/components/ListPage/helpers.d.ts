@@ -49,3 +49,4 @@ export declare const getInitialSorter: () => {
 };
 export declare const updateUrl: (states: any) => void;
 export declare const getColumnSortOrder: (columnId: any, sorter: any) => any;
+//# sourceMappingURL=helpers.d.ts.map

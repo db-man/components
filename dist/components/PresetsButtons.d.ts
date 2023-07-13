@@ -3,3 +3,4 @@ declare const PresetsButtons: ({ column, onChange }: {
     onChange: any;
 }) => any;
 export default PresetsButtons;
+//# sourceMappingURL=PresetsButtons.d.ts.map

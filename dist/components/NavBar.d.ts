@@ -7,3 +7,4 @@ export default class NavBar extends React.Component {
     renderReferenceTableLink: () => any;
     render(): import("react/jsx-runtime").JSX.Element;
 }
+//# sourceMappingURL=NavBar.d.ts.map
