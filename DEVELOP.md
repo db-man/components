@@ -16,7 +16,7 @@ npm start
 
 ```
 CI=true npm test && npm run build && git add . && git commit -m 'Build' && npm version patch
-git push && git push origin v0.1.2
+git push && git git push --tags
 npm publish --access=public
 ```
 
@@ -28,5 +28,5 @@ npm publish --access=public
 
 ## FAQ
 
-* Why `dist` dir should be pushed to repo?
-  * Because in github.com/db-man/db-man.github.io, it depends current package from direct GitHub repo like this: `... "dependencies": { "@db-man/components": "github:db-man/components", ...`
+- Why `dist` dir should be pushed to repo?
+  - Because in github.com/db-man/db-man.github.io, it depends current package from direct GitHub repo like this: `... "dependencies": { "@db-man/components": "github:db-man/components", ...`
