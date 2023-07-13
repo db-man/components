@@ -54,6 +54,4 @@ export { default as Settings } from './pages/Settings';
 export * as constants from './constants';
 export * as dbs from './dbs';
 export * as utils from './utils';
-
-// TODO just testing for ts types export
 //# sourceMappingURL=lib.js.map

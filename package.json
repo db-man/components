@@ -2,8 +2,8 @@
   "name": "@db-man/components",
   "version": "0.1.79",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/lib.js",
+  "types": "dist/lib.d.ts",
   "private": false,
   "repository": {
     "type": "git",
@@ -59,12 +59,12 @@
     }
   },
   "scripts": {
-    "start": "PUBLIC_URL=/ react-scripts start",
-    "build": "npm run build-lib",
-    "build-lib": "./build.sh",
-    "build-app": "react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
-    "release": "CI=true npm test && npm run build && git add . && git commit -m 'Build'; npm version patch && git push && git push --tags && npm publish --access=public",
+    "dev": "PUBLIC_URL=/ npm start",
+    "build-lib": "./build.sh",
+    "release": "CI=true npm test && npm run build-lib && git add . && git commit -m 'Build'; npm version patch && git push && git push --tags && npm publish --access=public",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

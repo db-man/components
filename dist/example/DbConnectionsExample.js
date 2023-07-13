@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { DbConnections, constants } from '..';
+import { DbConnections, constants } from '../lib';
 const SettingsExample = () => {
   const dbSchema = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
   if (dbSchema) {

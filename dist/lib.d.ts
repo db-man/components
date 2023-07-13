@@ -45,7 +45,4 @@ export { default as Settings } from './pages/Settings';
 export * as constants from './constants';
 export * as dbs from './dbs';
 export * as utils from './utils';
-export interface IPageProps {
-    page: string;
-}
 //# sourceMappingURL=lib.d.ts.map
