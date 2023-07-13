@@ -9,7 +9,7 @@ npm i
 Dev
 
 ```
-npm start
+npm run dev
 ```
 
 ## Publish
