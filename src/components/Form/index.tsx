@@ -2,7 +2,7 @@
 
 /* eslint-disable react/destructuring-assignment, react/no-access-state-in-setstate, react/forbid-prop-types, max-len */
 
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Select,
@@ -38,19 +38,16 @@ const renderFormFieldWrapper = (id, label, formField) => (
 const filterOutHiddenFields = (column) =>
   column['type:createUpdatePage'] !== 'HIDE';
 
-export default class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      formValues: {
-        ...this.props.defaultValues,
-      },
-    };
-  }
+const Form = (props) => {
+  const context = useContext(PageContext);
 
-  componentDidMount() {
-    this.context.columns.forEach((col) => {
-      if (!this.state.formValues[col.id]) {
+  const [formValues, setFormValues] = useState({
+    ...props.defaultValues,
+  });
+
+  useEffect(() => {
+    context.columns.forEach((col) => {
+      if (!formValues[col.id]) {
         let defaultValue = '';
         switch (col['type:createUpdatePage']) {
           case 'RadioGroup':
@@ -60,47 +57,41 @@ export default class Form extends React.Component {
             defaultValue = '';
         }
         if (defaultValue) {
-          this.setState((prevState) => ({
+          setFormValues((prevState) => ({
             ...prevState,
-            formValues: { ...prevState.formValues, [col.id]: defaultValue },
+            [col.id]: defaultValue,
           }));
         }
       }
     });
-  }
+  }, []);
 
-  handleChange = (key) => (value) => {
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        [key]: value,
-      },
+  const handleChange = (key) => (value) => {
+    setFormValues({
+      ...formValues,
+      [key]: value,
     });
   };
 
-  handleInputChange = (key) => (val /* ,event */) => {
+  const handleInputChange = (key) => (val /* ,event */) => {
     // if key is primary key, check if has space
-    if (key === this.context.primaryKey && val.includes(' ')) {
+    if (key === context.primaryKey && val.includes(' ')) {
       message.error('Primary key cannot contain space');
     }
 
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        [key]: val,
-      },
+    setFormValues({
+      ...formValues,
+      [key]: val,
     });
     // When mode is split-table, thats because table file too big.
     // Will not download big table file, so no checking about duplicated item.
-    if (!this.isSplitTable) {
+    if (!isSplitTable()) {
       // validate the primary field in form, e.g. duplication check
       // TODO maybe do this in antd Form component
       // TODO why do we assume the type of primary column in a table is always `string`?
-      if (key === this.context.primaryKey) {
-        if (
-          !validatePrimaryKey(val, this.props.rows, this.context.primaryKey)
-        ) {
-          this.warnPrimaryKeyInvalid(val);
+      if (key === context.primaryKey) {
+        if (!validatePrimaryKey(val, props.rows, context.primaryKey)) {
+          warnPrimaryKeyInvalid(val);
         }
       }
     }
@@ -110,46 +101,42 @@ export default class Form extends React.Component {
    * @param {string} id Column name
    * @param {string[]} value Cell value
    */
-  handleStringArrayChange = (id) => (value) =>
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        [id]: value,
-      },
+  const handleStringArrayChange = (id) => (value) =>
+    setFormValues({
+      ...formValues,
+      [id]: value,
     });
 
-  handleJsonEditorChange = (formValues) => {
-    this.setState({ formValues });
+  const handleJsonEditorChange = (formValues) => {
+    setFormValues(formValues);
   };
 
-  handleKeyDown = (event) => {
+  const handleKeyDown = (event) => {
     if (event.code === 'KeyS' && event.metaKey) {
       event.preventDefault();
-      this.handleFormSubmit();
+      handleFormSubmit();
     }
   };
 
-  handleFormSubmit = () => {
-    const { formValues } = this.state;
-    this.props.onSubmit(formValues);
+  const handleFormSubmit = () => {
+    props.onSubmit(formValues);
   };
 
-  handleDelete = () => {
-    const { formValues } = this.state;
-    this.props.onDelete(formValues);
+  const handleDelete = () => {
+    props.onDelete(formValues);
   };
 
-  get isSplitTable() {
-    const { appModes } = this.context;
+  const isSplitTable = () => {
+    const { appModes } = context;
     return appModes.indexOf('split-table') !== -1;
-  }
+  };
 
-  warnPrimaryKeyInvalid = (value) =>
+  const warnPrimaryKeyInvalid = (value) =>
     message.warning(
       <div>
         Found duplicated item in db{' '}
         <a
-          href={`/${this.context.dbName}/${this.context.tableName}/update?${this.context.primaryKey}=${value}`}
+          href={`/${context.dbName}/${context.tableName}/update?${context.primaryKey}=${value}`}
         >
           {value}
         </a>
@@ -157,9 +144,9 @@ export default class Form extends React.Component {
       10
     );
 
-  renderStringFormField = (column) => {
-    const { loading } = this.props;
-    const value = this.state.formValues[column.id];
+  const renderStringFormField = (column) => {
+    const { loading } = props;
+    const value = formValues[column.id];
     if (column['type:createUpdatePage'] === 'TextArea') {
       return (
         <TextAreaFormField
@@ -168,7 +155,7 @@ export default class Form extends React.Component {
           rows={2}
           disabled={loading}
           value={value}
-          onChange={this.handleChange(column.id)}
+          onChange={handleChange(column.id)}
         />
       );
     }
@@ -181,7 +168,7 @@ export default class Form extends React.Component {
           column={column}
           disabled={loading}
           value={radioValue}
-          onChange={this.handleChange(column.id)}
+          onChange={handleChange(column.id)}
         />
       );
     }
@@ -194,24 +181,22 @@ export default class Form extends React.Component {
         key={column.id}
         inputProps={{
           disabled: loading,
-          autoFocus: column.id === this.context.primaryKey,
-          onKeyDown: this.handleKeyDown,
+          autoFocus: column.id === context.primaryKey,
+          onKeyDown: handleKeyDown,
           placeholder: column.placeholder,
         }}
         preview={preview}
         label={column.name}
-        dbName={this.context.dbName}
-        primaryKey={this.context.primaryKey}
+        dbName={context.dbName}
+        primaryKey={context.primaryKey}
         column={column}
         value={value}
-        onChange={this.handleInputChange(column.id)}
+        onChange={handleInputChange(column.id)}
       />
     );
   };
 
-  renderStringArrayFormField = (column) => {
-    const { formValues } = this.state;
-
+  const renderStringArrayFormField = (column) => {
     if (
       !column['type:createUpdatePage'] ||
       column['type:createUpdatePage'] === 'Select'
@@ -225,8 +210,8 @@ export default class Form extends React.Component {
           <PresetsButtons
             column={column}
             onChange={(val) => {
-              this.handleStringArrayChange(column.id)([
-                ...(this.state.formValues[column.id] || []),
+              handleStringArrayChange(column.id)([
+                ...(formValues[column.id] || []),
                 val,
               ]);
             }}
@@ -235,10 +220,10 @@ export default class Form extends React.Component {
             size='small'
             mode='tags'
             style={{ width: '100%' }}
-            disabled={this.props.loading}
+            disabled={props.loading}
             value={formValues[column.id]}
-            onChange={this.handleStringArrayChange(column.id)}
-            onKeyDown={this.handleKeyDown}
+            onChange={handleStringArrayChange(column.id)}
+            onKeyDown={handleKeyDown}
           />
         </div>
       );
@@ -254,9 +239,9 @@ export default class Form extends React.Component {
               <Col span={12}>
                 <MultiLineInputBox
                   rows={2}
-                  disabled={this.props.loading}
+                  disabled={props.loading}
                   value={formValues[column.id]}
-                  onChange={this.handleStringArrayChange(column.id)}
+                  onChange={handleStringArrayChange(column.id)}
                 />
               </Col>
               <Col span={12}>
@@ -279,15 +264,15 @@ export default class Form extends React.Component {
         >
           <b>{column.name}</b>:{' '}
           <RefTableLink
-            dbName={this.context.dbName}
-            tables={dbs[this.context.dbName]}
+            dbName={context.dbName}
+            tables={dbs[context.dbName]}
             value={formValues[column.id]}
             column={column}
           />
           <MultiLineInputBox
-            disabled={this.props.loading}
+            disabled={props.loading}
             value={formValues[column.id]}
-            onChange={this.handleStringArrayChange(column.id)}
+            onChange={handleStringArrayChange(column.id)}
           />
         </div>
       );
@@ -296,109 +281,102 @@ export default class Form extends React.Component {
     return null;
   };
 
-  renderNumberFormField = (column) => {
-    const { loading } = this.props;
+  const renderNumberFormField = (column) => {
+    const { loading } = props;
     return renderFormFieldWrapper(
       column.id,
       column.name,
       <InputNumber
         size='small'
         disabled={loading}
-        autoFocus={column.id === this.context.primaryKey}
-        value={this.state.formValues[column.id]}
-        onChange={this.handleChange(column.id)}
-        onKeyDown={this.handleKeyDown}
+        autoFocus={column.id === context.primaryKey}
+        value={formValues[column.id]}
+        onChange={handleChange(column.id)}
+        onKeyDown={handleKeyDown}
       />
     );
   };
 
-  renderBoolFormField = (column) =>
+  const renderBoolFormField = (column) =>
     renderFormFieldWrapper(
       column.id,
       column.name,
       <Switch
         size='small'
-        disabled={this.props.loading}
-        checked={this.state.formValues[column.id]}
-        onChange={this.handleChange(column.id)}
+        disabled={props.loading}
+        checked={formValues[column.id]}
+        onChange={handleChange(column.id)}
       />
     );
 
-  fieldRender = (column) => {
+  const fieldRender = (column) => {
     switch (column.type) {
       case constants.STRING_ARRAY:
-        return this.renderStringArrayFormField(column);
+        return renderStringArrayFormField(column);
       case constants.NUMBER:
-        return this.renderNumberFormField(column);
+        return renderNumberFormField(column);
       case constants.BOOL:
-        return this.renderBoolFormField(column);
+        return renderBoolFormField(column);
       case constants.STRING:
       default:
-        return this.renderStringFormField(column);
+        return renderStringFormField(column);
     }
   };
 
-  render() {
-    const { loading } = this.props;
-    const tabsItems = [
-      {
-        label: 'Form',
-        key: 'form',
-        children: (
-          <div className='dm-form'>
-            {this.context.columns
-              .filter(filterOutHiddenFields)
-              .map(this.fieldRender)}
-          </div>
-        ),
-      },
-      {
-        label: 'JSON',
-        key: 'json',
-        children: (
-          <JsonEditor
-            value={this.state.formValues}
-            onChange={this.handleJsonEditorChange}
-          />
-        ),
-      },
-    ];
-    return (
-      <div className='create-update-component'>
-        <Tabs defaultActiveKey='form' items={tabsItems} />
-        <div className='dm-action-buttons'>
-          <Button
-            type='primary'
-            disabled={loading}
-            loading={loading}
-            onClick={this.handleFormSubmit}
-          >
-            Save
-          </Button>{' '}
-          |{' '}
-          <Popconfirm
-            title='Are you sure to delete?'
-            onConfirm={this.handleDelete}
-            onCancel={() => {}}
-            okText='Yes'
-            cancelText='No'
-          >
-            <Button danger disabled={loading} loading={loading}>
-              Delete
-            </Button>
-          </Popconfirm>{' '}
-          |{' '}
-          <Button
-            type='link'
-            href={`/${this.context.dbName}/${this.context.tableName}/create`}
-          >
-            Reset
-          </Button>{' '}
+  const { loading } = props;
+  const tabsItems = [
+    {
+      label: 'Form',
+      key: 'form',
+      children: (
+        <div className='dm-form'>
+          {context.columns.filter(filterOutHiddenFields).map(fieldRender)}
         </div>
+      ),
+    },
+    {
+      label: 'JSON',
+      key: 'json',
+      children: (
+        <JsonEditor value={formValues} onChange={handleJsonEditorChange} />
+      ),
+    },
+  ];
+  return (
+    <div className='create-update-component'>
+      <Tabs defaultActiveKey='form' items={tabsItems} />
+      <div className='dm-action-buttons'>
+        <Button
+          type='primary'
+          disabled={loading}
+          loading={loading}
+          onClick={handleFormSubmit}
+        >
+          Save
+        </Button>{' '}
+        |{' '}
+        <Popconfirm
+          title='Are you sure to delete?'
+          onConfirm={handleDelete}
+          onCancel={() => {}}
+          okText='Yes'
+          cancelText='No'
+        >
+          <Button danger disabled={loading} loading={loading}>
+            Delete
+          </Button>
+        </Popconfirm>{' '}
+        |{' '}
+        <Button
+          type='link'
+          href={`/${context.dbName}/${context.tableName}/create`}
+        >
+          Reset
+        </Button>{' '}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 Form.propTypes = {
   rows: PropTypes.array,
@@ -414,4 +392,4 @@ Form.defaultProps = {
   onDelete: () => {},
 };
 
-Form.contextType = PageContext;
+export default Form;
