@@ -30,7 +30,7 @@ import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage'
 import PresetsButtons from '../PresetsButtons';
 
 const renderFormFieldWrapper = (id, label, formField) => (
-  <div key={id} className="dm-form-field dm-string-form-field">
+  <div key={id} className='dm-form-field dm-string-form-field'>
     <b>{label}</b>: {formField}
   </div>
 );
@@ -98,11 +98,7 @@ export default class Form extends React.Component {
       // TODO why do we assume the type of primary column in a table is always `string`?
       if (key === this.context.primaryKey) {
         if (
-          !validatePrimaryKey(
-            val,
-            this.props.rows,
-            this.context.primaryKey,
-          )
+          !validatePrimaryKey(val, this.props.rows, this.context.primaryKey)
         ) {
           this.warnPrimaryKeyInvalid(val);
         }
@@ -158,7 +154,7 @@ export default class Form extends React.Component {
           {value}
         </a>
       </div>,
-      10,
+      10
     );
 
   renderStringFormField = (column) => {
@@ -186,7 +182,7 @@ export default class Form extends React.Component {
           disabled={loading}
           value={radioValue}
           onChange={this.handleChange(column.id)}
-        />,
+        />
       );
     }
     let preview = false;
@@ -223,7 +219,7 @@ export default class Form extends React.Component {
       return (
         <div
           key={column.id}
-          className="dm-form-field dm-string-array-form-field"
+          className='dm-form-field dm-string-array-form-field'
         >
           <b>{column.name}</b>:{' '}
           <PresetsButtons
@@ -234,11 +230,10 @@ export default class Form extends React.Component {
                 val,
               ]);
             }}
-          />
-          {' '}
+          />{' '}
           <Select
-            size="small"
-            mode="tags"
+            size='small'
+            mode='tags'
             style={{ width: '100%' }}
             disabled={this.props.loading}
             value={formValues[column.id]}
@@ -267,8 +262,8 @@ export default class Form extends React.Component {
               <Col span={12}>
                 {formValues[column.id] &&
                   formValues[column.id].map((img) => (
-                    <a key={img} href={img} target="_blank" rel="noreferrer">
-                      <img width="200px" src={img} alt="img" />
+                    <a key={img} href={img} target='_blank' rel='noreferrer'>
+                      <img width='200px' src={img} alt='img' />
                     </a>
                   ))}
               </Col>
@@ -280,7 +275,7 @@ export default class Form extends React.Component {
       return (
         <div
           key={column.id}
-          className="dm-form-field dm-string-array-form-field"
+          className='dm-form-field dm-string-array-form-field'
         >
           <b>{column.name}</b>:{' '}
           <RefTableLink
@@ -307,13 +302,13 @@ export default class Form extends React.Component {
       column.id,
       column.name,
       <InputNumber
-        size="small"
+        size='small'
         disabled={loading}
         autoFocus={column.id === this.context.primaryKey}
         value={this.state.formValues[column.id]}
         onChange={this.handleChange(column.id)}
         onKeyDown={this.handleKeyDown}
-      />,
+      />
     );
   };
 
@@ -322,11 +317,11 @@ export default class Form extends React.Component {
       column.id,
       column.name,
       <Switch
-        size="small"
+        size='small'
         disabled={this.props.loading}
         checked={this.state.formValues[column.id]}
         onChange={this.handleChange(column.id)}
-      />,
+      />
     );
 
   fieldRender = (column) => {
@@ -350,7 +345,7 @@ export default class Form extends React.Component {
         label: 'Form',
         key: 'form',
         children: (
-          <div className="dm-form">
+          <div className='dm-form'>
             {this.context.columns
               .filter(filterOutHiddenFields)
               .map(this.fieldRender)}
@@ -369,11 +364,11 @@ export default class Form extends React.Component {
       },
     ];
     return (
-      <div className="create-update-component">
-        <Tabs defaultActiveKey="form" items={tabsItems} />
-        <div className="dm-action-buttons">
+      <div className='create-update-component'>
+        <Tabs defaultActiveKey='form' items={tabsItems} />
+        <div className='dm-action-buttons'>
           <Button
-            type="primary"
+            type='primary'
             disabled={loading}
             loading={loading}
             onClick={this.handleFormSubmit}
@@ -382,11 +377,11 @@ export default class Form extends React.Component {
           </Button>{' '}
           |{' '}
           <Popconfirm
-            title="Are you sure to delete?"
+            title='Are you sure to delete?'
             onConfirm={this.handleDelete}
             onCancel={() => {}}
-            okText="Yes"
-            cancelText="No"
+            okText='Yes'
+            cancelText='No'
           >
             <Button danger disabled={loading} loading={loading}>
               Delete
@@ -394,7 +389,7 @@ export default class Form extends React.Component {
           </Popconfirm>{' '}
           |{' '}
           <Button
-            type="link"
+            type='link'
             href={`/${this.context.dbName}/${this.context.tableName}/create`}
           >
             Reset

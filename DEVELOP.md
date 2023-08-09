@@ -1,14 +1,9 @@
 # Develop
 
-## Install
+## Start develop
 
 ```
 npm i
-```
-
-Dev
-
-```
 npm run dev
 ```
 

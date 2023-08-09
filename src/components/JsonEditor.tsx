@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import { Input } from 'antd';
 
 const JsonEditor = (props) => {
-  const [jsonStr, setJsonStr] = useState(JSON.stringify(props.value, null, '  '));
+  const [jsonStr, setJsonStr] = useState(
+    JSON.stringify(props.value, null, '  ')
+  );
   const [errMsg, setErrMsg] = useState('');
 
   const handleChange = (event) => {
@@ -17,7 +19,9 @@ const JsonEditor = (props) => {
       const obj = JSON.parse(value);
       onChange(obj);
     } catch (error) {
-      setErrMsg(`There is something wrong in JSON text, detail: ${error.message}`);
+      setErrMsg(
+        `There is something wrong in JSON text, detail: ${error.message}`
+      );
     }
 
     setJsonStr(value);
@@ -25,11 +29,7 @@ const JsonEditor = (props) => {
 
   return (
     <div>
-      <Input.TextArea
-        autoSize
-        value={jsonStr}
-        onChange={handleChange}
-      />
+      <Input.TextArea autoSize value={jsonStr} onChange={handleChange} />
       {errMsg && <div style={{ color: 'red' }}>{errMsg}</div>}
     </div>
   );
