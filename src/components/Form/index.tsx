@@ -2,8 +2,8 @@
 
 /* eslint-disable react/destructuring-assignment, react/no-access-state-in-setstate, react/forbid-prop-types, max-len */
 
-import React, { useEffect, useContext, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useContext, useState, ReactNode } from 'react';
+// import PropTypes from 'prop-types';
 import {
   Select,
   Button,
@@ -28,17 +28,36 @@ import TextAreaFormField from '../TextAreaFormField';
 import { validatePrimaryKey, isType } from './helpers';
 import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
 import PresetsButtons from '../PresetsButtons';
+import Column from '../../types/Column';
 
-const renderFormFieldWrapper = (id, label, formField) => (
+interface RenderFormFieldWrapperProps {
+  id: string;
+  label: string;
+  formField: ReactNode;
+}
+
+const renderFormFieldWrapper = ({
+  id,
+  label,
+  formField,
+}: RenderFormFieldWrapperProps) => (
   <div key={id} className='dm-form-field dm-string-form-field'>
     <b>{label}</b>: {formField}
   </div>
 );
 
-const filterOutHiddenFields = (column) =>
+const filterOutHiddenFields = (column: Column) =>
   column['type:createUpdatePage'] !== 'HIDE';
 
-const Form = (props) => {
+interface FormProps {
+  defaultValues: Record<string, any>;
+  loading: boolean;
+  rows: Record<string, any>[];
+  onSubmit: (formValues: Record<string, any>) => void;
+  onDelete: (formValues: Record<string, any>) => void;
+}
+
+const Form: React.FC<FormProps> = (props) => {
   const context = useContext(PageContext);
 
   const [formValues, setFormValues] = useState({
@@ -46,12 +65,12 @@ const Form = (props) => {
   });
 
   useEffect(() => {
-    context.columns.forEach((col) => {
+    context.columns.forEach((col: Column) => {
       if (!formValues[col.id]) {
         let defaultValue = '';
         switch (col['type:createUpdatePage']) {
           case 'RadioGroup':
-            [defaultValue] = col.enum;
+            [defaultValue] = col.enum!;
             break;
           default:
             defaultValue = '';
@@ -66,14 +85,14 @@ const Form = (props) => {
     });
   }, []);
 
-  const handleChange = (key) => (value) => {
+  const handleChange = (key: string) => (value: any) => {
     setFormValues({
       ...formValues,
       [key]: value,
     });
   };
 
-  const handleInputChange = (key) => (val /* ,event */) => {
+  const handleInputChange = (key: string) => (val: any /* ,event */) => {
     // if key is primary key, check if has space
     if (key === context.primaryKey && val.includes(' ')) {
       message.error('Primary key cannot contain space');
@@ -101,17 +120,17 @@ const Form = (props) => {
    * @param {string} id Column name
    * @param {string[]} value Cell value
    */
-  const handleStringArrayChange = (id) => (value) =>
+  const handleStringArrayChange = (id: string) => (value: any) =>
     setFormValues({
       ...formValues,
       [id]: value,
     });
 
-  const handleJsonEditorChange = (formValues) => {
-    setFormValues(formValues);
+  const handleJsonEditorChange = (newFormValues: Record<string, any>) => {
+    setFormValues(newFormValues);
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.code === 'KeyS' && event.metaKey) {
       event.preventDefault();
       handleFormSubmit();
@@ -131,7 +150,7 @@ const Form = (props) => {
     return appModes.indexOf('split-table') !== -1;
   };
 
-  const warnPrimaryKeyInvalid = (value) =>
+  const warnPrimaryKeyInvalid = (value: string) =>
     message.warning(
       <div>
         Found duplicated item in db{' '}
@@ -144,7 +163,7 @@ const Form = (props) => {
       10
     );
 
-  const renderStringFormField = (column) => {
+  const renderStringFormField = (column: Column) => {
     const { loading } = props;
     const value = formValues[column.id];
     if (column['type:createUpdatePage'] === 'TextArea') {
@@ -160,17 +179,19 @@ const Form = (props) => {
       );
     }
     if (column['type:createUpdatePage'] === 'RadioGroup') {
-      const radioValue = value || column.enum[0];
-      return renderFormFieldWrapper(
-        column.id,
-        column.name,
-        <RadioGroupFormField
-          column={column}
-          disabled={loading}
-          value={radioValue}
-          onChange={handleChange(column.id)}
-        />
-      );
+      const radioValue = value || column?.enum?.[0];
+      return renderFormFieldWrapper({
+        id: column.id,
+        label: column.name,
+        formField: (
+          <RadioGroupFormField
+            column={column}
+            disabled={loading}
+            value={radioValue}
+            onChange={handleChange(column.id)}
+          />
+        ),
+      });
     }
     let preview = false;
     if (column['type:createUpdatePage'] === 'WithPreview') {
@@ -196,7 +217,7 @@ const Form = (props) => {
     );
   };
 
-  const renderStringArrayFormField = (column) => {
+  const renderStringArrayFormField = (column: Column) => {
     if (
       !column['type:createUpdatePage'] ||
       column['type:createUpdatePage'] === 'Select'
@@ -209,7 +230,7 @@ const Form = (props) => {
           <b>{column.name}</b>:{' '}
           <PresetsButtons
             column={column}
-            onChange={(val) => {
+            onChange={(val: any) => {
               handleStringArrayChange(column.id)([
                 ...(formValues[column.id] || []),
                 val,
@@ -246,7 +267,7 @@ const Form = (props) => {
               </Col>
               <Col span={12}>
                 {formValues[column.id] &&
-                  formValues[column.id].map((img) => (
+                  formValues[column.id].map((img: string) => (
                     <a key={img} href={img} target='_blank' rel='noreferrer'>
                       <img width='200px' src={img} alt='img' />
                     </a>
@@ -281,35 +302,39 @@ const Form = (props) => {
     return null;
   };
 
-  const renderNumberFormField = (column) => {
+  const renderNumberFormField = (column: Column) => {
     const { loading } = props;
-    return renderFormFieldWrapper(
-      column.id,
-      column.name,
-      <InputNumber
-        size='small'
-        disabled={loading}
-        autoFocus={column.id === context.primaryKey}
-        value={formValues[column.id]}
-        onChange={handleChange(column.id)}
-        onKeyDown={handleKeyDown}
-      />
-    );
+    return renderFormFieldWrapper({
+      id: column.id,
+      label: column.name,
+      formField: (
+        <InputNumber
+          size='small'
+          disabled={loading}
+          autoFocus={column.id === context.primaryKey}
+          value={formValues[column.id]}
+          onChange={handleChange(column.id)}
+          onKeyDown={handleKeyDown}
+        />
+      ),
+    });
   };
 
-  const renderBoolFormField = (column) =>
-    renderFormFieldWrapper(
-      column.id,
-      column.name,
-      <Switch
-        size='small'
-        disabled={props.loading}
-        checked={formValues[column.id]}
-        onChange={handleChange(column.id)}
-      />
-    );
+  const renderBoolFormField = (column: Column) =>
+    renderFormFieldWrapper({
+      id: column.id,
+      label: column.name,
+      formField: (
+        <Switch
+          size='small'
+          disabled={props.loading}
+          checked={formValues[column.id]}
+          onChange={handleChange(column.id)}
+        />
+      ),
+    });
 
-  const fieldRender = (column) => {
+  const fieldRender = (column: Column) => {
     switch (column.type) {
       case constants.STRING_ARRAY:
         return renderStringArrayFormField(column);
@@ -378,13 +403,13 @@ const Form = (props) => {
   );
 };
 
-Form.propTypes = {
-  rows: PropTypes.array,
-  defaultValues: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onSubmit: PropTypes.func,
-  onDelete: PropTypes.func,
-};
+// Form.propTypes = {
+//   rows: PropTypes.array,
+//   defaultValues: PropTypes.object.isRequired,
+//   loading: PropTypes.bool.isRequired,
+//   onSubmit: PropTypes.func,
+//   onDelete: PropTypes.func,
+// };
 
 Form.defaultProps = {
   rows: [],
