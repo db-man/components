@@ -4,6 +4,7 @@ import { Input } from 'antd';
 interface JsonEditorProps {
   value: Record<string, unknown>;
   onChange: (value: Record<string, unknown>) => void;
+  onSave?: () => void;
 }
 
 const obj2str = (obj: Record<string, unknown>) =>
@@ -11,7 +12,7 @@ const obj2str = (obj: Record<string, unknown>) =>
 const str2obj = (str: string) => JSON.parse(str) as Record<string, unknown>;
 
 const JsonEditor: React.FC<JsonEditorProps> = (props) => {
-  const { value } = props;
+  const { value, onSave = () => {} } = props;
   const [jsonStr, setJsonStr] = useState(obj2str(value));
   const [errMsg, setErrMsg] = useState('');
 
@@ -38,9 +39,21 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
     setJsonStr(value);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.code === 'KeyS' && event.metaKey) {
+      event.preventDefault();
+      onSave();
+    }
+  };
+
   return (
     <div>
-      <Input.TextArea autoSize value={jsonStr} onChange={handleChange} />
+      <Input.TextArea
+        autoSize
+        value={jsonStr}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
       {errMsg && <div style={{ color: 'red' }}>{errMsg}</div>}
     </div>
   );

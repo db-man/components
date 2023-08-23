@@ -359,7 +359,13 @@ const Form: React.FC<FormProps> = (props) => {
       label: 'JSON',
       key: 'json',
       children: (
-        <JsonEditor value={formValues} onChange={handleJsonEditorChange} />
+        <JsonEditor
+          value={formValues}
+          onChange={handleJsonEditorChange}
+          onSave={() => {
+            handleFormSubmit();
+          }}
+        />
       ),
     },
   ];
