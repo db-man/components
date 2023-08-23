@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Row, Col } from 'antd';
 
+export interface InputProps {
+  disabled?: boolean;
+  autoFocus?: boolean;
+  placeholder?: string;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+}
+
 interface StringFormFieldValueProps {
   value?: string;
   preview?: boolean;
-  inputProps?: {
-    disabled?: boolean;
-    autoFocus?: boolean;
-    onKeyDown?: () => void;
-  };
+  inputProps?: InputProps;
   onChange?: (
     value: string,
     event: React.ChangeEvent<HTMLInputElement>

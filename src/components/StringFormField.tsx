@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Alert } from 'antd';
 
 import { columnType } from './types';
-import StringFormFieldValue from './StringFormFieldValue';
+import StringFormFieldValue, { InputProps } from './StringFormFieldValue';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import { dbs } from '../dbs';
@@ -13,12 +13,10 @@ import Column from '../types/Column';
 interface StringFormFieldProps {
   label: string;
   column: Column;
+  dbName: string;
+  primaryKey: string;
   value?: string;
-  inputProps?: {
-    disabled?: boolean;
-    autoFocus?: boolean;
-    onKeyDown?: () => void;
-  };
+  inputProps?: InputProps;
   preview?: boolean;
   onChange: (value: string) => void;
 }

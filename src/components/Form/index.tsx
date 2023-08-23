@@ -1,7 +1,3 @@
-// @ts-nocheck
-
-/* eslint-disable react/destructuring-assignment, react/no-access-state-in-setstate, react/forbid-prop-types, max-len */
-
 import React, { useEffect, useContext, useState, ReactNode } from 'react';
 // import PropTypes from 'prop-types';
 import {
