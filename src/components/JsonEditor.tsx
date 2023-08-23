@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { Input } from 'antd';
 
 interface JsonEditorProps {
@@ -6,11 +6,18 @@ interface JsonEditorProps {
   onChange: (value: Record<string, unknown>) => void;
 }
 
+const obj2str = (obj: Record<string, unknown>) =>
+  JSON.stringify(obj, null, '  ');
+const str2obj = (str: string) => JSON.parse(str) as Record<string, unknown>;
+
 const JsonEditor: React.FC<JsonEditorProps> = (props) => {
-  const [jsonStr, setJsonStr] = useState(
-    JSON.stringify(props.value, null, '  ')
-  );
+  const { value } = props;
+  const [jsonStr, setJsonStr] = useState(obj2str(value));
   const [errMsg, setErrMsg] = useState('');
+
+  useEffect(() => {
+    setJsonStr(obj2str(value));
+  }, [value]);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.target;
@@ -18,7 +25,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
 
     setErrMsg('');
     try {
-      const obj = JSON.parse(value) as Record<string, unknown>;
+      const obj = str2obj(value);
       onChange(obj);
     } catch (error) {
       setErrMsg(
