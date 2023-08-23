@@ -4,18 +4,18 @@ import PropTypes from 'prop-types';
 import TextAreaFormFieldValue from './TextAreaFormFieldValue';
 
 interface TextAreaFormFieldProps {
-  label: string,
-  value?: string,
-  onChange?: (value: string) => void,
+  label: string;
+  value?: string;
+  rows?: number;
+  disabled?: boolean;
+  onChange?: (value: string) => void;
 }
 
 export default function TextAreaFormField(props: TextAreaFormFieldProps) {
   const { label, value, onChange } = props;
   return (
-    <div className="dm-form-field dm-string-form-field">
-      <b>{label}</b>
-      :
-      {' '}
+    <div className='dm-form-field dm-string-form-field'>
+      <b>{label}</b>:{' '}
       <TextAreaFormFieldValue
         value={value}
         onChange={onChange}
