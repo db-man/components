@@ -1,16 +1,30 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Row, Col } from 'antd';
 
-export default class StringFormFieldValue extends React.Component {
-  renderInput = () => {
-    const { value, inputProps, onChange } = this.props;
+interface StringFormFieldValueProps {
+  value?: string;
+  preview?: boolean;
+  inputProps?: {
+    disabled?: boolean;
+    autoFocus?: boolean;
+    onKeyDown?: () => void;
+  };
+  onChange?: (
+    value: string,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+}
+
+const StringFormFieldValue = (props: StringFormFieldValueProps) => {
+  const { value, preview } = props;
+
+  const renderInput = () => {
+    const { value, inputProps, onChange = () => {} } = props;
     return (
       <Input
-        {...inputProps} /* eslint-disable-line react/jsx-props-no-spreading */
-        size="small"
+        {...inputProps}
+        size='small'
         value={value}
         onChange={(event) => {
           onChange(event.target.value, event);
@@ -19,36 +33,32 @@ export default class StringFormFieldValue extends React.Component {
     );
   };
 
-  renderValue = () => {
-    const { value, preview } = this.props;
-    const input = this.renderInput();
-    // DELETE
-    if (!preview) {
-      return input;
-    }
-    return (
-      <Row gutter={16}>
-        <Col span={12}>{input}</Col>
-        <Col span={12}>
-          <a href={value} target="_blank" rel="noreferrer">
-            {value ? (
-              <img
-                width="200px"
-                src={value}
-                alt="img"
-                style={{ border: '1px solid' }}
-              />
-            ) : null}
-          </a>
-        </Col>
-      </Row>
-    );
-  };
+  const input = renderInput();
 
-  render() {
-    return this.renderValue();
+  // DELETE
+  if (!preview) {
+    return input;
   }
-}
+  return (
+    <Row gutter={16}>
+      <Col span={12}>{input}</Col>
+      <Col span={12}>
+        <a href={value} target='_blank' rel='noreferrer'>
+          {value ? (
+            <img
+              width='200px'
+              src={value}
+              alt='img'
+              style={{ border: '1px solid' }}
+            />
+          ) : null}
+        </a>
+      </Col>
+    </Row>
+  );
+};
+
+export default StringFormFieldValue;
 
 StringFormFieldValue.propTypes = {
   value: PropTypes.string,

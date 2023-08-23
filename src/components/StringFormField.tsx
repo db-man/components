@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'antd';
@@ -10,22 +8,36 @@ import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import { dbs } from '../dbs';
 import PresetsButtons from './PresetsButtons';
+import Column from '../types/Column';
 
-export default function StringFormField(props) {
-  const {
-    label, column, value, inputProps, preview, onChange,
-  } = props;
+interface StringFormFieldProps {
+  label: string;
+  column: Column;
+  value?: string;
+  inputProps?: {
+    disabled?: boolean;
+    autoFocus?: boolean;
+    onKeyDown?: () => void;
+  };
+  preview?: boolean;
+  onChange: (value: string) => void;
+}
+
+export default function StringFormField(props: StringFormFieldProps) {
+  const { label, column, value, inputProps, preview, onChange } = props;
   const { dbName } = useContext(PageContext);
   const renderWarning = () => {
     if (typeof value === 'string') return null;
-    return <Alert message={`(This form field type should be string, but current type is ${typeof value})`} type="warning" />;
+    return (
+      <Alert
+        message={`(This form field type should be string, but current type is ${typeof value})`}
+        type='warning'
+      />
+    );
   };
   return (
-    <div className="dm-form-field dm-string-form-field">
-      <b>{label}</b>
-      :
-      {' '}
-      <PresetsButtons column={column} onChange={onChange} />{' '}
+    <div className='dm-form-field dm-string-form-field'>
+      <b>{label}</b>: <PresetsButtons column={column} onChange={onChange} />{' '}
       <RefTableLink
         column={column}
         tables={dbs[dbName]}
@@ -35,7 +47,6 @@ export default function StringFormField(props) {
       {renderWarning()}
       <StringFormFieldValue
         inputProps={inputProps}
-        size="small"
         preview={preview}
         value={value}
         onChange={onChange}
