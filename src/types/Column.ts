@@ -28,6 +28,9 @@ export default interface Column extends AntdColumnType<Record<string, any>> {
    * If true, on the list page, the column will be shown in the filter section.
    */
   filter: boolean;
+  /**
+   * In the Form page, e.g. to create a new user, use it to show a dropdown list with "Maintainer" and "Developer".
+   */
   enum?: string[];
   /**
    * If is 'HIDE', the column will not be shown on the list page.

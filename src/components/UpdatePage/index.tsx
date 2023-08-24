@@ -1,8 +1,4 @@
-// @ts-nocheck
-
-/* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods */
-
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { message, Alert, Spin, Skeleton } from 'antd';
 import { utils as githubUtils } from '@db-man/github';
 
@@ -12,29 +8,28 @@ import Form from '../Form';
 import PageContext from '../../contexts/page';
 
 import { getNewRows } from './helpers';
+import { DataRowType, DataType } from '../../types/Data';
 
-export default class UpdatePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errorMessage: '',
+const UpdatePage = () => {
+  const { primaryKey, appModes, dbName, tableName, githubDb } =
+    useContext(PageContext);
 
-      // all rows in table data file
-      tableFileLoading: '',
-      rows: [],
-      tableFileSha: null,
+  const [errorMessage, setErrorMessage] = useState('');
 
-      recordFileLoading: '',
-      record: {},
-      recordFileSha: null,
+  // all rows in table data file
+  const [tableFileLoading, setTableFileLoading] = useState('');
+  const [rows, setRows] = useState<DataRowType>([]);
+  const [tableFileSha, setTableFileSha] = useState(null);
 
-      loading: '',
-    };
-  }
+  const [recordFileLoading, setRecordFileLoading] = useState('');
+  const [record, setRecord] = useState<DataType>({});
+  const [recordFileSha, setRecordFileSha] = useState(null);
 
-  componentDidMount() {
-    this.getData();
-  }
+  const [loading, setLoading] = useState('');
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   /**
    * `updateTableFileAsync`
@@ -43,17 +38,17 @@ export default class UpdatePage extends React.Component {
    *   to only update record file, file is small, so get response quickly,
    *   but backend (github action) need to merge several record files into big table file after this update
    */
-  handleFormSubmit = (formValues) => {
-    if (this.isSplitTable) {
-      this.updateRecordFileAsync(formValues);
+  const handleFormSubmit = (formValues: DataType) => {
+    if (isSplitTable()) {
+      updateRecordFileAsync(formValues);
     } else {
-      this.updateTableFileAsync(formValues);
+      updateTableFileAsync(formValues);
     }
   };
 
-  handleDelete = (formValues) => {
-    if (this.isSplitTable) {
-      this.deleteRecordFileAsync(formValues);
+  const handleDelete = (formValues: DataType) => {
+    if (isSplitTable()) {
+      deleteRecordFileAsync(formValues);
     } else {
       message.info('Only supported in split-table mode!');
     }
@@ -62,206 +57,172 @@ export default class UpdatePage extends React.Component {
   /**
    * If primary key is "itemId", and this field value is "foo", then return "foo"
    */
-  get currentId() {
-    return utils.getUrlParams()[this.context.primaryKey];
-  }
+  const currentId = () => {
+    return utils.getUrlParams()[primaryKey];
+  };
 
-  get isSplitTable() {
-    const { appModes } = this.context;
+  const isSplitTable = () => {
     return appModes.indexOf('split-table') !== -1;
-  }
+  };
 
-  get record() {
-    if (this.isSplitTable) {
-      return this.state.record;
+  const getRecord = () => {
+    if (isSplitTable()) {
+      return record;
     }
     return (
-      this.state.rows.find(
-        (row) => row[this.context.primaryKey] === this.currentId,
-      ) || {}
+      rows.find((row) => row[primaryKey] === currentId()) || ({} as DataType)
     );
-  }
+  };
 
-  get tips() {
-    const { tableFileLoading, recordFileLoading } = this.state;
+  const tips = () => {
     const tips = [];
     if (tableFileLoading) tips.push(tableFileLoading);
     if (recordFileLoading) tips.push(recordFileLoading);
     return tips;
-  }
+  };
 
-  updateTableFileAsync = async (formValues) => {
-    const { dbName, tableName, primaryKey } = this.context;
-    const { rows, tableFileSha } = this.state;
+  const updateTableFileAsync = async (formValues: DataType) => {
+    const newRows = getNewRows(formValues, [...rows], primaryKey, currentId());
 
-    const newRows = getNewRows(
-      formValues,
-      [...rows],
-      primaryKey,
-      this.currentId,
-    );
-
-    this.setState({ loading: 'Updating table file...' });
+    setLoading('Updating table file...');
     try {
-      const { commit } = await this.context.githubDb.updateTableFile(
+      const { commit } = await githubDb.updateTableFile(
         dbName,
         tableName,
         newRows,
-        tableFileSha,
+        tableFileSha
       );
 
       message.success(<SuccessMessage url={commit.html_url} />, 10);
     } catch (err) {
       console.error('updateTableFile, err:', err);
-      this.setState({
-        errorMessage: 'Failed to update table file on server!',
-      });
+      setErrorMessage('Failed to update table file on server!');
     }
 
-    this.setState({ loading: '' });
+    setLoading('');
   };
 
-  updateRecordFileAsync = async (formValues) => {
-    const { dbName, tableName, primaryKey } = this.context;
-    const { recordFileSha } = this.state;
-
-    this.setState({ loading: 'Updating record file...' });
+  const updateRecordFileAsync = async (formValues: DataType) => {
+    setLoading('Updating record file...');
     try {
       const record = {
         ...formValues,
         updatedAt: githubUtils.formatDate(new Date()),
       };
-      const { commit } = await this.context.githubDb.updateRecordFile(
+      const { commit } = await githubDb.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
         record,
-        recordFileSha,
+        recordFileSha
       );
 
       message.success(<SuccessMessage url={commit.html_url} />, 10);
     } catch (err) {
       console.error('updateRecordFile, err:', err);
-      this.setState({
-        errorMessage: 'Failed to update record file on server!',
-      });
+      setErrorMessage('Failed to update record file on server!');
     }
 
-    this.setState({ loading: '' });
+    setLoading('');
   };
 
-  deleteRecordFileAsync = async (formValues) => {
-    const { dbName, tableName, primaryKey } = this.context;
-    const { recordFileSha } = this.state;
-
-    this.setState({ loading: 'Deleting record file...' });
+  const deleteRecordFileAsync = async (formValues: DataType) => {
+    setLoading('Deleting record file...');
     try {
-      const { commit } = await this.context.githubDb.deleteRecordFile(
+      const { commit } = await githubDb.deleteRecordFile(
         dbName,
         tableName,
         formValues[primaryKey],
-        recordFileSha,
+        recordFileSha
       );
 
       message.success(<SuccessMessage url={commit.html_url} />, 10);
     } catch (err) {
       console.error('deleteRecordFile, err:', err);
-      this.setState({
-        errorMessage: 'Failed to delete record file on server!',
-      });
+      setErrorMessage('Failed to delete record file on server!');
     }
 
-    this.setState({ loading: '' });
+    setLoading('');
   };
 
   // Get single record file or whole table file
-  getData = () => {
+  const getData = () => {
     const ps = [];
-    if (this.isSplitTable) {
+    if (isSplitTable()) {
       // When in split-table mode, whole table file is too big to download and cost a lot of time to download
-      ps.push(this.getRecordFileAsync());
+      ps.push(getRecordFileAsync());
     } else {
-      ps.push(this.getTableFileAsync());
+      ps.push(getTableFileAsync());
     }
     Promise.all(ps);
   };
 
-  getTableFileAsync = async () => {
-    const { dbName, tableName } = this.context;
-    this.setState({ tableFileLoading: `Loading ${dbName}/${tableName} ...` });
+  const getTableFileAsync = async () => {
+    setTableFileLoading(`Loading ${dbName}/${tableName} ...`);
     try {
-      const { content: rows, sha: tableFileSha } = await this.context.githubDb.getTableRows(
+      const { content: rows, sha: tableFileSha } = await githubDb.getTableRows(
         dbName,
-        tableName,
+        tableName
       );
-      this.setState({
-        rows,
-        tableFileSha,
-      });
+      setRows(rows);
+      setTableFileSha(tableFileSha);
     } catch (err) {
       console.error('getTableRows, error:', err);
-      this.setState({ errorMessage: 'Failed to get table file from server!' });
+      setErrorMessage('Failed to get table file from server!');
     }
-    this.setState({ tableFileLoading: '' });
+    setTableFileLoading('');
   };
 
-  getRecordFileAsync = async () => {
-    const { dbName, tableName } = this.context;
-    this.setState({
-      recordFileLoading: `Loading ${dbName}/${tableName}/${this.currentId}`,
-    });
+  const getRecordFileAsync = async () => {
+    setRecordFileLoading(`Loading ${dbName}/${tableName}/${currentId()}`);
     try {
-      const { content, sha } = await this.context.githubDb.getRecordFileContentAndSha(
+      const { content, sha } = await githubDb.getRecordFileContentAndSha(
         dbName,
         tableName,
-        this.currentId,
+        currentId()
       );
-      this.setState({
-        recordFileSha: sha,
-        record: content,
-      });
+      setRecordFileSha(sha);
+      setRecord(content);
     } catch (err) {
       console.error('getRecordFileContentAndSha, error:', err);
-      this.setState({ errorMessage: 'Failed to get file from server!' });
+      setErrorMessage('Failed to get file from server!');
     }
-    this.setState({ recordFileLoading: '' });
+    setRecordFileLoading('');
   };
 
-  renderAlert = () => {
-    if (!this.state.errorMessage) {
+  const renderAlert = () => {
+    if (!errorMessage) {
       return null;
     }
-    return <Alert message={this.state.errorMessage} type="error" />;
+    return <Alert message={errorMessage} type='error' />;
   };
 
-  renderForm = () => {
-    if (this.tips.length) {
-      return <Spin tip={this.tips.join(',')}>Loading...</Spin>;
+  const renderForm = () => {
+    if (tips().length) {
+      return <Spin tip={tips().join(',')}>Loading...</Spin>;
     }
-    if (!this.record[this.context.primaryKey]) {
+    if (!getRecord()[primaryKey]) {
       return null;
     }
     return (
       <Form
-        defaultValues={this.record}
-        rows={this.state.rows}
-        loading={!!this.state.loading}
-        onSubmit={this.handleFormSubmit}
-        onDelete={this.handleDelete}
+        defaultValues={getRecord()}
+        rows={rows}
+        loading={!!loading}
+        onSubmit={handleFormSubmit}
+        onDelete={handleDelete}
       />
     );
   };
 
-  render() {
-    return (
-      <div className="dm-page update-page-body-component">
-        <Skeleton loading={this.tips.length > 0}>
-          {this.renderAlert()}
-          {this.renderForm()}
-        </Skeleton>
-      </div>
-    );
-  }
-}
+  return (
+    <div className='dm-page update-page-body-component'>
+      <Skeleton loading={tips().length > 0}>
+        {renderAlert()}
+        {renderForm()}
+      </Skeleton>
+    </div>
+  );
+};
 
-UpdatePage.contextType = PageContext;
+export default UpdatePage;
