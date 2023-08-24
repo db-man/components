@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import React, { useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { dbs } from '../dbs';
@@ -9,12 +7,23 @@ import PageContext from '../contexts/page';
 
 import { columnType } from './types';
 import * as constants from '../constants';
+import Column from '../types/Column';
+
+interface FieldWrapperProps {
+  column: Column;
+  value: number | boolean | string | string[];
+  children: ReactNode;
+}
 
 /**
  * Form field wrapper for detail page
  * TODO When value is an array, how to render RefTableLink
  */
-const FieldWrapperForDetailPage = ({ column, value, children }) => {
+const FieldWrapperForDetailPage = ({
+  column,
+  value,
+  children,
+}: FieldWrapperProps) => {
   const { dbName } = useContext(PageContext);
   const typeClassName =
     column.type === constants.STRING_ARRAY
@@ -26,11 +35,11 @@ const FieldWrapperForDetailPage = ({ column, value, children }) => {
       className={`dm-form-field ${typeClassName}`}
       data-debug={JSON.stringify(column)}
     >
-      <div className="dm-field-label">
+      <div className='dm-field-label'>
         <b>
-          {column.name}
+          {column.name} (<code>{column.id}</code>)
           {column.type === constants.STRING_ARRAY
-            ? ` (count:${value ? value.length : 0})`
+            ? ` (count:${value ? (value as string[]).length : 0})`
             : null}
         </b>
         :{' '}

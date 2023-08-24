@@ -2,7 +2,7 @@ import React from 'react';
 
 import Column from '../types/Column';
 
-interface PageContextType {
+export interface PageContextType {
   appModes: string[];
   dbName: string;
   tableName: string;

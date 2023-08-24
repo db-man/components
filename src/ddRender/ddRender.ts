@@ -46,7 +46,7 @@ export const getRender = (args, tplExtra) => {
  *   "type:listPage": ["Link", "{{record.url}}"]
  * }
  */
-export const getColumnRender = (renderKey, column, tplExtra) => {
+export const getColumnRender = (renderKey, column, tplExtra?) => {
   const customRender = getRender(column[renderKey], tplExtra);
   if (customRender) {
     return customRender;

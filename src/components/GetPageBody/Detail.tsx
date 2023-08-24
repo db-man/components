@@ -1,28 +1,32 @@
-// @ts-nocheck
-
 /* eslint-disable react/destructuring-assignment, no-console, max-len */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Collapse } from 'antd';
+import { Input, Collapse, CollapseProps } from 'antd';
 
 import PageContext from '../../contexts/page';
 import * as constants from '../../constants';
 import * as ddRender from '../../ddRender/ddRender';
 import FieldWrapperForDetailPage from '../FieldWrapperForDetailPage';
 import StringFormFieldValue from '../StringFormFieldValue';
+import Column from '../../types/Column';
 
-const { Panel } = Collapse;
+interface DetailProps {
+  defaultValues: Record<string, any>;
+  refTables: Record<string, any>;
+}
 
-export default class Detail extends React.Component {
-  renderWithDdRender = (column, value) => {
+const Detail = (props: DetailProps) => {
+  const { columns, tables } = React.useContext(PageContext);
+
+  const renderWithDdRender = (column: Column, value: any) => {
     const renderFn = ddRender.getColumnRender('type:getPage', column, {
       column,
-      tables: this.context.tables,
-      rows: this.props.refTables[`ref:${column.referenceTable}:rows`], // eslint-disable-line react/prop-types
+      tables: tables,
+      rows: props.refTables[`ref:${column.referenceTable}:rows`], // eslint-disable-line react/prop-types
     });
     if (renderFn) {
-      const el = renderFn(value, this.props.defaultValues);
+      const el = renderFn(value, props.defaultValues);
       if (el) {
         return el;
       }
@@ -30,11 +34,11 @@ export default class Detail extends React.Component {
     return <div>No render fn: {value}</div>;
   };
 
-  renderStringFieldValue = (column) => {
-    const value = this.props.defaultValues[column.id];
+  const renderStringFieldValue = (column: Column) => {
+    const value = props.defaultValues[column.id];
 
     if (column['type:getPage']) {
-      return this.renderWithDdRender(column, value);
+      return renderWithDdRender(column, value);
     }
 
     let preview = false;
@@ -53,57 +57,53 @@ export default class Detail extends React.Component {
     );
   };
 
-  renderFieldValue = (column) => {
+  const renderFieldValue = (column: Column) => {
     switch (column.type) {
       case constants.STRING:
-        return this.renderStringFieldValue(column);
+        return renderStringFieldValue(column);
       case constants.BOOL:
       case constants.NUMBER:
       case constants.STRING_ARRAY:
       default:
-        return this.renderWithDdRender(
-          column,
-          this.props.defaultValues[column.id],
-        );
+        return renderWithDdRender(column, props.defaultValues[column.id]);
     }
   };
 
-  renderDebugJson = () => {
-    const debugJson = JSON.stringify(this.props.defaultValues, null, '  ');
-    return (
-      <Collapse>
-        <Panel header="Debug JSON" key="1">
+  const renderDebugJson = () => {
+    const debugJson = JSON.stringify(props.defaultValues, null, '  ');
+    const items: CollapseProps['items'] = [
+      {
+        key: 'debug-json',
+        label: 'Debug JSON',
+        children: (
           <Input.TextArea
             style={{ fontSize: '10px' }}
             rows={debugJson.split('\n').length}
             value={debugJson}
           />
-        </Panel>
-      </Collapse>
-    );
+        ),
+      },
+    ];
+    return <Collapse size='small' items={items} />;
   };
 
-  render() {
-    const { columns } = this.context;
-
-    return (
-      <div className="get-page-body-detail-component">
-        <div>
-          {columns.map((column) => (
-            <FieldWrapperForDetailPage
-              key={column.id}
-              column={column}
-              value={this.props.defaultValues[column.id]}
-            >
-              {this.renderFieldValue(column)}
-            </FieldWrapperForDetailPage>
-          ))}
-        </div>
-        {this.renderDebugJson()}
+  return (
+    <div className='get-page-body-detail-component'>
+      <div>
+        {columns.map((column) => (
+          <FieldWrapperForDetailPage
+            key={column.id}
+            column={column}
+            value={props.defaultValues[column.id]}
+          >
+            {renderFieldValue(column)}
+          </FieldWrapperForDetailPage>
+        ))}
       </div>
-    );
-  }
-}
+      {renderDebugJson()}
+    </div>
+  );
+};
 
 Detail.propTypes = {
   defaultValues: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -111,4 +111,4 @@ Detail.propTypes = {
 
 Detail.defaultProps = {};
 
-Detail.contextType = PageContext;
+export default Detail;

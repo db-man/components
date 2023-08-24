@@ -4,6 +4,7 @@ import { Input, Row, Col } from 'antd';
 
 export interface InputProps {
   disabled?: boolean;
+  readOnly?: boolean;
   autoFocus?: boolean;
   placeholder?: string;
   onKeyDown?: (event: React.KeyboardEvent) => void;

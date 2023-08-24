@@ -1,179 +1,150 @@
-// @ts-nocheck
-
-/* eslint-disable react/destructuring-assignment, no-console, max-len */
-
-import React from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { message, Alert, Spin } from 'antd';
 import * as utils from '../../utils';
 import PageContext from '../../contexts/page';
 
 import Detail from './Detail';
+import { DataRowType } from '../../types/Data';
 
-export default class GetPageBody extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      contentLoading: false,
-      contentLoaded: false,
-      refTables: {},
+const GetPageBody = () => {
+  const { dbName, tableName, appModes, primaryKey, githubDb, columns } =
+    useContext(PageContext);
 
-      errorMessage: '',
+  const [contentLoading, setContentLoading] = React.useState(false);
+  const [contentLoaded, setContentLoaded] = React.useState(false);
+  const [refTables, setRefTables] = React.useState({});
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [record, setRecord] = React.useState({}); // One record in table rows
 
-      // One record in table rows
-      record: {},
+  // Create the initial form fields according to whether create/update.
+  const getInitialFormFields = useCallback(
+    (tableRows: DataRowType) => {
+      const foundRows = tableRows.filter(
+        (item) => item[primaryKey] === utils.getUrlParams()[primaryKey]
+      );
+
+      if (foundRows.length === 0) {
+        setErrorMessage('item not found in db');
+        return null;
+      }
+      if (foundRows.length > 1) {
+        setErrorMessage('more than 1 rows');
+        return null;
+      }
+
+      return {
+        ...foundRows[0],
+      };
+    },
+    [primaryKey]
+  );
+
+  const getSingleRecordAsync = useCallback(() => {
+    /**
+     * If primary key is "itemId", and this field value is "foo", then return "foo"
+     */
+    const currentId = () => {
+      return utils.getUrlParams()[primaryKey];
     };
-  }
-
-  componentDidMount() {
-    const { dbName, tableName } = this.context;
-    this.fetchData(dbName, tableName);
-  }
-
-  // componentDidUpdate(prevProps) {
-  //   // When URL changed, dbName or tableName changed, then load data from backend
-  //   if (
-  //     this.context.dbName !== prevProps.dbName
-  //     || this.context.tableName !== prevProps.tableName
-  //   ) {
-  //     this.fetchData(this.context.dbName, this.context.tableName);
-  //   }
-  // }
-
-  get isSplitTable() {
-    const { appModes } = this.context;
-    return appModes.indexOf('split-table') !== -1;
-  }
-
-  /**
-   * If primary key is "itemId", and this field value is "foo", then return "foo"
-   */
-  get currentId() {
-    return utils.getUrlParams()[this.context.primaryKey];
-  }
-
-  getTableRowsAsync = async ({ dbName, tableName }) => {
-    return this.context.githubDb
-      .getTableRows(dbName, tableName)
-      .then(({ content }) => {
-        return content;
+    return githubDb
+      .getRecordFileContentAndSha(dbName, tableName, currentId())
+      .then(({ content }: { content: DataRowType }) => {
+        setContentLoaded(true);
+        setRecord(content);
       })
-      .then((tableRows) => {
-        this.setState({
-          contentLoaded: true,
-          record: this.getInitialFormFields(tableRows),
-        });
-      })
-      .catch((err) => {
-        console.error('getTableRows failed, err:', err);
-        message.error('something wrong in getTableRows');
-      });
-  };
-
-  getSingleRecordAsync = async ({ dbName, tableName }) => {
-    return this.context.githubDb
-      .getRecordFileContentAndSha(dbName, tableName, this.currentId)
-      .then(({ content }) => {
-        this.setState({
-          contentLoaded: true,
-          record: content,
-        });
-      })
-      .catch((err) => {
+      .catch((err: Error) => {
         console.error('githubDb.getRecordFileContentAndSha failed, err:', err);
         message.error('something wrong in githubDb.getRecordFileContentAndSha');
       });
-  };
+  }, [dbName, tableName, githubDb, primaryKey]);
 
-  fetchData = (dbName, tableName) => {
-    this.setState({ contentLoading: true });
+  const getTableRowsAsync = useCallback(() => {
+    return githubDb
+      .getTableRows(dbName, tableName)
+      .then(({ content }: { content: DataRowType }) => {
+        return content;
+      })
+      .then((tableRows: DataRowType) => {
+        setContentLoaded(true);
+        const r = getInitialFormFields(tableRows);
+        if (r) {
+          setRecord(r);
+        } else {
+          message.error('item not found in db');
+        }
+      })
+      .catch((err: Error) => {
+        console.error('getTableRows failed, err:', err);
+        message.error('something wrong in getTableRows');
+      });
+  }, [dbName, tableName, getInitialFormFields, githubDb]);
+
+  // page mount or db/table change load data
+  useEffect(() => {
+    setContentLoading(true);
     const ps = [];
 
-    if (this.isSplitTable) {
-      ps.push(this.getSingleRecordAsync({ dbName, tableName }));
+    if (appModes.indexOf('split-table') !== -1) {
+      ps.push(getSingleRecordAsync());
     } else {
-      ps.push(this.getTableRowsAsync({ dbName, tableName }));
+      ps.push(getTableRowsAsync());
     }
 
-    const getRefTablePromises = this.context.columns
+    const getRefTablePromises = columns
       .filter(({ referenceTable }) => referenceTable)
       .map(({ referenceTable }) => {
-        return this.context.githubDb
+        return githubDb
           .getTableRows(dbName, referenceTable)
-          .then(({ content }) => {
-            const { refTables } = this.state;
-            refTables[`ref:${referenceTable}:rows`] = content; // TODO
-            this.setState({
-              refTables,
-            });
+          .then(({ content }: { content: DataRowType }) => {
+            setRefTables((prevRefTables) => ({
+              ...prevRefTables,
+              [`ref:${referenceTable}:rows`]: content, // TODO
+            }));
           });
       });
 
-    console.debug('Start getting all table data...');
+    // console.debug('Start getting all table data...');
     Promise.all([...ps, ...getRefTablePromises])
       .then(() => {
-        console.debug('Finish getting all table data...');
+        // console.debug('Finish getting all table data...');
       })
       .finally(() => {
-        this.setState({ contentLoading: false });
+        setContentLoading(false);
       });
+  }, [
+    dbName,
+    tableName,
+    columns,
+    getSingleRecordAsync,
+    getTableRowsAsync,
+    githubDb,
+    appModes,
+  ]);
+
+  const renderAlert = () =>
+    errorMessage && <Alert message={errorMessage} type='error' />;
+
+  const renderDetail = () => {
+    if (record === null) {
+      return null;
+    }
+    return <Detail defaultValues={record} refTables={refTables} />;
   };
 
-  // Create the initial form fields according to whether create/update.
-  getInitialFormFields = (tableRows) => {
-    const foundRows = tableRows.filter(
-      (item) =>
-        item[this.context.primaryKey] ===
-        utils.getUrlParams()[this.context.primaryKey],
-    );
-
-    if (foundRows.length === 0) {
-      this.setState({ errorMessage: 'item not found in db' });
-      return null;
-    }
-    if (foundRows.length > 1) {
-      this.setState({ errorMessage: 'more than 1 rows' });
-      return null;
-    }
-
-    return {
-      ...foundRows[0],
-    };
-  };
-
-  renderAlert = () =>
-    this.state.errorMessage && (
-      <Alert message={this.state.errorMessage} type="error" />
-    );
-
-  renderDetail = () => {
-    if (this.state.record === null) {
-      return null;
-    }
-    return (
-      <Detail
-        defaultValues={this.state.record}
-        tables={this.context.tables}
-        refTables={this.state.refTables}
-      />
-    );
-  };
-
-  render() {
-    if (this.state.contentLoading) {
-      return <Spin />;
-    }
-
-    if (!this.state.contentLoaded) {
-      return null;
-    }
-
-    return (
-      <div className="get-body-component">
-        {this.renderAlert()}
-        {this.renderDetail()}
-      </div>
-    );
+  if (contentLoading) {
+    return <Spin />;
   }
-}
 
-GetPageBody.contextType = PageContext;
+  if (!contentLoaded) {
+    return null;
+  }
+
+  return (
+    <div className='get-body-component'>
+      {renderAlert()}
+      {renderDetail()}
+    </div>
+  );
+};
+
+export default GetPageBody;
