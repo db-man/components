@@ -32,23 +32,43 @@ const loadDbsSchemaAsync = async (github, githubDb, path) => {
 };
 
 const validateDbsSchame = (dbsSchema) => {
+  const errors = [];
   Object.keys(dbsSchema).forEach((dbName) => {
     const tables = dbsSchema[dbName];
     tables.forEach((table, index) => {
       if (!table.name) {
-        message.warning(
-          `Missing table name, dbName:${dbName}, index:${index}`,
-          10
-        );
+        errors.push(`Missing table name, dbName:${dbName}, index:${index}`);
       }
       if (!table.columns) {
-        message.warning(
-          `Missing table columns, tableName: ${table.name}, dbName:${dbName}`,
-          10
+        errors.push(
+          `Missing table columns, tableName: ${table.name}, dbName:${dbName}`
         );
       }
+      table.columns.forEach((column, colIndex) => {
+        if (!column.id) {
+          errors.push(
+            `Missing column id, tableName: ${table.name}, dbName:${dbName}, colIndex:${colIndex}`
+          );
+        }
+        if (!column.name) {
+          errors.push(
+            `Missing column name, tableName: ${table.name}, dbName:${dbName}, colIndex:${colIndex}`
+          );
+        }
+        if (!column.type) {
+          errors.push(
+            `Missing column type, tableName: ${table.name}, dbName:${dbName}, colIndex:${colIndex}`
+          );
+        }
+      });
     });
   });
+
+  if (errors.length) {
+    message.warning(errors.join('\n'), 20);
+  }
+
+  return errors.length === 0;
 };
 
 const reloadDbsSchemaAsync = async (github, githubDb) => {
@@ -73,12 +93,13 @@ const reloadDbsSchemaAsync = async (github, githubDb) => {
     return;
   }
 
-  validateDbsSchame(dbsSchema);
+  if (!validateDbsSchame(dbsSchema)) {
+    message.error('DB schema is invalid! Will not save to localStorage!');
+    return;
+  }
 
   localStorage.setItem(constants.LS_KEY_DBS_SCHEMA, JSON.stringify(dbsSchema));
-
   message.info('Finish loading DBs schema! Will reload window in 3s!');
-
   setTimeout(() => {
     window.location.reload();
   }, 3000);
