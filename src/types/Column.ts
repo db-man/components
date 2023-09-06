@@ -4,7 +4,7 @@ import { ColumnType as AntdColumnType } from 'antd/es/table';
 type ColumnPlaceholder = string;
 
 /**
- * One of "STRING", "STRING_ARRAY", "NUMBER" or "BOOL". Default is "STRING".
+ * One of "STRING", "STRING_ARRAY", "NUMBER" or "BOOL".
 
 | type         | Default UI Component |
 | ------------ | -------------------- |
@@ -18,9 +18,23 @@ type ColumnPlaceholder = string;
 type ColumnType = 'STRING' | 'STRING_ARRAY' | 'NUMBER' | 'BOOL';
 
 export default interface Column extends AntdColumnType<Record<string, any>> {
+  /**
+   * Required. The id of this column.
+   */
   id: string;
+  /**
+   * Required. The name of this column.
+   */
   name: string;
+  /**
+   * Required. The type of this column.
+   */
   type: ColumnType;
+  /**
+   * Only one column in table should have this field.
+   * `true` to indicate this column is an uniq key of this table.
+   */
+  primary: boolean;
   'type:createUpdatePage': string;
   'type:getPage': string;
   placeholder: ColumnPlaceholder;

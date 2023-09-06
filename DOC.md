@@ -23,6 +23,10 @@ When a database is set `split-table`, when update a table record, will only upda
 
 Table is defined in `columns.json` file.
 
+See `src/types/DbTable.ts`
+
+An example:
+
 ```json
 {
   "name": "users",
@@ -43,11 +47,11 @@ Table is defined in `columns.json` file.
 }
 ```
 
-- table.name - Table name
-- table.columns - Array of column definition
-- table.large - Optional, default is false. Set to true for large table file which is more than 1MB.
-
 ## Column definition
+
+See `src/types/Column.ts`
+
+An example:
 
 ```json
 {
@@ -62,14 +66,13 @@ Table is defined in `columns.json` file.
 
 ### `name` (Required)
 
-### `type` (Optional)
+### `type` (Required)
 
 See `src/types/Column.ts::ColumnType`
 
 ### `primary`
 
-Only one column in table should have this field.
-`true` to indicate this column is an uniq key of this table.
+See `src/types/Column.ts`
 
 ### `placeholder`
 
