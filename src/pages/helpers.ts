@@ -21,9 +21,11 @@ const loadDbsSchemaAsync = async (github, githubDb, path) => {
   await Promise.all(
     files
       .map(({ name }) => name)
-      .map((dbName) => githubDb.getDbTablesSchemaAsync(dbName).then((tables) => {
-        dbsSchema[dbName] = tables;
-      })),
+      .map((dbName) =>
+        githubDb.getDbTablesSchemaAsync(dbName).then((tables) => {
+          dbsSchema[dbName] = tables;
+        })
+      )
   );
 
   return dbsSchema;
@@ -34,10 +36,16 @@ const validateDbsSchame = (dbsSchema) => {
     const tables = dbsSchema[dbName];
     tables.forEach((table, index) => {
       if (!table.name) {
-        message.warning(`Missing table name, dbName:${dbName}, index:${index}`, 10);
+        message.warning(
+          `Missing table name, dbName:${dbName}, index:${index}`,
+          10
+        );
       }
       if (!table.columns) {
-        message.warning(`Missing table columns, tableName: ${table.name}, dbName:${dbName}`, 10);
+        message.warning(
+          `Missing table columns, tableName: ${table.name}, dbName:${dbName}`,
+          10
+        );
       }
     });
   });
@@ -56,7 +64,12 @@ const reloadDbsSchemaAsync = async (github, githubDb) => {
   try {
     dbsSchema = await loadDbsSchemaAsync(github, githubDb, path);
   } catch (err) {
-    errMsg(`Failed to get DB schema! Maybe you need to create this file: https://github.com/${localStorage.getItem(constants.LS_KEY_GITHUB_OWNER)}/${localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME)}/${path}`, err);
+    errMsg(
+      `Failed to get DB schema! Maybe you need to create this file: https://github.com/${localStorage.getItem(
+        constants.LS_KEY_GITHUB_OWNER
+      )}/${localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME)}/${path}`,
+      err
+    );
     return;
   }
 
