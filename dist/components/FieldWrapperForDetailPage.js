@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { dbs } from '../dbs';
@@ -7,7 +5,6 @@ import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import { columnType } from './types';
 import * as constants from '../constants';
-
 /**
  * Form field wrapper for detail page
  * TODO When value is an array, how to render RefTableLink
@@ -27,7 +24,7 @@ const FieldWrapperForDetailPage = ({
     "data-debug": JSON.stringify(column)
   }, /*#__PURE__*/React.createElement("div", {
     className: "dm-field-label"
-  }, /*#__PURE__*/React.createElement("b", null, column.name, column.type === constants.STRING_ARRAY ? ` (count:${value ? value.length : 0})` : null), ":", ' ', column.referenceTable && typeof value === 'string' && /*#__PURE__*/React.createElement(RefTableLink, {
+  }, /*#__PURE__*/React.createElement("b", null, column.name, " (", /*#__PURE__*/React.createElement("code", null, column.id), ")", column.type === constants.STRING_ARRAY ? ` (count:${value ? value.length : 0})` : null), ":", ' ', column.referenceTable && typeof value === 'string' && /*#__PURE__*/React.createElement(RefTableLink, {
     dbName: dbName,
     tables: dbs[dbName],
     value: value,

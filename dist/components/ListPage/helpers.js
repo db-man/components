@@ -12,6 +12,13 @@ import * as constants from '../../constants';
 export const searchKeywordInText = (keyword, text) => text.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
 
 /**
+ * Search "234"(keyword) in `123456`(text)
+ * @param {string} keyword
+ * @param {number} number
+ */
+export const searchNumberKeywordInText = (keyword, number) => String(number).toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+
+/**
  * Search keyword 'do' in string array ['dog', 'cat']
  * @param {string|undefined} keyword Search keyword
  * @param {string[]} tags The table cell value
@@ -73,6 +80,7 @@ export const isAllFilterInvalid = (filter, filterColumnIds) => {
   return validFilter.length === 0;
 };
 const filterFnMapping = {
+  [constants.NUMBER]: searchNumberKeywordInText,
   [constants.STRING]: searchKeywordInText,
   [constants.STRING_ARRAY]: stringArrayFilter
 };

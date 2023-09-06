@@ -1,5 +1,17 @@
 import PropTypes from 'prop-types';
-declare function StringFormField(props: any): import("react/jsx-runtime").JSX.Element;
+import { InputProps } from './StringFormFieldValue';
+import Column from '../types/Column';
+interface StringFormFieldProps {
+    label: string;
+    column: Column;
+    dbName: string;
+    primaryKey: string;
+    value?: string;
+    inputProps?: InputProps;
+    preview?: boolean;
+    onChange: (value: string) => void;
+}
+declare function StringFormField(props: StringFormFieldProps): import("react/jsx-runtime").JSX.Element;
 declare namespace StringFormField {
     var propTypes: {
         label: PropTypes.Validator<string>;

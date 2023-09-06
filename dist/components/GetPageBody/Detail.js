@@ -1,8 +1,3 @@
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-// @ts-nocheck
-
 /* eslint-disable react/destructuring-assignment, no-console, max-len */
 
 import React from 'react';
@@ -13,87 +8,85 @@ import * as constants from '../../constants';
 import * as ddRender from '../../ddRender/ddRender';
 import FieldWrapperForDetailPage from '../FieldWrapperForDetailPage';
 import StringFormFieldValue from '../StringFormFieldValue';
-const {
-  Panel
-} = Collapse;
-export default class Detail extends React.Component {
-  constructor(...args) {
-    super(...args);
-    _defineProperty(this, "renderWithDdRender", (column, value) => {
-      const renderFn = ddRender.getColumnRender('type:getPage', column, {
-        column,
-        tables: this.context.tables,
-        rows: this.props.refTables[`ref:${column.referenceTable}:rows`] // eslint-disable-line react/prop-types
-      });
+const Detail = props => {
+  const {
+    columns,
+    tables
+  } = React.useContext(PageContext);
+  const renderWithDdRender = (column, value) => {
+    const renderFn = ddRender.getColumnRender('type:getPage', column, {
+      column,
+      tables: tables,
+      rows: props.refTables[`ref:${column.referenceTable}:rows`] // eslint-disable-line react/prop-types
+    });
 
-      if (renderFn) {
-        const el = renderFn(value, this.props.defaultValues);
-        if (el) {
-          return el;
-        }
+    if (renderFn) {
+      const el = renderFn(value, props.defaultValues);
+      if (el) {
+        return el;
       }
-      return /*#__PURE__*/React.createElement("div", null, "No render fn: ", value);
+    }
+    return /*#__PURE__*/React.createElement("div", null, "No render fn: ", value);
+  };
+  const renderStringFieldValue = column => {
+    const value = props.defaultValues[column.id];
+    if (column['type:getPage']) {
+      return renderWithDdRender(column, value);
+    }
+    let preview = false;
+    if (column['type:getPage'] === 'WithPreview') {
+      preview = true;
+    }
+    return /*#__PURE__*/React.createElement(StringFormFieldValue, {
+      key: column.id,
+      inputProps: {
+        readOnly: true
+      },
+      preview: preview,
+      value: value
     });
-    _defineProperty(this, "renderStringFieldValue", column => {
-      const value = this.props.defaultValues[column.id];
-      if (column['type:getPage']) {
-        return this.renderWithDdRender(column, value);
-      }
-      let preview = false;
-      if (column['type:getPage'] === 'WithPreview') {
-        preview = true;
-      }
-      return /*#__PURE__*/React.createElement(StringFormFieldValue, {
-        key: column.id,
-        inputProps: {
-          readOnly: true
-        },
-        preview: preview,
-        value: value
-      });
-    });
-    _defineProperty(this, "renderFieldValue", column => {
-      switch (column.type) {
-        case constants.STRING:
-          return this.renderStringFieldValue(column);
-        case constants.BOOL:
-        case constants.NUMBER:
-        case constants.STRING_ARRAY:
-        default:
-          return this.renderWithDdRender(column, this.props.defaultValues[column.id]);
-      }
-    });
-    _defineProperty(this, "renderDebugJson", () => {
-      const debugJson = JSON.stringify(this.props.defaultValues, null, '  ');
-      return /*#__PURE__*/React.createElement(Collapse, null, /*#__PURE__*/React.createElement(Panel, {
-        header: "Debug JSON",
-        key: "1"
-      }, /*#__PURE__*/React.createElement(Input.TextArea, {
+  };
+  const renderFieldValue = column => {
+    switch (column.type) {
+      case constants.STRING:
+        return renderStringFieldValue(column);
+      case constants.BOOL:
+      case constants.NUMBER:
+      case constants.STRING_ARRAY:
+      default:
+        return renderWithDdRender(column, props.defaultValues[column.id]);
+    }
+  };
+  const renderDebugJson = () => {
+    const debugJson = JSON.stringify(props.defaultValues, null, '  ');
+    const items = [{
+      key: 'debug-json',
+      label: 'Debug JSON',
+      children: /*#__PURE__*/React.createElement(Input.TextArea, {
         style: {
           fontSize: '10px'
         },
         rows: debugJson.split('\n').length,
         value: debugJson
-      })));
+      })
+    }];
+    return /*#__PURE__*/React.createElement(Collapse, {
+      size: "small",
+      items: items
     });
-  }
-  render() {
-    const {
-      columns
-    } = this.context;
-    return /*#__PURE__*/React.createElement("div", {
-      className: "get-page-body-detail-component"
-    }, /*#__PURE__*/React.createElement("div", null, columns.map(column => /*#__PURE__*/React.createElement(FieldWrapperForDetailPage, {
-      key: column.id,
-      column: column,
-      value: this.props.defaultValues[column.id]
-    }, this.renderFieldValue(column)))), this.renderDebugJson());
-  }
-}
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "get-page-body-detail-component"
+  }, /*#__PURE__*/React.createElement("div", null, columns.map(column => /*#__PURE__*/React.createElement(FieldWrapperForDetailPage, {
+    key: column.id,
+    column: column,
+    value: props.defaultValues[column.id]
+  }, renderFieldValue(column)))), renderDebugJson());
+};
 Detail.propTypes = {
   defaultValues: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
 
 Detail.defaultProps = {};
-Detail.contextType = PageContext;
+export default Detail;
 //# sourceMappingURL=Detail.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"Data.js","names":[],"sources":["../../src/types/Data.ts"],"sourcesContent":["export type DataType = { [key: string]: any };\n\nexport type DataRowType = Array<DataType>;\n"],"mappings":""}

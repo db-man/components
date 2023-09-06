@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
-declare function MultiLineInputBox(props: any): import("react/jsx-runtime").JSX.Element;
+interface MultiLineInputBoxProps {
+    rows?: number;
+    disabled?: boolean;
+    value?: string[];
+    onChange?: (value: string[]) => void;
+}
+declare function MultiLineInputBox(props: MultiLineInputBoxProps): import("react/jsx-runtime").JSX.Element;
 declare namespace MultiLineInputBox {
     var propTypes: {
         value: PropTypes.Requireable<(string | null | undefined)[]>;

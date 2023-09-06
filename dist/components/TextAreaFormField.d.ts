@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 interface TextAreaFormFieldProps {
     label: string;
     value?: string;
+    rows?: number;
+    disabled?: boolean;
     onChange?: (value: string) => void;
 }
 declare function TextAreaFormField(props: TextAreaFormFieldProps): import("react/jsx-runtime").JSX.Element;

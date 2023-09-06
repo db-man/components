@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'antd';
@@ -30,7 +28,7 @@ export default function StringFormField(props) {
   };
   return /*#__PURE__*/React.createElement("div", {
     className: "dm-form-field dm-string-form-field"
-  }, /*#__PURE__*/React.createElement("b", null, label), ":", ' ', /*#__PURE__*/React.createElement(PresetsButtons, {
+  }, /*#__PURE__*/React.createElement("b", null, label), ": ", /*#__PURE__*/React.createElement(PresetsButtons, {
     column: column,
     onChange: onChange
   }), ' ', /*#__PURE__*/React.createElement(RefTableLink, {
@@ -40,7 +38,6 @@ export default function StringFormField(props) {
     value: value
   }), renderWarning(), /*#__PURE__*/React.createElement(StringFormFieldValue, {
     inputProps: inputProps,
-    size: "small",
     preview: preview,
     value: value,
     onChange: onChange

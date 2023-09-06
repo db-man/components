@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types';
-declare const JsonEditor: {
-    (props: any): import("react/jsx-runtime").JSX.Element;
-    propTypes: {
-        value: PropTypes.Validator<object>;
-        onChange: PropTypes.Validator<(...args: any[]) => any>;
-    };
-};
+import React from 'react';
+interface JsonEditorProps {
+    value: Record<string, unknown>;
+    onChange: (value: Record<string, unknown>) => void;
+    onSave?: () => void;
+}
+declare const JsonEditor: React.FC<JsonEditorProps>;
 export default JsonEditor;
 //# sourceMappingURL=JsonEditor.d.ts.map

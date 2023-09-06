@@ -1,13 +1,15 @@
 import React from 'react';
-declare const PageContext: React.Context<{
-    appModes: never[];
+import Column from '../types/Column';
+export interface PageContextType {
+    appModes: string[];
     dbName: string;
     tableName: string;
     action: string;
-    columns: never[];
+    columns: Column[];
     primaryKey: string;
-    tables: never[];
-    githubDb: null;
-}>;
+    tables: string[];
+    githubDb: any;
+}
+declare const PageContext: React.Context<PageContextType>;
 export default PageContext;
 //# sourceMappingURL=page.d.ts.map

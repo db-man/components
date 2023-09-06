@@ -5,6 +5,12 @@
  */
 export declare const searchKeywordInText: (keyword: any, text: any) => boolean;
 /**
+ * Search "234"(keyword) in `123456`(text)
+ * @param {string} keyword
+ * @param {number} number
+ */
+export declare const searchNumberKeywordInText: (keyword: any, number: any) => boolean;
+/**
  * Search keyword 'do' in string array ['dog', 'cat']
  * @param {string|undefined} keyword Search keyword
  * @param {string[]} tags The table cell value
