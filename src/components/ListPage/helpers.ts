@@ -9,7 +9,8 @@ import * as constants from '../../constants';
  * @param {string} keyword
  * @param {string} text
  */
-export const searchKeywordInText = (keyword, text) => text.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+export const searchKeywordInText = (keyword, text) =>
+  text.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
 
 /**
  * Search keyword 'do' in string array ['dog', 'cat']
@@ -33,22 +34,22 @@ export const searchStringInArray = (keyword, tags) => {
  * @param {string[]} tags The table cell value
  * @return {boolean}
  */
-export const searchKeywordInTags = (keyword, tags) => tags.reduce((prev, tag) => prev || searchKeywordInText(keyword, tag), false);
+export const searchKeywordInTags = (keyword, tags) =>
+  tags.reduce((prev, tag) => prev || searchKeywordInText(keyword, tag), false);
 
 // keywords="ap+ba" tags=["apple","banana"]
 // take 1st kw "ap": "apple".indexOf("ap")=>0, "banana".indexOf("ap")=>-1, data has tags matched "ap", => true
 // take 2rd kw "ba": "apple".indexOf("ba")=>-1, "banana".indexOf("ba")=>0, data has tags matched "ba", => true
 // true && true => true
-export const searchKeywordsInTagsWithLogicAnd = (keywords, tags) => keywords.reduce((prev, kw) => prev && searchKeywordInTags(kw, tags), true);
+export const searchKeywordsInTagsWithLogicAnd = (keywords, tags) =>
+  keywords.reduce((prev, kw) => prev && searchKeywordInTags(kw, tags), true);
 
 // keywords="ap ba" data=["apple","pair"]
 // take 1st kw "ap": "apple".indexOf("ap")=>0, "pair".indexOf("ap")=>-1, data has tags matched "ap", => true
 // take 2rd kw "ba": "apple".indexOf("ba")=>-1, "pair".indexOf("ba")=>-1, data has no tags matched "ba", => false
 // true || false => true
-export const searchKeywordsInTagsWithLogicOr = (keywords, tags) => keywords.reduce(
-  (prev, kw) => prev || searchKeywordInTags(kw, tags),
-  false,
-);
+export const searchKeywordsInTagsWithLogicOr = (keywords, tags) =>
+  keywords.reduce((prev, kw) => prev || searchKeywordInTags(kw, tags), false);
 
 /**
  * Search filterKeyword in cellValue
@@ -92,14 +93,18 @@ const defaultValueMapping = {
  * @param {Column[]} filterColumns The table columns definitions,
  * but only the col which is filterable
  */
-const searchByFilter = (filterColumns, filterKeyVals) => (row) => filterColumns.reduce((prev, column) => {
-  const keyword = filterKeyVals[column.id];
-  let matched = true;
-  if (keyword) {
-    matched = filterFnMapping[column.type](keyword, row[column.id] || defaultValueMapping[column.type]);
-  }
-  return prev && matched;
-}, true);
+const searchByFilter = (filterColumns, filterKeyVals) => (row) =>
+  filterColumns.reduce((prev, column) => {
+    const keyword = filterKeyVals[column.id];
+    let matched = true;
+    if (keyword) {
+      matched = filterFnMapping[column.type](
+        keyword,
+        row[column.id] || defaultValueMapping[column.type]
+      );
+    }
+    return prev && matched;
+  }, true);
 
 /**
  * @param {Object} filterKeyVals
@@ -112,7 +117,7 @@ export const getFilteredData = (filterColumns, filterKeyVals, originalRows) => {
   if (
     isAllFilterInvalid(
       filterKeyVals,
-      filterColumns.map((column) => column.id),
+      filterColumns.map((column) => column.id)
     )
   ) {
     return originalRows;
@@ -121,15 +126,16 @@ export const getFilteredData = (filterColumns, filterKeyVals, originalRows) => {
   return originalRows.filter(searchByFilter(filterColumns, filterKeyVals));
 };
 
-export const getSortedData = (originalData, sorter) => [...originalData].sort((a, b) => {
-  const result = (`${a[sorter.columnKey] || ''}`).localeCompare(
-    b[sorter.columnKey] || '',
-  );
-  if (sorter.order === 'ascend') {
-    return result;
-  }
-  return -result; // descend
-});
+export const getSortedData = (originalData, sorter) =>
+  [...originalData].sort((a, b) => {
+    const result = `${a[sorter.columnKey] || ''}`.localeCompare(
+      b[sorter.columnKey] || ''
+    );
+    if (sorter.order === 'ascend') {
+      return result;
+    }
+    return -result; // descend
+  });
 
 // https://stackoverflow.com/questions/840781/get-all-non-unique-values-i-e-duplicate-more-than-one-occurrence-in-an-array
 export const findDuplicates = (arr) => {
@@ -172,7 +178,7 @@ export const getInitialFilter = (filterProp) => {
         'Failed to parse filter param from URL, filterParam:',
         filterParam,
         ', error:',
-        error,
+        error
       );
     }
   }
@@ -196,7 +202,7 @@ export const getInitialSorter = () => {
         'Failed to parse filter param from URL, sorter:',
         sorter,
         ', error:',
-        error,
+        error
       );
     }
   }
