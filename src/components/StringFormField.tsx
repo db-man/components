@@ -6,7 +6,6 @@ import { columnType } from './types';
 import StringFormFieldValue, { InputProps } from './StringFormFieldValue';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
-import { dbs } from '../dbs';
 import PresetsButtons from './PresetsButtons';
 import Column from '../types/Column';
 
@@ -23,7 +22,7 @@ interface StringFormFieldProps {
 
 export default function StringFormField(props: StringFormFieldProps) {
   const { label, column, value, inputProps, preview, onChange } = props;
-  const { dbName } = useContext(PageContext);
+  const { dbs, dbName } = useContext(PageContext);
   const renderWarning = () => {
     if (typeof value === 'string') return null;
     return (

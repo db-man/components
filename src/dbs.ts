@@ -1,7 +1,10 @@
 import { LS_KEY_DBS_SCHEMA } from './constants';
-import DbTable from './types/DbTable';
+import Databases from './types/Databases';
+// import DbTable from './types/DbTable';
 
 /**
+ * DEPRECATED
+ *
  * ```json
  * {
  *   "iam": [
@@ -11,9 +14,9 @@ import DbTable from './types/DbTable';
  * }
  * ```
  */
-export const dbs = JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);
+// export const dbs = JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);
 
-export const getDbs = () =>
+export const getDbs = (): Databases =>
   JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);
 export const getTablesByDbName = (dbName: string) => {
   const keyVal = localStorage.getItem(LS_KEY_DBS_SCHEMA);
@@ -25,13 +28,15 @@ export const getTablesByDbName = (dbName: string) => {
 export const setDbs = (val: string) =>
   localStorage.setItem(LS_KEY_DBS_SCHEMA, val);
 
-export const getTable = (dbName: string, tableName: string) => {
-  if (!dbs) return null;
-  return dbs[dbName].find(({ name }: DbTable) => name === tableName);
-};
+// TODO Maybe in @db-man/github
+// export const getTable = (dbName: string, tableName: string) => {
+//   if (!dbs) return null;
+//   return dbs[dbName].find(({ name }: DbTable) => name === tableName);
+// };
 
-export const isLargeTable = (dbName: string, tableName: string) => {
-  const table = getTable(dbName, tableName);
-  if (!table) return false;
-  return table.large;
-};
+// TODO Maybe in @db-man/github
+// export const isLargeTable = (dbName: string, tableName: string) => {
+//   const table = getTable(dbName, tableName);
+//   if (!table) return false;
+//   return table.large;
+// };

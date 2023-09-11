@@ -1,12 +1,12 @@
 // @ts-nocheck
 
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
 
-import { dbs } from '../dbs';
+import PageContext from '../contexts/page';
 
 const withRouter = (Component) => {
   function Wrapper(props) {
@@ -18,26 +18,28 @@ const withRouter = (Component) => {
 };
 function PageHeaderContent(props) {
   const { params } = props;
+  const { dbs } = useContext(PageContext);
 
   if (!dbs) {
     return null;
   }
 
   return (
-    <div className="page-header">
-      <div key="logo" className="logo" />
+    <div className='page-header'>
+      <div key='logo' className='logo' />
       <Menu
-        key="menu"
-        theme="dark"
-        mode="horizontal"
+        key='menu'
+        theme='dark'
+        mode='horizontal'
         defaultSelectedKeys={['home']}
         selectedKeys={[params.dbName]}
         items={[
-          { key: 'home', label: <Link to="/">Home</Link> },
-          ...Object.keys(dbs || {}).map((dbName) => (
-            { key: dbName, label: <Link to={`/${dbName}`}>{dbName}</Link> }
-          )),
-          { key: 'settings', label: <Link to="/settings">Settings</Link> },
+          { key: 'home', label: <Link to='/'>Home</Link> },
+          ...Object.keys(dbs || {}).map((dbName) => ({
+            key: dbName,
+            label: <Link to={`/${dbName}`}>{dbName}</Link>,
+          })),
+          { key: 'settings', label: <Link to='/settings'>Settings</Link> },
         ]}
       />
     </div>

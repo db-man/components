@@ -18,7 +18,6 @@ import JsonEditor from '../JsonEditor';
 import RefTableLink from '../RefTableLink';
 import PageContext from '../../contexts/page';
 import MultiLineInputBox from '../MultiLineInputBox';
-import { dbs } from '../../dbs';
 import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
 import { validatePrimaryKey, isType } from './helpers';
@@ -282,7 +281,7 @@ const Form: React.FC<FormProps> = (props) => {
           <b>{column.name}</b>:{' '}
           <RefTableLink
             dbName={context.dbName}
-            tables={dbs[context.dbName]}
+            tables={context.dbs[context.dbName]}
             value={formValues[column.id]}
             column={column}
           />

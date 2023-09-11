@@ -1,9 +1,11 @@
 import React from 'react';
 
 import Column from '../types/Column';
+import Databases from '../types/Databases';
 
 export interface PageContextType {
   appModes: string[];
+  dbs: Databases;
   dbName: string;
   tableName: string;
   action: string;
@@ -14,9 +16,10 @@ export interface PageContextType {
 }
 
 // Store all page info, include db, table, and columns
-// Setter: src/App/components/PageWrapper.jsx
+// Setter: src/layout/PageWrapper.tsx
 const PageContext = React.createContext<PageContextType>({
   appModes: [], // all app modes: 'split-table'
+  dbs: {}, // all dbs
   dbName: '',
   tableName: '',
   action: '',

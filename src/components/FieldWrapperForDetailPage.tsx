@@ -1,7 +1,6 @@
 import React, { ReactNode, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { dbs } from '../dbs';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 
@@ -24,7 +23,7 @@ const FieldWrapperForDetailPage = ({
   value,
   children,
 }: FieldWrapperProps) => {
-  const { dbName } = useContext(PageContext);
+  const { dbName, dbs } = useContext(PageContext);
   const typeClassName =
     column.type === constants.STRING_ARRAY
       ? 'dm-string-array-form-field'
