@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { LS_KEY_DBS_SCHEMA } from '../constants';
 import Databases from '../types/Databases';
+import { useAppContext } from '../contexts/AppContext';
 
 interface LeftSideMenuProps {
   dbName: string;
@@ -17,10 +17,7 @@ const LeftSideMenu: React.FC<LeftSideMenuProps> = ({
   tableName,
   action,
 }) => {
-  // TODO maybe put in context
-  const dbs: Databases = JSON.parse(
-    localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`
-  );
+  const { dbs }: { dbs: Databases } = useAppContext();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
 
   const handleOpenChange = (keys: string[]) => {
