@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
 import { GithubDb } from '@db-man/github';
 
-import { getDbs, getTablesByDbName } from '../dbs';
+import { getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
 import { getPrimaryKey } from '../utils';
 import PageContext from '../contexts/page';
@@ -20,6 +20,7 @@ import TagsCloudPage from '../components/TagsCloudPage';
 import GetPage from '../components/GetPage';
 import TableConfigPage from '../components/TableConfigPage';
 import QueryPage from '../components/QueryPage';
+import { useAppContext } from '../contexts/AppContext';
 
 const { Provider } = PageContext;
 
@@ -35,8 +36,9 @@ const mapp = {
 };
 
 export function TableList({ dbName }) {
-  if (!getDbs()) return null;
-  const tablesOfSelectedDb = getDbs()[dbName];
+  const { dbs } = useAppContext();
+  if (!dbs) return null;
+  const tablesOfSelectedDb = dbs[dbName];
   return (
     <div>
       {tablesOfSelectedDb.map(({ name: tName }) => (
@@ -74,7 +76,9 @@ export default class PageWrapper extends React.Component {
     };
 
     this.githubDb = new GithubDb({
-      personalAccessToken: localStorage.getItem(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN),
+      personalAccessToken: localStorage.getItem(
+        constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN
+      ),
       repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
       owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
       repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
@@ -102,7 +106,7 @@ export default class PageWrapper extends React.Component {
     const tablesOfSelectedDb = getTablesByDbName(dbName);
     if (!tablesOfSelectedDb) return [];
     const currentTable = tablesOfSelectedDb.find(
-      (table) => table.name === tableName,
+      (table) => table.name === tableName
     );
     if (!currentTable) return [];
     return currentTable.columns;
@@ -115,7 +119,6 @@ export default class PageWrapper extends React.Component {
       appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES)
         ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',')
         : [],
-      dbs: getDbs(),
       dbName,
       tableName,
       action,
@@ -129,7 +132,9 @@ export default class PageWrapper extends React.Component {
   getOnlineData = async () => {
     try {
       this.setState({ loading: true });
-      const tables = await this.githubDb.getDbTablesSchemaAsync(this.props.dbName);
+      const tables = await this.githubDb.getDbTablesSchemaAsync(
+        this.props.dbName
+      );
       console.debug('use online columns', tables);
       this.setState({
         tables,
@@ -137,7 +142,7 @@ export default class PageWrapper extends React.Component {
     } catch (error) {
       console.error(
         'Failed to get column JSON file in List component, error:',
-        error,
+        error
       );
       message.error('Failed to get online columns definition!');
     }
@@ -150,7 +155,7 @@ export default class PageWrapper extends React.Component {
       return;
     }
     const tables = JSON.parse(
-      localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
+      localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)
     )[this.props.dbName];
     this.setState({
       tables,
@@ -195,7 +200,7 @@ export default class PageWrapper extends React.Component {
     }
 
     if (errMsgs.length > 0) {
-      return <div className="dm-page-v2 err-msg">{errMsgs.join(' ,')}</div>;
+      return <div className='dm-page-v2 err-msg'>{errMsgs.join(' ,')}</div>;
     }
 
     const PageComponent = mapp[action];
@@ -210,12 +215,12 @@ export default class PageWrapper extends React.Component {
     }
 
     if (loading) {
-      return <Spin tip="loading columns in PageWrapper">Loading...</Spin>;
+      return <Spin tip='loading columns in PageWrapper'>Loading...</Spin>;
     }
 
     return (
       <Provider value={this.pageInfo}>
-        <div className="dm-page-v2">
+        <div className='dm-page-v2'>
           {/* Pass tableName down, so child component to rerender according to this props */}
           <PageComponent
             dbName={dbName}

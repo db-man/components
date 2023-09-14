@@ -24,6 +24,7 @@ import { validatePrimaryKey, isType } from './helpers';
 import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
 import PresetsButtons from '../PresetsButtons';
 import Column from '../../types/Column';
+import { useAppContext } from '../../contexts/AppContext';
 
 interface RenderFormFieldWrapperProps {
   id: string;
@@ -54,6 +55,7 @@ interface FormProps {
 
 const Form: React.FC<FormProps> = (props) => {
   const context = useContext(PageContext);
+  const { dbs } = useAppContext();
 
   const [formValues, setFormValues] = useState({
     ...props.defaultValues,
@@ -281,7 +283,7 @@ const Form: React.FC<FormProps> = (props) => {
           <b>{column.name}</b>:{' '}
           <RefTableLink
             dbName={context.dbName}
-            tables={context.dbs[context.dbName]}
+            tables={dbs[context.dbName]}
             value={formValues[column.id]}
             column={column}
           />

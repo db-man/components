@@ -4,16 +4,16 @@ import React from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 import { TableList } from './PageWrapper';
-import { getDbs } from '../dbs';
+import { useAppContext } from '../contexts/AppContext';
 
 function Database() {
   const params = useParams();
-  const dbs = getDbs();
+  const { dbs } = useAppContext();
 
-  if (!dbs) return 'Failed to get dbs from localStorage';
+  if (!dbs) return <div>Failed to get dbs from localStorage</div>;
 
   const selectedDb = dbs[params.dbName];
-  if (!selectedDb) return 'db not found';
+  if (!selectedDb) return <div>db not found</div>;
 
   return (
     <div>

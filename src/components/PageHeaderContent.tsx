@@ -1,12 +1,12 @@
 // @ts-nocheck
 
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
 
-import PageContext from '../contexts/page';
+import { useAppContext } from '../contexts/AppContext';
 
 const withRouter = (Component) => {
   function Wrapper(props) {
@@ -18,7 +18,7 @@ const withRouter = (Component) => {
 };
 function PageHeaderContent(props) {
   const { params } = props;
-  const { dbs } = useContext(PageContext);
+  const { dbs } = useAppContext();
 
   if (!dbs) {
     return null;

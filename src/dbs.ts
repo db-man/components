@@ -1,5 +1,4 @@
 import { LS_KEY_DBS_SCHEMA } from './constants';
-import Databases from './types/Databases';
 // import DbTable from './types/DbTable';
 
 /**
@@ -16,8 +15,6 @@ import Databases from './types/Databases';
  */
 // export const dbs = JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);
 
-export const getDbs = (): Databases =>
-  JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);
 export const getTablesByDbName = (dbName: string) => {
   const keyVal = localStorage.getItem(LS_KEY_DBS_SCHEMA);
   if (!keyVal) return [];

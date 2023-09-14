@@ -8,6 +8,7 @@ import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import PresetsButtons from './PresetsButtons';
 import Column from '../types/Column';
+import { useAppContext } from '../contexts/AppContext';
 
 interface StringFormFieldProps {
   label: string;
@@ -22,7 +23,8 @@ interface StringFormFieldProps {
 
 export default function StringFormField(props: StringFormFieldProps) {
   const { label, column, value, inputProps, preview, onChange } = props;
-  const { dbs, dbName } = useContext(PageContext);
+  const { dbs } = useAppContext();
+  const { dbName } = useContext(PageContext);
   const renderWarning = () => {
     if (typeof value === 'string') return null;
     return (

@@ -7,9 +7,11 @@ import { Link } from 'react-router-dom';
 
 import PageContext from '../contexts/page';
 import { columnType } from './types';
+import { useAppContext } from '../contexts/AppContext';
 
 export default function RefTableLinks({ value, column }) {
-  const { dbName, dbs } = useContext(PageContext);
+  const { dbs } = useAppContext();
+  const { dbName } = useContext(PageContext);
   // val can be "123" or ["123", "456"]
   let ids = value;
   if (!Array.isArray(value)) {

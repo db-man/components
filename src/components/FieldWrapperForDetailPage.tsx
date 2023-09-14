@@ -7,6 +7,7 @@ import PageContext from '../contexts/page';
 import { columnType } from './types';
 import * as constants from '../constants';
 import Column from '../types/Column';
+import { useAppContext } from '../contexts/AppContext';
 
 interface FieldWrapperProps {
   column: Column;
@@ -23,7 +24,8 @@ const FieldWrapperForDetailPage = ({
   value,
   children,
 }: FieldWrapperProps) => {
-  const { dbName, dbs } = useContext(PageContext);
+  const { dbName } = useContext(PageContext);
+  const { dbs } = useAppContext();
   const typeClassName =
     column.type === constants.STRING_ARRAY
       ? 'dm-string-array-form-field'
@@ -70,6 +72,5 @@ FieldWrapperForDetailPage.defaultProps = {
   value: '',
   children: null,
 };
-// FieldWrapperForDetailPage.contextType = PageContext;
 
 export default FieldWrapperForDetailPage;
