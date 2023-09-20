@@ -10,9 +10,10 @@ import * as ddRender from '../../ddRender/ddRender';
 import FieldWrapperForDetailPage from '../FieldWrapperForDetailPage';
 import StringFormFieldValue from '../StringFormFieldValue';
 import Column from '../../types/Column';
+import { ValueType } from '../Form';
 
 interface DetailProps {
-  defaultValues: Record<string, any>;
+  defaultValues: ValueType;
   refTables: Record<string, any>;
 }
 

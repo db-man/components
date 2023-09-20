@@ -32,6 +32,17 @@ interface RenderFormFieldWrapperProps {
   formField: ReactNode;
 }
 
+export type ValueType = Record<string, any>;
+type RowType = ValueType;
+
+interface FormProps {
+  defaultValues: ValueType;
+  loading: boolean;
+  rows: RowType[];
+  onSubmit: (formValues: ValueType) => void;
+  onDelete: (formValues: ValueType) => void;
+}
+
 const renderFormFieldWrapper = ({
   id,
   label,
@@ -44,14 +55,6 @@ const renderFormFieldWrapper = ({
 
 const filterOutHiddenFields = (column: Column) =>
   column['type:createUpdatePage'] !== 'HIDE';
-
-interface FormProps {
-  defaultValues: Record<string, any>;
-  loading: boolean;
-  rows: Record<string, any>[];
-  onSubmit: (formValues: Record<string, any>) => void;
-  onDelete: (formValues: Record<string, any>) => void;
-}
 
 const Form: React.FC<FormProps> = (props) => {
   const context = useContext(PageContext);
@@ -123,7 +126,7 @@ const Form: React.FC<FormProps> = (props) => {
       [id]: value,
     });
 
-  const handleJsonEditorChange = (newFormValues: Record<string, any>) => {
+  const handleJsonEditorChange = (newFormValues: ValueType) => {
     setFormValues(newFormValues);
   };
 

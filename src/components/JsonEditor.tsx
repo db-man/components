@@ -1,21 +1,23 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { Input } from 'antd';
 
+import { ValueType } from './Form';
+
 interface JsonEditorProps {
-  value: Record<string, unknown>;
-  onChange: (value: Record<string, unknown>) => void;
+  value: ValueType;
+  onChange: (value: ValueType) => void;
   onSave?: () => void;
 }
 
-const obj2str = (obj: Record<string, unknown>) =>
-  JSON.stringify(obj, null, '  ');
-const str2obj = (str: string) => JSON.parse(str) as Record<string, unknown>;
+const obj2str = (obj: ValueType) => JSON.stringify(obj, null, '  ');
+const str2obj = (str: string) => JSON.parse(str) as ValueType;
 
 const JsonEditor: React.FC<JsonEditorProps> = (props) => {
   const { value, onSave = () => {} } = props;
   const [jsonStr, setJsonStr] = useState(obj2str(value));
   const [errMsg, setErrMsg] = useState('');
 
+  // when outside value changed, update jsonStr
   useEffect(() => {
     setJsonStr(obj2str(value));
   }, [value]);
