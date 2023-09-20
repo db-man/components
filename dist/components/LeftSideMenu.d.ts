@@ -1,7 +1,9 @@
 import React from 'react';
-export default class LeftSideMenu extends React.Component {
-    constructor(props: any);
-    handleOpenChange: (openKeys: any) => void;
-    render(): import("react/jsx-runtime").JSX.Element | null;
+interface LeftSideMenuProps {
+    dbName: string;
+    tableName?: string;
+    action?: string;
 }
+declare const LeftSideMenu: React.FC<LeftSideMenuProps>;
+export default LeftSideMenu;
 //# sourceMappingURL=LeftSideMenu.d.ts.map

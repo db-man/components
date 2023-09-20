@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { dbs } from '../dbs';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import { columnType } from './types';
 import * as constants from '../constants';
+import { useAppContext } from '../contexts/AppContext';
 /**
  * Form field wrapper for detail page
  * TODO When value is an array, how to render RefTableLink
@@ -17,6 +17,9 @@ const FieldWrapperForDetailPage = ({
   const {
     dbName
   } = useContext(PageContext);
+  const {
+    dbs
+  } = useAppContext();
   const typeClassName = column.type === constants.STRING_ARRAY ? 'dm-string-array-form-field' : 'dm-string-form-field';
   return /*#__PURE__*/React.createElement("div", {
     // key={column.id}
@@ -40,7 +43,5 @@ FieldWrapperForDetailPage.defaultProps = {
   value: '',
   children: null
 };
-// FieldWrapperForDetailPage.contextType = PageContext;
-
 export default FieldWrapperForDetailPage;
 //# sourceMappingURL=FieldWrapperForDetailPage.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"Databases.js","names":[],"sources":["../../src/types/Databases.ts"],"sourcesContent":["import DbTable from './DbTable';\n\nexport default interface Databases {\n  [databaseName: string]: DbTable[];\n}\n"],"mappings":""}

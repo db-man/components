@@ -5,8 +5,8 @@ import { columnType } from './types';
 import StringFormFieldValue from './StringFormFieldValue';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
-import { dbs } from '../dbs';
 import PresetsButtons from './PresetsButtons';
+import { useAppContext } from '../contexts/AppContext';
 export default function StringFormField(props) {
   const {
     label,
@@ -16,6 +16,9 @@ export default function StringFormField(props) {
     preview,
     onChange
   } = props;
+  const {
+    dbs
+  } = useAppContext();
   const {
     dbName
   } = useContext(PageContext);

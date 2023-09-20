@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
+import { ValueType } from '../Form';
 interface DetailProps {
-    defaultValues: Record<string, any>;
+    defaultValues: ValueType;
     refTables: Record<string, any>;
 }
 declare const Detail: {

@@ -1,9 +1,11 @@
 import React from 'react';
 // Store all page info, include db, table, and columns
-// Setter: src/App/components/PageWrapper.jsx
+// Setter: src/layout/PageWrapper.tsx
 const PageContext = /*#__PURE__*/React.createContext({
   appModes: [],
   // all app modes: 'split-table'
+  dbs: {},
+  // all dbs
   dbName: '',
   tableName: '',
   action: '',

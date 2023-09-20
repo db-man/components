@@ -9,7 +9,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
 import { GithubDb } from '@db-man/github';
-import { getDbs, getTablesByDbName } from '../dbs';
+import { getTablesByDbName } from '../dbs';
 import * as constants from '../constants';
 import { getPrimaryKey } from '../utils';
 import PageContext from '../contexts/page';
@@ -22,6 +22,7 @@ import TagsCloudPage from '../components/TagsCloudPage';
 import GetPage from '../components/GetPage';
 import TableConfigPage from '../components/TableConfigPage';
 import QueryPage from '../components/QueryPage';
+import { useAppContext } from '../contexts/AppContext';
 const {
   Provider
 } = PageContext;
@@ -38,8 +39,11 @@ const mapp = {
 export function TableList({
   dbName
 }) {
-  if (!getDbs()) return null;
-  const tablesOfSelectedDb = getDbs()[dbName];
+  const {
+    dbs
+  } = useAppContext();
+  if (!dbs) return null;
+  const tablesOfSelectedDb = dbs[dbName];
   return /*#__PURE__*/React.createElement("div", null, tablesOfSelectedDb.map(({
     name: tName
   }) => /*#__PURE__*/React.createElement("li", {
@@ -151,7 +155,6 @@ export default class PageWrapper extends React.Component {
     return {
       // e.g. ['split-table']
       appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES) ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',') : [],
-      dbs: getDbs(),
       dbName,
       tableName,
       action,

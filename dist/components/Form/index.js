@@ -7,12 +7,12 @@ import JsonEditor from '../JsonEditor';
 import RefTableLink from '../RefTableLink';
 import PageContext from '../../contexts/page';
 import MultiLineInputBox from '../MultiLineInputBox';
-import { dbs } from '../../dbs';
 import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
-import { validatePrimaryKey, isType } from './helpers';
+import { validatePrimaryKey, isType, obj2str, str2obj, getFormInitialValues } from './helpers';
 import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
 import PresetsButtons from '../PresetsButtons';
+import { useAppContext } from '../../contexts/AppContext';
 const renderFormFieldWrapper = ({
   id,
   label,
@@ -24,31 +24,35 @@ const renderFormFieldWrapper = ({
 const filterOutHiddenFields = column => column['type:createUpdatePage'] !== 'HIDE';
 const Form = props => {
   const context = useContext(PageContext);
+  const {
+    dbs
+  } = useAppContext();
   const [formValues, setFormValues] = useState({
     ...props.defaultValues
   });
+  const [jsonStr, setJsonStr] = useState(obj2str({
+    ...props.defaultValues
+  }));
   useEffect(() => {
-    context.columns.forEach(col => {
-      if (!formValues[col.id]) {
-        let defaultValue = '';
-        switch (col['type:createUpdatePage']) {
-          case 'RadioGroup':
-            [defaultValue] = col.enum;
-            break;
-          default:
-            defaultValue = '';
-        }
-        if (defaultValue) {
-          setFormValues(prevState => ({
-            ...prevState,
-            [col.id]: defaultValue
-          }));
-        }
-      }
+    const initFormValues = getFormInitialValues(context.columns, formValues);
+    setFormValues(prevFormValues => ({
+      ...prevFormValues,
+      ...initFormValues
+    }));
+    setJsonStr(prevJsonStr => {
+      const prevJsonObj = str2obj(prevJsonStr);
+      return obj2str({
+        ...prevJsonObj,
+        ...initFormValues
+      });
     });
   }, []);
+  const changeBothFormAndJsonEditor = newFormValues => {
+    setFormValues(newFormValues);
+    setJsonStr(obj2str(newFormValues));
+  };
   const handleChange = key => value => {
-    setFormValues({
+    changeBothFormAndJsonEditor({
       ...formValues,
       [key]: value
     });
@@ -58,7 +62,7 @@ const Form = props => {
     if (key === context.primaryKey && val.includes(' ')) {
       message.error('Primary key cannot contain space');
     }
-    setFormValues({
+    changeBothFormAndJsonEditor({
       ...formValues,
       [key]: val
     });
@@ -80,13 +84,10 @@ const Form = props => {
    * @param {string} id Column name
    * @param {string[]} value Cell value
    */
-  const handleStringArrayChange = id => value => setFormValues({
+  const handleStringArrayChange = id => value => changeBothFormAndJsonEditor({
     ...formValues,
     [id]: value
   });
-  const handleJsonEditorChange = newFormValues => {
-    setFormValues(newFormValues);
-  };
   const handleKeyDown = event => {
     if (event.code === 'KeyS' && event.metaKey) {
       event.preventDefault();
@@ -277,8 +278,9 @@ const Form = props => {
     label: 'JSON',
     key: 'json',
     children: /*#__PURE__*/React.createElement(JsonEditor, {
-      value: formValues,
-      onChange: handleJsonEditorChange,
+      value: jsonStr,
+      onChange: setJsonStr,
+      onFormValueChange: setFormValues,
       onSave: () => {
         handleFormSubmit();
       }

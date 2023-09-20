@@ -1,10 +1,12 @@
 import React from 'react';
+export type ValueType = Record<string, any>;
+type RowType = ValueType;
 interface FormProps {
-    defaultValues: Record<string, any>;
+    defaultValues: ValueType;
     loading: boolean;
-    rows: Record<string, any>[];
-    onSubmit: (formValues: Record<string, any>) => void;
-    onDelete: (formValues: Record<string, any>) => void;
+    rows: RowType[];
+    onSubmit: (formValues: ValueType) => void;
+    onDelete: (formValues: ValueType) => void;
 }
 declare const Form: React.FC<FormProps>;
 export default Form;

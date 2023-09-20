@@ -15,7 +15,6 @@ export default class PageWrapper extends React.Component {
     get columns(): any;
     get pageInfo(): {
         appModes: string[];
-        dbs: any;
         dbName: any;
         tableName: any;
         action: any;

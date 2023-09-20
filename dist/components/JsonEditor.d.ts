@@ -1,7 +1,9 @@
 import React from 'react';
+import { ValueType } from './Form';
 interface JsonEditorProps {
-    value: Record<string, unknown>;
-    onChange: (value: Record<string, unknown>) => void;
+    value: string;
+    onChange: (value: string) => void;
+    onFormValueChange: (value: ValueType) => void;
     onSave?: () => void;
 }
 declare const JsonEditor: React.FC<JsonEditorProps>;

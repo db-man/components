@@ -4,13 +4,16 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'antd';
 import { Link } from 'react-router-dom';
-import { dbs } from '../dbs';
 import PageContext from '../contexts/page';
 import { columnType } from './types';
+import { useAppContext } from '../contexts/AppContext';
 export default function RefTableLinks({
   value,
   column
 }) {
+  const {
+    dbs
+  } = useAppContext();
   const {
     dbName
   } = useContext(PageContext);

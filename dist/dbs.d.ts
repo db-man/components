@@ -1,4 +1,6 @@
 /**
+ * DEPRECATED
+ *
  * ```json
  * {
  *   "iam": [
@@ -8,10 +10,6 @@
  * }
  * ```
  */
-export declare const dbs: any;
-export declare const getDbs: () => any;
-export declare const getTablesByDbName: (dbName: any) => any;
-export declare const setDbs: (val: any) => void;
-export declare const getTable: (dbName: any, tableName: any) => any;
-export declare const isLargeTable: (dbName: any, tableName: any) => any;
+export declare const getTablesByDbName: (dbName: string) => any;
+export declare const setDbs: (val: string) => void;
 //# sourceMappingURL=dbs.d.ts.map

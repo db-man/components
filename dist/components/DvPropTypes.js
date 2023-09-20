@@ -42,6 +42,8 @@ propFullName // e.g. "columns[0].type:listPage[0]"
     default:
   }
 });
+
+// See also: UiType in src/types/Column.ts
 const uiType = PropTypes.oneOfType([PropTypes.string,
 // e.g. "Link"
 ddType // e.g. ["Link", "https://github.com/{{record.user}}/{{record.repo}}"]

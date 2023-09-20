@@ -42,19 +42,19 @@ const columns = [{
 }];
 
 const footer = ({
-  page
+  dbName
 }) => function TableFooter() {
   return /*#__PURE__*/React.createElement("div", null, "Table column definition:", ' ', /*#__PURE__*/React.createElement("a", {
-    href: `https://github.com/${localStorage.getItem('dm_github_owner')}/${localStorage.getItem('dm_github_repo_name')}/blob/main/${localStorage.getItem('dm_github_repo_path')}/${page.dbName}/columns.json`,
+    href: `https://github.com/${localStorage.getItem('dm_github_owner')}/${localStorage.getItem('dm_github_repo_name')}/blob/main/${localStorage.getItem('dm_github_repo_path')}/${dbName}/columns.json`,
     target: "_blank",
     rel: "noreferrer"
   }, "columns.json"));
 };
 export default function TableConfigPage() {
-  const page = useContext(PageContext);
   const {
+    dbName,
     columns: dbTableColumns
-  } = page;
+  } = useContext(PageContext);
   console.debug('TableConfigPage', dbTableColumns); // eslint-disable-line no-console
   return /*#__PURE__*/React.createElement("div", {
     className: "table-config-page"
@@ -64,7 +64,7 @@ export default function TableConfigPage() {
     columns: columns,
     pagination: false,
     footer: footer({
-      page
+      dbName
     })
   }));
 }

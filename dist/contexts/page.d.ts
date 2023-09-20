@@ -1,7 +1,9 @@
 import React from 'react';
 import Column from '../types/Column';
+import Databases from '../types/Databases';
 export interface PageContextType {
     appModes: string[];
+    dbs: Databases;
     dbName: string;
     tableName: string;
     action: string;

@@ -1,13 +1,20 @@
-// @ts-nocheck
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import * as constants from '../constants';
 import Settings from '../pages/Settings';
 import AppLayout from './AppLayout';
+import { LS_KEY_DBS_SCHEMA } from '../constants';
+import { AppContext } from '../contexts/AppContext';
 export default function App() {
-  const dbs = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
+  const [dbs, setDbs] = useState({});
+  useEffect(() => {
+    const _dbs = JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || '{}');
+    setDbs(_dbs);
+  }, []);
   if (!dbs) return /*#__PURE__*/React.createElement(Settings, null);
-  return /*#__PURE__*/React.createElement(BrowserRouter, null, /*#__PURE__*/React.createElement(AppLayout, null));
+  return /*#__PURE__*/React.createElement(AppContext.Provider, {
+    value: {
+      dbs
+    }
+  }, /*#__PURE__*/React.createElement(BrowserRouter, null, /*#__PURE__*/React.createElement(AppLayout, null)));
 }
 //# sourceMappingURL=App.js.map

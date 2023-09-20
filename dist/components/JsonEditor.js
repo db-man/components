@@ -1,32 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input } from 'antd';
-const obj2str = obj => JSON.stringify(obj, null, '  ');
-const str2obj = str => JSON.parse(str);
+import { str2obj } from './Form/helpers';
 const JsonEditor = props => {
   const {
     value,
+    onChange,
+    onFormValueChange,
     onSave = () => {}
   } = props;
-  const [jsonStr, setJsonStr] = useState(obj2str(value));
   const [errMsg, setErrMsg] = useState('');
-  useEffect(() => {
-    setJsonStr(obj2str(value));
-  }, [value]);
   const handleChange = event => {
-    const {
-      value
-    } = event.target;
-    const {
-      onChange
-    } = props;
+    onChange(event.target.value);
     setErrMsg('');
     try {
-      const obj = str2obj(value);
-      onChange(obj);
+      const obj = str2obj(event.target.value);
+      onFormValueChange(obj);
     } catch (error) {
       setErrMsg(`There is something wrong in JSON text, detail: ${error.message}`);
     }
-    setJsonStr(value);
   };
   const handleKeyDown = event => {
     if (event.code === 'KeyS' && event.metaKey) {
@@ -36,7 +27,7 @@ const JsonEditor = props => {
   };
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Input.TextArea, {
     autoSize: true,
-    value: jsonStr,
+    value: value,
     onChange: handleChange,
     onKeyDown: handleKeyDown
   }), errMsg && /*#__PURE__*/React.createElement("div", {

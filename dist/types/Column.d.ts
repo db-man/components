@@ -1,7 +1,8 @@
 import { ColumnType as AntdColumnType } from 'antd/es/table';
+import { GetPageUiType, ListPageUiType, RadioGroupUiTypeEnum, UiType } from './UiType';
 type ColumnPlaceholder = string;
 /**
- * One of "STRING", "STRING_ARRAY", "NUMBER" or "BOOL". Default is "STRING".
+ * One of "STRING", "STRING_ARRAY", "NUMBER" or "BOOL".
 
 | type         | Default UI Component |
 | ------------ | -------------------- |
@@ -14,11 +15,26 @@ type ColumnPlaceholder = string;
  */
 type ColumnType = 'STRING' | 'STRING_ARRAY' | 'NUMBER' | 'BOOL';
 export default interface Column extends AntdColumnType<Record<string, any>> {
+    /**
+     * Required. The id of this column.
+     */
     id: string;
+    /**
+     * Required. The name of this column.
+     */
     name: string;
+    /**
+     * Required. The type of this column.
+     */
     type: ColumnType;
-    'type:createUpdatePage': string;
-    'type:getPage': string;
+    /**
+     * Only one column in table should have this field.
+     * `true` to indicate this column is an uniq key of this table.
+     */
+    primary: boolean;
+    'type:createUpdatePage': UiType;
+    'type:getPage': GetPageUiType;
+    'type:listPage'?: ListPageUiType;
     placeholder: ColumnPlaceholder;
     /**
      * If true, on the list page, the column will be shown in the filter section.
@@ -27,11 +43,7 @@ export default interface Column extends AntdColumnType<Record<string, any>> {
     /**
      * In the Form page, e.g. to create a new user, use it to show a dropdown list with "Maintainer" and "Developer".
      */
-    enum?: string[];
-    /**
-     * If is 'HIDE', the column will not be shown on the list page.
-     */
-    'type:listPage'?: string | 'HIDE';
+    enum?: RadioGroupUiTypeEnum;
     /**
      * Pass to the Column of Ant Design Table.
      */
