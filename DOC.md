@@ -80,18 +80,7 @@ See `src/types/Column.ts::ColumnPlaceholder`
 
 ### `enum`
 
-Used when `type="STRING"`, and `type:createUpdatePage="RadioGroup"`.
-Only used on create/update page.
-To render some Radio components with given text, click one of the Radio to fill the text in input box.
-
-```json
-{
-  "id": "vehicleType",
-  "name": "Vehicle Type",
-  "type": "STRING",
-  "enum": ["car", "bike"]
-}
-```
+See `src/types/Column.ts::RadioGroupUiTypeEnum`
 
 ### `ui:presets`
 

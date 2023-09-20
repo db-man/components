@@ -20,7 +20,13 @@ import PageContext from '../../contexts/page';
 import MultiLineInputBox from '../MultiLineInputBox';
 import * as constants from '../../constants';
 import TextAreaFormField from '../TextAreaFormField';
-import { validatePrimaryKey, isType } from './helpers';
+import {
+  validatePrimaryKey,
+  isType,
+  obj2str,
+  str2obj,
+  getFormInitialValues,
+} from './helpers';
 import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
 import PresetsButtons from '../PresetsButtons';
 import Column from '../../types/Column';
@@ -63,42 +69,46 @@ const Form: React.FC<FormProps> = (props) => {
   const [formValues, setFormValues] = useState({
     ...props.defaultValues,
   });
+  const [jsonStr, setJsonStr] = useState(
+    obj2str({
+      ...props.defaultValues,
+    })
+  );
 
   useEffect(() => {
-    context.columns.forEach((col: Column) => {
-      if (!formValues[col.id]) {
-        let defaultValue = '';
-        switch (col['type:createUpdatePage']) {
-          case 'RadioGroup':
-            [defaultValue] = col.enum!;
-            break;
-          default:
-            defaultValue = '';
-        }
-        if (defaultValue) {
-          setFormValues((prevState) => ({
-            ...prevState,
-            [col.id]: defaultValue,
-          }));
-        }
-      }
+    const initFormValues = getFormInitialValues(context.columns, formValues);
+    setFormValues((prevFormValues) => ({
+      ...prevFormValues,
+      ...initFormValues,
+    }));
+    setJsonStr((prevJsonStr) => {
+      const prevJsonObj = str2obj(prevJsonStr);
+      return obj2str({
+        ...prevJsonObj,
+        ...initFormValues,
+      });
     });
   }, []);
 
+  const changeBothFormAndJsonEditor = (newFormValues: ValueType) => {
+    setFormValues(newFormValues);
+    setJsonStr(obj2str(newFormValues));
+  };
+
   const handleChange = (key: string) => (value: any) => {
-    setFormValues({
+    changeBothFormAndJsonEditor({
       ...formValues,
       [key]: value,
     });
   };
 
-  const handleInputChange = (key: string) => (val: any /* ,event */) => {
+  const handleInputChange = (key: string) => (val: string /* ,event */) => {
     // if key is primary key, check if has space
     if (key === context.primaryKey && val.includes(' ')) {
       message.error('Primary key cannot contain space');
     }
 
-    setFormValues({
+    changeBothFormAndJsonEditor({
       ...formValues,
       [key]: val,
     });
@@ -121,14 +131,10 @@ const Form: React.FC<FormProps> = (props) => {
    * @param {string[]} value Cell value
    */
   const handleStringArrayChange = (id: string) => (value: any) =>
-    setFormValues({
+    changeBothFormAndJsonEditor({
       ...formValues,
       [id]: value,
     });
-
-  const handleJsonEditorChange = (newFormValues: ValueType) => {
-    setFormValues(newFormValues);
-  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.code === 'KeyS' && event.metaKey) {
@@ -364,8 +370,9 @@ const Form: React.FC<FormProps> = (props) => {
       key: 'json',
       children: (
         <JsonEditor
-          value={formValues}
-          onChange={handleJsonEditorChange}
+          value={jsonStr}
+          onChange={setJsonStr}
+          onFormValueChange={setFormValues}
           onSave={() => {
             handleFormSubmit();
           }}

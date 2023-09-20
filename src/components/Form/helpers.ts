@@ -1,10 +1,16 @@
-// @ts-nocheck
+import { ValueType } from '.';
+import Column from '../../types/Column';
+import { UiType } from '../../types/UiType';
 
 /**
  * Check duplicated primary key
  * For example, if `id` is primary key, then there should not be two id=1 record in table
  */
-export const validatePrimaryKey = (value, content, primaryKey) => {
+export const validatePrimaryKey = (
+  value: string,
+  content: ValueType[],
+  primaryKey: string
+) => {
   const found = content.find((item) => item[primaryKey] === value);
   if (found) {
     return false;
@@ -17,7 +23,7 @@ export const validatePrimaryKey = (value, content, primaryKey) => {
  * @param {string} uiType e.g. "MultiLineInputBox"
  * @returns {is:bool,preview:bool}
  */
-export const isType = (column, uiType) => {
+export const isType = (column: Column, uiType: UiType) => {
   // type="MultiLineInputBox"
   // type=["MultiLineInputBox"]
   // type=["MultiLineInputBox", "WithPreview"]
@@ -29,4 +35,33 @@ export const isType = (column, uiType) => {
   }
   const is = column['type:createUpdatePage'] === uiType;
   return { is, preview: false };
+};
+
+export const obj2str = (obj: ValueType) => JSON.stringify(obj, null, '  ');
+export const str2obj = (str: string) => JSON.parse(str) as ValueType;
+
+export const getFormInitialValues = (
+  columns: Column[],
+  formValues: ValueType
+) => {
+  const initFormValues: {
+    [key: string]: any;
+  } = {};
+  // Initialize form values with default values defined in table schema when form values are empty
+  columns.forEach((col: Column) => {
+    if (!formValues[col.id]) {
+      let defaultValue = '';
+      switch (col['type:createUpdatePage']) {
+        case 'RadioGroup':
+          [defaultValue] = col.enum!;
+          break;
+        default:
+          defaultValue = '';
+      }
+      if (defaultValue) {
+        initFormValues[col.id] = defaultValue;
+      }
+    }
+  });
+  return initFormValues;
 };

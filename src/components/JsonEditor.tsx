@@ -1,35 +1,27 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { Input } from 'antd';
 
 import { ValueType } from './Form';
+import { str2obj } from './Form/helpers';
 
 interface JsonEditorProps {
-  value: ValueType;
-  onChange: (value: ValueType) => void;
+  value: string;
+  onChange: (value: string) => void;
+  onFormValueChange: (value: ValueType) => void;
   onSave?: () => void;
 }
 
-const obj2str = (obj: ValueType) => JSON.stringify(obj, null, '  ');
-const str2obj = (str: string) => JSON.parse(str) as ValueType;
-
 const JsonEditor: React.FC<JsonEditorProps> = (props) => {
-  const { value, onSave = () => {} } = props;
-  const [jsonStr, setJsonStr] = useState(obj2str(value));
+  const { value, onChange, onFormValueChange, onSave = () => {} } = props;
   const [errMsg, setErrMsg] = useState('');
 
-  // when outside value changed, update jsonStr
-  useEffect(() => {
-    setJsonStr(obj2str(value));
-  }, [value]);
-
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = event.target;
-    const { onChange } = props;
+    onChange(event.target.value);
 
     setErrMsg('');
     try {
-      const obj = str2obj(value);
-      onChange(obj);
+      const obj = str2obj(event.target.value);
+      onFormValueChange(obj);
     } catch (error) {
       setErrMsg(
         `There is something wrong in JSON text, detail: ${
@@ -37,8 +29,6 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
         }`
       );
     }
-
-    setJsonStr(value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -52,7 +42,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
     <div>
       <Input.TextArea
         autoSize
-        value={jsonStr}
+        value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
