@@ -1,14 +1,13 @@
-// @ts-nocheck
-
 /* eslint-disable react/destructuring-assignment, no-console, max-len */
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { List, Card } from 'antd';
 
 // import { contexts as PageContext, ddRender } from '@db-man/components';
 import PageContext from '../contexts/page';
 import * as ddRender from '../ddRender/ddRender';
+import { RowType } from '../types/Data';
 
 const listGrid = {
   gutter: 16,
@@ -19,8 +18,8 @@ const listGrid = {
   xl: 4,
   xxl: 3,
 };
-const getAny = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const getRandomItems = (rows) => {
+const getAny = (arr: RowType[]) => arr[Math.floor(Math.random() * arr.length)];
+const getRandomItems = (rows: RowType[]) => {
   const randomItems = [];
   for (let i = 0; i < 8; i += 1) {
     randomItems.push(getAny(rows));
@@ -28,48 +27,39 @@ const getRandomItems = (rows) => {
   return randomItems;
 };
 
-export default class RandomPageBody extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      content: null,
-    };
-  }
+const RandomPageBody = () => {
+  const { githubDb, dbName, tableName, primaryKey, columns } =
+    useContext(PageContext);
+  const [content, setContent] = useState<RowType[] | null>(null);
 
-  componentDidMount() {
-    this.getDataAsync();
-  }
+  useEffect(() => {
+    getDataAsync();
+  }, []);
 
-  getDataAsync = async () => {
+  const getDataAsync = async () => {
     try {
-      const { content } = await this.context.githubDb.getTableRows(
-        this.context.dbName,
-        this.context.tableName,
-      );
-      this.setState({
-        content,
-
-      });
+      const contentAndSha = await githubDb!.getTableRows(dbName, tableName);
+      setContent(contentAndSha.content);
     } catch (error) {
       console.error(
         'Failed to get JSON file in RandomPageBody component, error:',
-        error,
+        error
       );
     }
   };
 
-  renderItem = (item) => {
-    const { primaryKey } = this.context;
-    const column = this.context.columns.find((col) => col.id === primaryKey);
+  const renderItem = (item: RowType) => {
+    const column = columns.find((col) => col.id === primaryKey);
+    if (!column) return <div>No primary column found</div>;
     const args = column['type:randomPage'];
-    const fn = ddRender.getRender(args) || ((val) => val);
+    const fn = ddRender.getRender(args) || ((val: any) => val);
     return (
       <List.Item>
         <Card>
           <div>{fn(item[primaryKey], item, 0)}</div>
           <Link
             to={{
-              pathname: `/${this.context.dbName}/${this.context.tableName}/update`,
+              pathname: `/${dbName}/${tableName}/update`,
               search: `?${primaryKey}=${item[primaryKey]}`,
             }}
           >
@@ -80,24 +70,19 @@ export default class RandomPageBody extends React.Component {
     );
   };
 
-  renderList = () => {
-    const { content } = this.state;
+  const renderList = () => {
     if (!content) return null;
 
     return (
       <List
         grid={listGrid}
         dataSource={getRandomItems(content)}
-        renderItem={this.renderItem}
+        renderItem={renderItem}
       />
     );
   };
 
-  render() {
-    return (
-      <div className="random-page-body-component">{this.renderList()}</div>
-    );
-  }
-}
+  return <div className='random-page-body-component'>{renderList()}</div>;
+};
 
-RandomPageBody.contextType = PageContext;
+export default RandomPageBody;

@@ -17,7 +17,6 @@ import debounce from 'lodash.debounce';
 
 import PageContext, { PageContextType } from '../../contexts/page';
 import { getColumnRender } from '../../ddRender/ddRender';
-
 import {
   findDuplicates,
   getFilteredData,
@@ -30,7 +29,7 @@ import {
 import RefTableLinks from '../RefTableLinks';
 import * as constants from '../../constants';
 import Column from '../../types/Column';
-import { DataRowType, DataType } from '../../types/Data';
+import { RowType } from '../../types/Data';
 
 interface ListPageProps {
   tableName: string;
@@ -48,14 +47,14 @@ const ListPage = (props: ListPageProps) => {
   const { columns, tableName, primaryKey, dbName, githubDb } =
     useContext<PageContextType>(PageContext);
 
-  const [filter, setFilter] = useState<Record<string, string | undefined>>({}); // getInitialFilter(filterCols()), cannot get context in constructor
+  const [filter, setFilter] = useState<Record<string, string>>({}); // getInitialFilter(filterCols()), cannot get context in constructor
   const [sorter, setSorter] = useState({
     columnKey: '', // e.g. "url"
     order: '', //  "ascend" or "descend" or undefined
   });
   const [loading, setLoading] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [rows, setRows] = useState<DataRowType | null>(null);
+  const [rows, setRows] = useState<RowType[] | null>(null);
   const [contentTableName, setContentTableName] = useState(''); // the current table name of data this.state.rows
   const [page, setPage] = useState(() => {
     const url = new URL(window.location.href);
@@ -82,7 +81,11 @@ const ListPage = (props: ListPageProps) => {
   }, []);
 
   const filteredSortedData = () => {
-    const filteredData = getFilteredData(filterCols(columns), filter, rows);
+    const filteredData = getFilteredData(
+      filterCols(columns),
+      filter,
+      rows || []
+    );
     if (sorter.columnKey && sorter.order !== undefined) {
       return getSortedData(filteredData, sorter);
     }
@@ -138,7 +141,7 @@ const ListPage = (props: ListPageProps) => {
       });
     };
 
-  const handleTableChange: TableProps<DataType>['onChange'] = (
+  const handleTableChange: TableProps<RowType>['onChange'] = (
     pagination,
     filters,
     newSorter /* , extra */
@@ -167,7 +170,7 @@ const ListPage = (props: ListPageProps) => {
   const getData = async (tableName: string) => {
     setLoading(`Loading ${dbName}/${tableName} ...`);
     try {
-      const { content } = await githubDb.getTableRows(
+      const { content } = await githubDb!.getTableRows(
         dbName,
         tableName,
         controllerRef.current.signal
@@ -197,7 +200,7 @@ const ListPage = (props: ListPageProps) => {
   };
 
   const alertTableDataInvalid = () => {
-    const invalidRows: DataRowType = [];
+    const invalidRows: RowType[] = [];
     if (!rows) return null;
     rows.forEach((row, idx) => {
       if (row[primaryKey] === undefined || row[primaryKey] === null) {
@@ -234,7 +237,7 @@ const ListPage = (props: ListPageProps) => {
       .filter((column) => column['type:listPage'] !== 'HIDE')
       .map((column) => {
         // Table component of antd
-        const antdCol: AntdColumnType<DataType> = {
+        const antdCol: AntdColumnType<RowType> = {
           key: column.id,
           title: column.name,
           dataIndex: column.id,

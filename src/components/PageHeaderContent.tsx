@@ -8,15 +8,17 @@ import { Menu } from 'antd';
 
 import { useAppContext } from '../contexts/AppContext';
 
-const withRouter = (Component) => {
-  function Wrapper(props) {
+type PropsType = { params: { dbName: string } };
+
+const withRouter = (Component: any) => {
+  function Wrapper(props: PropsType) {
     const params = useParams();
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <Component params={params} {...props} />;
   }
   return Wrapper;
 };
-function PageHeaderContent(props) {
+function PageHeaderContent(props: PropsType) {
   const { params } = props;
   const { dbs } = useAppContext();
 

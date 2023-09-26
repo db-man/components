@@ -6,9 +6,8 @@ import SuccessMessage from '../SuccessMessage';
 import * as utils from '../../utils';
 import Form from '../Form';
 import PageContext from '../../contexts/page';
-
 import { getNewRows } from './helpers';
-import { DataRowType, DataType } from '../../types/Data';
+import { RowType } from '../../types/Data';
 
 const UpdatePage = () => {
   const { primaryKey, appModes, dbName, tableName, githubDb } =
@@ -18,12 +17,12 @@ const UpdatePage = () => {
 
   // all rows in table data file
   const [tableFileLoading, setTableFileLoading] = useState('');
-  const [rows, setRows] = useState<DataRowType>([]);
-  const [tableFileSha, setTableFileSha] = useState(null);
+  const [rows, setRows] = useState<RowType[]>([]);
+  const [tableFileSha, setTableFileSha] = useState<string | null>(null);
 
   const [recordFileLoading, setRecordFileLoading] = useState('');
-  const [record, setRecord] = useState<DataType>({});
-  const [recordFileSha, setRecordFileSha] = useState(null);
+  const [record, setRecord] = useState<RowType>({});
+  const [recordFileSha, setRecordFileSha] = useState<string | null>(null);
 
   const [loading, setLoading] = useState('');
 
@@ -38,7 +37,7 @@ const UpdatePage = () => {
    *   to only update record file, file is small, so get response quickly,
    *   but backend (github action) need to merge several record files into big table file after this update
    */
-  const handleFormSubmit = (formValues: DataType) => {
+  const handleFormSubmit = (formValues: RowType) => {
     if (isSplitTable()) {
       updateRecordFileAsync(formValues);
     } else {
@@ -46,7 +45,7 @@ const UpdatePage = () => {
     }
   };
 
-  const handleDelete = (formValues: DataType) => {
+  const handleDelete = (formValues: RowType) => {
     if (isSplitTable()) {
       deleteRecordFileAsync(formValues);
     } else {
@@ -70,7 +69,7 @@ const UpdatePage = () => {
       return record;
     }
     return (
-      rows.find((row) => row[primaryKey] === currentId()) || ({} as DataType)
+      rows.find((row) => row[primaryKey] === currentId()) || ({} as RowType)
     );
   };
 
@@ -81,12 +80,12 @@ const UpdatePage = () => {
     return tips;
   };
 
-  const updateTableFileAsync = async (formValues: DataType) => {
+  const updateTableFileAsync = async (formValues: RowType) => {
     const newRows = getNewRows(formValues, [...rows], primaryKey, currentId());
 
     setLoading('Updating table file...');
     try {
-      const { commit } = await githubDb.updateTableFile(
+      const { commit } = await githubDb!.updateTableFile(
         dbName,
         tableName,
         newRows,
@@ -102,14 +101,14 @@ const UpdatePage = () => {
     setLoading('');
   };
 
-  const updateRecordFileAsync = async (formValues: DataType) => {
+  const updateRecordFileAsync = async (formValues: RowType) => {
     setLoading('Updating record file...');
     try {
       const record = {
         ...formValues,
         updatedAt: githubUtils.formatDate(new Date()),
       };
-      const { commit } = await githubDb.updateRecordFile(
+      const { commit } = await githubDb!.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
@@ -126,10 +125,10 @@ const UpdatePage = () => {
     setLoading('');
   };
 
-  const deleteRecordFileAsync = async (formValues: DataType) => {
+  const deleteRecordFileAsync = async (formValues: RowType) => {
     setLoading('Deleting record file...');
     try {
-      const { commit } = await githubDb.deleteRecordFile(
+      const { commit } = await githubDb!.deleteRecordFile(
         dbName,
         tableName,
         formValues[primaryKey],
@@ -160,7 +159,7 @@ const UpdatePage = () => {
   const getTableFileAsync = async () => {
     setTableFileLoading(`Loading ${dbName}/${tableName} ...`);
     try {
-      const { content: rows, sha: tableFileSha } = await githubDb.getTableRows(
+      const { content: rows, sha: tableFileSha } = await githubDb!.getTableRows(
         dbName,
         tableName
       );
@@ -176,7 +175,7 @@ const UpdatePage = () => {
   const getRecordFileAsync = async () => {
     setRecordFileLoading(`Loading ${dbName}/${tableName}/${currentId()}`);
     try {
-      const { content, sha } = await githubDb.getRecordFileContentAndSha(
+      const { content, sha } = await githubDb!.getRecordFileContentAndSha(
         dbName,
         tableName,
         currentId()

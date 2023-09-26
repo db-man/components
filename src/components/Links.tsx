@@ -1,33 +1,35 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as types from './types';
+import { PhotoType } from './PhotoList';
 
-export function Fragment(props) {
-  return props.children;
+export function Fragment({ children }: { children: React.ReactNode }) {
+  return children;
 }
 
-export function Link({ children, href, text }) {
+export function Link({
+  children,
+  href,
+  text,
+}: {
+  children?: string;
+  href?: string;
+  text?: string;
+}) {
   if (children) {
     return (
       <a
-        className="dm-dd-link"
+        className='dm-dd-link'
         href={children}
-        target="_blank"
-        rel="noreferrer"
+        target='_blank'
+        rel='noreferrer'
       >
         {children}
       </a>
     );
   }
   return (
-    <a
-      className="dm-dd-link"
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <a className='dm-dd-link' href={href} target='_blank' rel='noreferrer'>
       {text}
     </a>
   );
@@ -39,7 +41,14 @@ Link.defaultProps = {
   text: '',
 };
 
-export function Links({ links }) {
+export function Links({
+  links,
+}: {
+  links: {
+    href?: string;
+    text?: string;
+  }[];
+}) {
   return (
     <div>
       {links.map(({ href, text }, index) => (
@@ -61,8 +70,13 @@ Links.defaultProps = {
  * @returns
  */
 export function ImageLink({
-  children, url, imgSrc, description,
-}) {
+  children,
+  url,
+  imgSrc,
+  description,
+}: {
+  children?: string;
+} & PhotoType) {
   let url2 = url;
   let imgSrc2 = imgSrc;
   if (children) {
@@ -71,9 +85,14 @@ export function ImageLink({
   }
   return (
     <div>
-      <a className="dm-dd-image-link" href={url2} rel="noreferrer" target="_blank">
+      <a
+        className='dm-dd-image-link'
+        href={url2}
+        rel='noreferrer'
+        target='_blank'
+      >
         <span>{url2}</span>
-        <img alt="ImageLink" src={imgSrc2} />
+        <img alt='ImageLink' src={imgSrc2} />
       </a>
       <br />
       {description}
@@ -94,7 +113,13 @@ ImageLink.defaultProps = {
 };
 
 // eslint-disable-next-line react/prop-types
-export function ImageLinks({ imgs, limit = 3 }) {
+export function ImageLinks({
+  imgs,
+  limit = 3,
+}: {
+  imgs: PhotoType[];
+  limit?: number;
+}) {
   if (!imgs) return null;
 
   let results = imgs;

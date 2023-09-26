@@ -1,17 +1,22 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Alert, Input, Popover, Button,
-} from 'antd';
+import { Alert, Input, Popover, Button } from 'antd';
+import { RowType } from '../types/Data';
 
 export default function ErrorAlert({
-  json, error, tplStr, record,
+  json,
+  error,
+  tplStr,
+  record,
+}: {
+  json: string;
+  error: { message: string };
+  tplStr: string;
+  record: RowType;
 }) {
   return (
     <Alert
-      message={(
+      message={
         <div>
           Failed to parse JSON generated from template, fallback to render plain
           text.
@@ -20,35 +25,32 @@ export default function ErrorAlert({
             <Input.TextArea defaultValue={json} />
           </div>
           <Popover
-            content={(
+            content={
               <div style={{ width: '800px' }}>
                 <div>
                   Error:
                   {error.message}
                 </div>
                 <div>
-                  tplStr:
-                  {' '}
-                  <Input.TextArea defaultValue={tplStr} />
+                  tplStr: <Input.TextArea defaultValue={tplStr} />
                 </div>
                 <div>
-                  record:
-                  {' '}
+                  record:{' '}
                   <Input.TextArea
                     rows={7}
                     defaultValue={JSON.stringify(record, null, 2)}
                   />
                 </div>
               </div>
-            )}
-            title="Debug Info"
-            trigger="click"
+            }
+            title='Debug Info'
+            trigger='click'
           >
             <Button danger>Debug Info</Button>
           </Popover>
         </div>
-      )}
-      type="error"
+      }
+      type='error'
       closable
     />
   );

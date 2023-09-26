@@ -1,16 +1,13 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function SuccessMessage({ url }) {
+function SuccessMessage({ url }: { url: string }) {
   console.debug('Commit link:', url); // eslint-disable-line no-console
 
   return (
     <div>
-      Item saved.
-      {' '}
-      <a href={url} target="_blank" rel="noreferrer">
+      Item saved.{' '}
+      <a href={url} target='_blank' rel='noreferrer'>
         Commit link
       </a>
     </div>

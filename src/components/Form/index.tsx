@@ -31,6 +31,7 @@ import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage'
 import PresetsButtons from '../PresetsButtons';
 import Column from '../../types/Column';
 import { useAppContext } from '../../contexts/AppContext';
+import { RowType } from '../../types/Data';
 
 interface RenderFormFieldWrapperProps {
   id: string;
@@ -38,15 +39,14 @@ interface RenderFormFieldWrapperProps {
   formField: ReactNode;
 }
 
-export type ValueType = Record<string, any>;
-type RowType = ValueType;
+export type ValueType = RowType;
 
 interface FormProps {
   defaultValues: ValueType;
   loading: boolean;
   rows: RowType[];
   onSubmit: (formValues: ValueType) => void;
-  onDelete: (formValues: ValueType) => void;
+  onDelete?: (formValues: ValueType) => void;
 }
 
 const renderFormFieldWrapper = ({
@@ -148,7 +148,7 @@ const Form: React.FC<FormProps> = (props) => {
   };
 
   const handleDelete = () => {
-    props.onDelete(formValues);
+    props.onDelete && props.onDelete(formValues);
   };
 
   const isSplitTable = () => {
@@ -424,10 +424,10 @@ const Form: React.FC<FormProps> = (props) => {
 //   onDelete: PropTypes.func,
 // };
 
-Form.defaultProps = {
-  rows: [],
-  onSubmit: () => {},
-  onDelete: () => {},
-};
+// Form.defaultProps = {
+//   rows: [],
+//   onSubmit: () => {},
+//   onDelete: () => {},
+// };
 
 export default Form;

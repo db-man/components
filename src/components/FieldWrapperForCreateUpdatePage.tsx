@@ -1,15 +1,20 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { columnType } from './types';
 import * as constants from '../constants';
+import Column from '../types/Column';
 
 /**
  * Form field wrapper for create/update page
  */
-const FieldWrapperForCreateUpdatePage = ({ column, children }) => {
+const FieldWrapperForCreateUpdatePage = ({
+  column,
+  children,
+}: {
+  column: Column;
+  children: React.ReactNode;
+}) => {
   const typeClassName =
     column.type === constants.STRING_ARRAY
       ? 'dm-string-array-form-field'
@@ -20,7 +25,7 @@ const FieldWrapperForCreateUpdatePage = ({ column, children }) => {
       className={`dm-form-field ${typeClassName}`}
       data-debug={JSON.stringify(column)}
     >
-      <div className="dm-field-label">
+      <div className='dm-field-label'>
         <b>{column.name}</b>:{' '}
       </div>
       {children}

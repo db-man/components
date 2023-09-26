@@ -15,7 +15,7 @@ const defaultRenders = {
  * @param {string|string[]} args
  * @param {Object} tplExtra
  */
-export const getRender = (args, tplExtra) => {
+export const getRender = (args, tplExtra?: any) => {
   // the column render function defined in Table component of antd
   // renderFn = (val, record, index) => ()
   let renderFn;

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
@@ -12,7 +10,7 @@ function Database() {
 
   if (!dbs) return <div>Failed to get dbs from localStorage</div>;
 
-  const selectedDb = dbs[params.dbName];
+  const selectedDb = dbs[params.dbName || ''];
   if (!selectedDb) return <div>db not found</div>;
 
   return (

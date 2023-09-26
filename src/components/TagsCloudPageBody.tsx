@@ -1,56 +1,46 @@
-// @ts-nocheck
-
 /* eslint-disable react/destructuring-assignment, no-console, max-len */
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { List } from 'antd';
 
 import PageContext from '../contexts/page';
+import { RowType } from '../types/Data';
 
-export default class TagsCloudPageBody extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      content: [],
-    };
-  }
+const TagsCloudPageBody = () => {
+  const { githubDb, dbName, tableName } = useContext(PageContext);
+  const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState<RowType>([]);
 
-  componentDidMount() {
-    this.getDataAsync();
-  }
+  useEffect(() => {
+    getDataAsync();
+  }, []);
 
-  getDataAsync = async () => {
+  const getDataAsync = async () => {
     try {
-      this.setState({ loading: true });
-      const { content } = await this.context.githubDb.getTableRows(
-        this.context.dbName,
-        this.context.tableName,
-      );
-      this.setState({
-        loading: false,
-        content,
-
-      });
+      setLoading(true);
+      const contentAndSha = await githubDb!.getTableRows(dbName, tableName);
+      setLoading(false);
+      setContent(contentAndSha.content);
     } catch (error) {
-      this.setState({ loading: false });
+      setLoading(false);
       console.error(
         'Failed to get JSON file in TagsCloudPageBody component, error:',
-        error,
+        error
       );
     }
   };
 
-  renderList = () => {
-    const { content } = this.state;
+  const renderList = () => {
     if (!content) return null;
 
     // tag name <=> tag count
-    const tagNameCount = {};
-    content.forEach((item) => {
+    const tagNameCount: {
+      [key: string]: number;
+    } = {};
+    content.forEach((item: RowType) => {
       if (!item.tags) return;
-      item.tags.forEach((name) => {
+      item.tags.forEach((name: string) => {
         if (!tagNameCount[name]) {
           tagNameCount[name] = 0;
         }
@@ -67,7 +57,7 @@ export default class TagsCloudPageBody extends React.Component {
 
     return (
       <List
-        loading={this.state.loading}
+        loading={loading}
         grid={{
           gutter: 16,
           xs: 1,
@@ -82,23 +72,20 @@ export default class TagsCloudPageBody extends React.Component {
           const filter = encodeURIComponent(
             JSON.stringify({
               tags: item.name,
-            }),
+            })
           );
           return (
             <List.Item>
-              <div className="tags-cloud-item">
+              <div className='tags-cloud-item'>
                 <Link
                   to={{
-                    pathname: `/${this.context.dbName}/${this.context.tableName}/list`,
+                    pathname: `/${dbName}/${tableName}/list`,
                     search: `?filter=${filter}`,
                   }}
                 >
                   {item.name}
-                </Link>
-                {' '}
-                :
-                {' '}
-                {item.count}
+                </Link>{' '}
+                : {item.count}
               </div>
             </List.Item>
           );
@@ -107,11 +94,7 @@ export default class TagsCloudPageBody extends React.Component {
     );
   };
 
-  render() {
-    return (
-      <div className="tags-cloud-page-body-component">{this.renderList()}</div>
-    );
-  }
-}
+  return <div className='tags-cloud-page-body-component'>{renderList()}</div>;
+};
 
-TagsCloudPageBody.contextType = PageContext;
+export default TagsCloudPageBody;

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -7,7 +5,7 @@
 import '@testing-library/jest-dom';
 
 const localStorageMock = (function mock() {
-  let store = {
+  let store: { [key: string]: string } = {
     dm_github_personal_access_token: '',
     dm_github_repo_path: 'dbs',
     dm_github_owner: 'db-man',
@@ -19,13 +17,13 @@ const localStorageMock = (function mock() {
   };
 
   return {
-    getItem(key) {
+    getItem(key: string) {
       return store[key] ?? null;
     },
-    setItem(key, value) {
+    setItem(key: string, value: any) {
       store[key] = value.toString();
     },
-    removeItem(key) {
+    removeItem(key: string) {
       delete store[key];
     },
     clear() {

@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { message, Alert, Spin } from 'antd';
+
 import * as utils from '../../utils';
 import PageContext from '../../contexts/page';
-
 import Detail from './Detail';
-import { DataRowType } from '../../types/Data';
+import { RowType } from '../../types/Data';
 
 const GetPageBody = () => {
   const { dbName, tableName, appModes, primaryKey, githubDb, columns } =
@@ -18,7 +18,7 @@ const GetPageBody = () => {
 
   // Create the initial form fields according to whether create/update.
   const getInitialFormFields = useCallback(
-    (tableRows: DataRowType) => {
+    (tableRows: RowType[]) => {
       const foundRows = tableRows.filter(
         (item) => item[primaryKey] === utils.getUrlParams()[primaryKey]
       );
@@ -46,9 +46,10 @@ const GetPageBody = () => {
     const currentId = () => {
       return utils.getUrlParams()[primaryKey];
     };
-    return githubDb
+    // ValueType vs DataType
+    return githubDb!
       .getRecordFileContentAndSha(dbName, tableName, currentId())
-      .then(({ content }: { content: DataRowType }) => {
+      .then(({ content }: { content: RowType }) => {
         setContentLoaded(true);
         setRecord(content);
       })
@@ -60,11 +61,11 @@ const GetPageBody = () => {
 
   const getTableRowsAsync = useCallback(() => {
     return githubDb
-      .getTableRows(dbName, tableName)
-      .then(({ content }: { content: DataRowType }) => {
-        return content;
+      ?.getTableRows(dbName, tableName)
+      .then(({ content }: { content: RowType }) => {
+        return content as RowType[];
       })
-      .then((tableRows: DataRowType) => {
+      .then((tableRows: RowType[]) => {
         setContentLoaded(true);
         const r = getInitialFormFields(tableRows);
         if (r) {
@@ -93,9 +94,9 @@ const GetPageBody = () => {
     const getRefTablePromises = columns
       .filter(({ referenceTable }) => referenceTable)
       .map(({ referenceTable }) => {
-        return githubDb
-          .getTableRows(dbName, referenceTable)
-          .then(({ content }: { content: DataRowType }) => {
+        return githubDb!
+          .getTableRows(dbName, referenceTable!)
+          .then(({ content }: { content: RowType[] }) => {
             setRefTables((prevRefTables) => ({
               ...prevRefTables,
               [`ref:${referenceTable}:rows`]: content, // TODO

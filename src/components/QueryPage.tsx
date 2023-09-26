@@ -1,11 +1,10 @@
-// @ts-nocheck
-
 import { Row, Col } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import ReactJson from 'react-json-view';
 
 import PageContext from '../contexts/page';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
+import { RowType } from '../types/Data';
 
 const defaultCode = 'return input;';
 
@@ -13,10 +12,10 @@ export default function QueryPage() {
   const { dbName, tableName, githubDb } = useContext(PageContext);
   const [code, setCode] = React.useState(defaultCode);
   const [result, setResult] = React.useState({ obj: '', err: '' });
-  const [content, setContent] = React.useState([]);
+  const [content, setContent] = React.useState<RowType>([]);
 
   useEffect(() => {
-    githubDb.getTableRows(dbName, tableName).then((response) => {
+    githubDb?.getTableRows(dbName, tableName).then((response) => {
       setContent(response.content);
     });
   }, []);
@@ -28,7 +27,7 @@ export default function QueryPage() {
 
       const output = fn(content);
       setResult({ obj: JSON.stringify(output), err: '' });
-    } catch (err) {
+    } catch (err: any) {
       // console.log('[ERROR] Failed to eval function!');
 
       setResult({ obj: '', err: err.message });
@@ -36,7 +35,7 @@ export default function QueryPage() {
   }, [content, code]);
 
   return (
-    <div className="dm-query-page">
+    <div className='dm-query-page'>
       <Row>
         <Col span={16}>
           Code:

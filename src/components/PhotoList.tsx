@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'antd';
@@ -16,16 +14,27 @@ const listGrid = {
   xxl: 3,
 };
 
-const renderItem = (item) => (
+export type PhotoType = {
+  url: string;
+  imgSrc: string;
+  description: string;
+};
+
+const renderItem = (item: PhotoType) => (
   <List.Item>
-    <ImageLink url={item.url} imgSrc={item.imgSrc} description={item.description} />
+    <ImageLink
+      url={item.url}
+      imgSrc={item.imgSrc}
+      description={item.description}
+    />
   </List.Item>
 );
 
-export default class PhotoList extends React.Component {
-  renderDup = () => {
-    const { photos } = this.props;
-    const photoMap = {};
+const PhotoList = ({ photos }: { photos: PhotoType[] }) => {
+  const renderDup = () => {
+    const photoMap: {
+      [key: string]: number;
+    } = {};
     photos.forEach((photo) => {
       if (photoMap[photo.url] === undefined) {
         photoMap[photo.url] = 0;
@@ -39,20 +48,13 @@ export default class PhotoList extends React.Component {
       .join(',');
   };
 
-  render() {
-    const { photos } = this.props;
-    return (
-      <div>
-        {this.renderDup()}
-        <List
-          grid={listGrid}
-          dataSource={photos}
-          renderItem={renderItem}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      {renderDup()}
+      <List grid={listGrid} dataSource={photos} renderItem={renderItem} />
+    </div>
+  );
+};
 
 PhotoList.propTypes = {
   photos: PropTypes.arrayOf(
@@ -60,8 +62,10 @@ PhotoList.propTypes = {
       url: PropTypes.string.isRequired,
       imgSrc: PropTypes.string.isRequired,
       description: PropTypes.string,
-    }),
+    })
   ),
 };
 
 PhotoList.defaultProps = { photos: [] };
+
+export default PhotoList;

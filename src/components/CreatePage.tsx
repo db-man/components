@@ -1,69 +1,59 @@
-// @ts-nocheck
-
 /* eslint-disable react/destructuring-assignment, no-console, max-len, react/no-unused-class-component-methods */
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { message, Spin, Alert } from 'antd';
 import { utils as githubUtils } from '@db-man/github';
 
 import { validatePrimaryKey } from './Form/helpers';
 import SuccessMessage from './SuccessMessage';
 import * as utils from '../utils';
-import Form from './Form';
+import Form, { ValueType } from './Form';
 import PageContext from '../contexts/page';
 import * as constants from '../constants';
+import { RowType } from '../types/Data';
 
-export default class CreatePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errorMessage: '',
-      // all rows in table file
-      tableFileLoading: false,
-      // all rows in whole table, in split table mode, it's empty
-      rows: [],
-      tableFileSha: null,
+const CreatePage = () => {
+  const { appModes, githubDb, dbName, tableName, primaryKey, columns } =
+    useContext(PageContext);
 
-      defaultFormValues: null,
+  const [errorMessage, setErrorMessage] = useState('');
+  // all rows in table file
+  const [tableFileLoading, setTableFileLoading] = useState(false);
+  // all rows in whole table, in split table mode, it's empty
+  const [rows, setRows] = useState<RowType[]>([]);
+  const [tableFileSha, setTableFileSha] = useState<string | null>(null);
+  const [defaultFormValues, setDefaultFormValues] = useState<ValueType | null>(
+    null
+  );
+  const [saveLoading, setSaveLoading] = useState(false);
 
-      saveLoading: false,
-    };
-  }
+  useEffect(() => {
+    getData();
 
-  componentDidMount() {
-    this.getData();
-
-    const fields = this.getInitialFormFields();
-    this.setState({
-      defaultFormValues: {
-        ...fields,
-      },
+    const fields = getInitialFormFields();
+    setDefaultFormValues({
+      ...fields,
     });
-  }
+  }, []);
 
   // `updateTableFileAsync` to update the whole table file, it's too big, and take more time to get the response from server
   // `createRecordFileAsync` to only create record file, file is small, so get response quickly, but backend (github action) need to merge records into big table file
-  handleFormSubmit = (formValues) => {
-    if (!this.isSplitTable) {
-      this.updateTableFileAsync(formValues);
+  const handleFormSubmit = (formValues: ValueType) => {
+    if (!isSplitTable()) {
+      updateTableFileAsync(formValues);
     } else {
-      this.createRecordFileAsync(formValues);
+      createRecordFileAsync(formValues);
     }
   };
 
-  get loading() {
-    return this.state.tableFileLoading;
-  }
-
-  get isSplitTable() {
-    const { appModes } = this.context;
+  const isSplitTable = () => {
     return appModes.indexOf('split-table') !== -1;
-  }
+  };
 
-  updateTableFileAsync = async (formValues) => {
-    const newContent = [...this.state.rows];
+  const updateTableFileAsync = async (formValues: ValueType) => {
+    const newContent: RowType[] = [...rows];
 
-    if (!this.formValidation(this.state.rows, formValues)) {
+    if (!formValidation(rows, formValues)) {
       return;
     }
 
@@ -74,30 +64,27 @@ export default class CreatePage extends React.Component {
       updatedAt: time,
     });
 
-    this.setState({ saveLoading: true });
+    setSaveLoading(true);
     try {
-      const { commit } = await this.context.githubDb.updateTableFile(
-        this.context.dbName,
-        this.context.tableName,
+      const _result = await githubDb?.updateTableFile(
+        dbName,
+        tableName,
         newContent,
-        this.state.tableFileSha,
+        tableFileSha
       );
 
-      message.success(<SuccessMessage url={commit.html_url} />, 10);
+      if (_result) {
+        message.success(<SuccessMessage url={_result.commit.html_url} />, 10);
+      }
     } catch (err) {
       console.error('updateTableFile, err:', err);
-      this.setState({
-        errorMessage: 'Failed to update table file on server!',
-      });
+      setErrorMessage('Failed to update table file on server!');
     }
 
-    this.setState({ saveLoading: false });
+    setSaveLoading(false);
   };
 
-  createRecordFileAsync = async (formValues) => {
-    const { dbName, tableName, primaryKey } = this.context;
-    const { recordFileSha } = this.state;
-
+  const createRecordFileAsync = async (formValues: ValueType) => {
     const time = githubUtils.formatDate(new Date());
     const record = {
       ...formValues,
@@ -105,62 +92,58 @@ export default class CreatePage extends React.Component {
       updatedAt: time,
     };
 
-    this.setState({ saveLoading: true });
+    setSaveLoading(true);
     try {
-      const { commit } = await this.context.githubDb.updateRecordFile(
+      const _result = await githubDb?.updateRecordFile(
         dbName,
         tableName,
         primaryKey,
         record,
-        recordFileSha,
+        null // recordFileSha
       );
 
-      message.success(<SuccessMessage url={commit.html_url} />, 10);
+      if (_result) {
+        message.success(<SuccessMessage url={_result.commit.html_url} />, 10);
+      }
     } catch (err) {
       console.error('updateRecordFile, err:', err);
-      this.setState({
-        errorMessage: 'Failed to create record file on server!',
-      });
+      setErrorMessage('Failed to create record file on server!');
     }
 
-    this.setState({ saveLoading: false });
+    setSaveLoading(false);
   };
 
   // Get single record file, the whole table file will be used to de-dup
-  getData = () => {
+  const getData = () => {
     const ps = [];
     // Whole table file is too big, so only get it when it's not split table
-    if (!this.isSplitTable) {
-      ps.push(this.getTableFileAsync());
+    if (!isSplitTable()) {
+      ps.push(getTableFileAsync());
     }
     Promise.all(ps);
   };
 
-  getTableFileAsync = async () => {
-    this.setState({ tableFileLoading: true });
+  const getTableFileAsync = async () => {
+    setTableFileLoading(true);
     try {
-      const { content: rows, sha: tableFileSha } =
-        await this.context.githubDb.getTableRows(
-          this.context.dbName,
-          this.context.tableName,
-        );
-      this.setState({
-        rows,
-        tableFileSha,
-      });
+      const _result = await githubDb?.getTableRows(dbName, tableName);
+      if (_result) {
+        setRows(_result.content);
+        setTableFileSha(_result.sha);
+      }
     } catch (err) {
       console.error('getTableRows, error:', err);
-      this.setState({ errorMessage: 'Failed to get table file from server!' });
+      setErrorMessage('Failed to get table file from server!');
     }
-    this.setState({ tableFileLoading: false });
+    setTableFileLoading(false);
   };
 
   // Create the initial form fields
-  getInitialFormFields = () => {
-    const fields = {};
+  const getInitialFormFields = () => {
+    const fields: ValueType = {};
 
     // Fill the form field with URL params
-    this.context.columns
+    columns
       .filter((col) => utils.getUrlParams()[col.id])
       .forEach((col) => {
         if (col.type === constants.STRING_ARRAY) {
@@ -173,75 +156,61 @@ export default class CreatePage extends React.Component {
     return fields;
   };
 
-  formValidation = (rows, formValues) => {
-    if (
-      !validatePrimaryKey(
-        formValues[this.context.primaryKey],
-        rows,
-        this.context.primaryKey,
-      )
-    ) {
-      this.warnPrimaryKeyInvalid(formValues[this.context.primaryKey]);
+  const formValidation = (rows: RowType[], formValues: ValueType) => {
+    if (!validatePrimaryKey(formValues[primaryKey], rows, primaryKey)) {
+      warnPrimaryKeyInvalid(formValues[primaryKey]);
       return false;
     }
     return true;
   };
 
-  warnPrimaryKeyInvalid = (value) =>
+  const warnPrimaryKeyInvalid = (value: string) =>
     message.warning(
       <div>
         Found duplicated item in db{' '}
-        <a
-          href={`/${this.context.dbName}/${this.context.tableName}/update?${this.context.primaryKey}=${value}`}
-        >
+        <a href={`/${dbName}/${tableName}/update?${primaryKey}=${value}`}>
           {value}
         </a>
       </div>,
-      10,
+      10
     );
 
-  render() {
-    const { dbName, tableName } = this.context;
-
-    if (this.state.defaultFormValues === null) {
-      return null;
-    }
-
-    return (
-      <div className="dm-page">
-        <h1>
-          Create {dbName} {tableName}
-        </h1>
-        <div className="create-page-body-component">
-          <Spin
-            spinning={this.loading}
-            tip={(
-              <div>
-                Loading file:{' '}
-                <a
-                  href={this.context.githubDb.getDataUrl(dbName, tableName)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {dbName}/{tableName}
-                </a>
-              </div>
-            )}
-          >
-            {this.state.errorMessage && (
-              <Alert message={this.state.errorMessage} type="error" />
-            )}
-            <Form
-              defaultValues={this.state.defaultFormValues}
-              rows={this.state.rows}
-              loading={this.state.saveLoading}
-              onSubmit={this.handleFormSubmit}
-            />
-          </Spin>
-        </div>
-      </div>
-    );
+  if (defaultFormValues === null) {
+    return null;
   }
-}
 
-CreatePage.contextType = PageContext;
+  return (
+    <div className='dm-page'>
+      <h1>
+        Create {dbName} {tableName}
+      </h1>
+      <div className='create-page-body-component'>
+        <Spin
+          spinning={tableFileLoading}
+          tip={
+            <div>
+              Loading file:{' '}
+              <a
+                href={githubDb?.getDataUrl(dbName, tableName)}
+                target='_blank'
+                rel='noreferrer'
+              >
+                {dbName}/{tableName}
+              </a>
+            </div>
+          }
+        >
+          {errorMessage && <Alert message={errorMessage} type='error' />}
+          <Form
+            defaultValues={defaultFormValues}
+            rows={rows}
+            loading={saveLoading}
+            onSubmit={handleFormSubmit}
+          />
+        </Spin>
+      </div>
+    </div>
+  );
+};
+
+export default CreatePage;

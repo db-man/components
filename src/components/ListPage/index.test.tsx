@@ -2,34 +2,38 @@
 
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import {
-  render, act, /* screen,  waitFor, */
-} from '@testing-library/react';
+import { render, act /* screen,  waitFor, */ } from '@testing-library/react';
 
 import ListPageBody from './index';
 import PageContext from '../../contexts/page';
+import { STRING } from '../../constants';
 
 const context = {
   dbName: 'db-man',
   tableName: 'users',
   action: 'list',
-  columns: [{ id: 'id', name: 'ID' }, { id: 'email', name: 'Email' }],
+  columns: [
+    { id: 'id', name: 'ID', type: STRING },
+    { id: 'email', name: 'Email', type: STRING },
+  ],
   primaryKey: 'id',
   tables: [],
   githubDb: {
     getTableRows: jest.fn(),
   },
+  appModes: [],
+  dbs: {},
 };
 jest.mock('@db-man/github');
 
 beforeEach(() => {
   context.githubDb.getTableRows.mockReset();
-  context.githubDb.getTableRows.mockResolvedValue({ content: [{ userId: '123' }] });
+  context.githubDb.getTableRows.mockResolvedValue({
+    content: [{ userId: '123' }],
+  });
 });
 
-afterEach(() => {
-
-});
+afterEach(() => {});
 
 describe('ListPageBody', () => {
   it('renders table properly', async () => {
@@ -49,13 +53,14 @@ describe('ListPageBody', () => {
 
     // githubDb.getTableRows.mockResolvedValue({ content: [{ id: '123', email: 'foo@abc.com' }] });
 
+    // eslint-disable-next-line
     act(() => {
       render(
         <BrowserRouter>
           <PageContext.Provider value={context}>
-            <ListPageBody tableName="users" />
+            <ListPageBody tableName='users' />
           </PageContext.Provider>
-        </BrowserRouter>,
+        </BrowserRouter>
       );
     });
 

@@ -13,11 +13,11 @@ import PropTypes from 'prop-types';
 // current item's key.
 const ddType = PropTypes.arrayOf(
   (
-    propValue, // the whole array, e.g. ["Link", "{\"href\":\"https://github.com/{{record.user}}/{{record.repo}}\",\"text\":\"{{record.user}}/{{record.repo}}\"}"}]
-    key, // index of the element needed to check in this array, e.g. 0
-    componentName, // e.g. "ListPage"
-    location, // e.g. "prop"
-    propFullName // e.g. "columns[0].type:listPage[0]"
+    propValue: any[], // the whole array, e.g. ["Link", "{\"href\":\"https://github.com/{{record.user}}/{{record.repo}}\",\"text\":\"{{record.user}}/{{record.repo}}\"}"}]
+    key: number, // index of the element needed to check in this array, e.g. 0
+    componentName: string, // e.g. "ListPage"
+    location: string, // e.g. "prop"
+    propFullName: string // e.g. "columns[0].type:listPage[0]"
   ) => {
     // eslint-disable-line consistent-return
     switch (key) {

@@ -27,3 +27,5 @@ export type GetPageUiType = string;
  * If is 'HIDE', the column will not be shown on the list page.
  */
 export type ListPageUiType = string | 'HIDE';
+
+export type RandomPageUiType = string;

@@ -1,14 +1,15 @@
-// @ts-nocheck
-
 /* eslint-disable react/prop-types, react/jsx-props-no-spreading */
 
 import React, { useState, useEffect } from 'react';
-import {
-  Table, Input, Popconfirm, Form, Typography, Button,
-} from 'antd';
+import { Table, Input, Popconfirm, Form, Typography, Button } from 'antd';
 
 import { CheckCircleOutlined } from '@ant-design/icons';
 import * as constants from '../constants';
+import { StorageType } from './DbConnections';
+
+type TableRowType = {
+  [key: string]: string;
+};
 
 function EditableCell({
   editing,
@@ -18,6 +19,13 @@ function EditableCell({
   index,
   children,
   ...restProps
+}: {
+  editing: boolean;
+  dataIndex: string;
+  title: string;
+  record: any;
+  index: number;
+  children: any;
 }) {
   return (
     <td {...restProps}>
@@ -43,9 +51,15 @@ function EditableCell({
   );
 }
 
-function EditableTable({ storage, onEnable }) {
+function EditableTable({
+  storage,
+  onEnable,
+}: {
+  storage: StorageType;
+  onEnable: () => void;
+}) {
   const [form] = Form.useForm();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<TableRowType[]>([]);
   const [editingKey, setEditingKey] = useState('');
 
   useEffect(() => {
@@ -55,9 +69,9 @@ function EditableTable({ storage, onEnable }) {
     }
   }, []);
 
-  const isEditing = (record) => record.key === editingKey;
+  const isEditing = (record: TableRowType) => record.key === editingKey;
 
-  const saveData = (d) => {
+  const saveData = (d: TableRowType[]) => {
     setData(d);
     storage.set(constants.LS_KEY_DB_CONNECTIONS, JSON.stringify(d));
   };
@@ -82,7 +96,7 @@ function EditableTable({ storage, onEnable }) {
     setEditingKey('0');
   };
 
-  const edit = (record) => {
+  const edit = (record: TableRowType) => {
     form.setFieldsValue({
       owner: '',
       token: '',
@@ -94,7 +108,7 @@ function EditableTable({ storage, onEnable }) {
     setEditingKey(record.key);
   };
 
-  const cancel = (record) => {
+  const cancel = (record: TableRowType) => {
     setEditingKey('');
     if (record.key === '0') {
       // Remove tmp row
@@ -105,7 +119,7 @@ function EditableTable({ storage, onEnable }) {
     }
   };
 
-  const save = async (key) => {
+  const save = async (key: string) => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
@@ -114,7 +128,16 @@ function EditableTable({ storage, onEnable }) {
       if (index > -1) {
         const item = newData[index];
         if (item.key === '0') {
-          item.key = data.filter(({ key: k }) => k !== '0').length === 0 ? '1' : Math.max(...data.filter(({ key: k }) => k !== '0').map(({ key: k }) => Number(k))) + 1;
+          item.key =
+            data.filter(({ key: k }) => k !== '0').length === 0
+              ? '1'
+              : Math.max(
+                  ...data
+                    .filter(({ key: k }) => k !== '0')
+                    .map(({ key: k }) => Number(k))
+                ) +
+                1 +
+                '';
         }
         newData.splice(index, 1, { ...item, ...row });
         saveData(newData);
@@ -133,20 +156,17 @@ function EditableTable({ storage, onEnable }) {
     }
   };
 
-  const handleDelete = (record) => {
+  const handleDelete = (record: TableRowType) => {
     const newData = [...data];
     const index = newData.findIndex((item) => item.key === record.key);
     newData.splice(index, 1);
     saveData(newData);
   };
 
-  const handleEnable = (record) => {
+  const handleEnable = (record: TableRowType) => {
     storage.set(constants.LS_KEY_GITHUB_OWNER, record.owner);
     storage.set(constants.LS_KEY_GITHUB_REPO_NAME, record.repo);
-    storage.set(
-      constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN,
-      record.token,
-    );
+    storage.set(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN, record.token);
     storage.set(constants.LS_KEY_GITHUB_REPO_PATH, record.path);
     storage.set(constants.LS_KEY_GITHUB_REPO_MODES, record.modes);
     onEnable();
@@ -169,7 +189,15 @@ function EditableTable({ storage, onEnable }) {
       title: 'token',
       dataIndex: 'token',
       width: '10%',
-      render: (token) => <textarea style={{ resize: 'none' }} rows={1} cols={10} disabled defaultValue={token} />,
+      render: (token: string) => (
+        <textarea
+          style={{ resize: 'none' }}
+          rows={1}
+          cols={10}
+          disabled
+          defaultValue={token}
+        />
+      ),
       editable: true,
     },
     {
@@ -193,13 +221,18 @@ function EditableTable({ storage, onEnable }) {
     {
       title: (
         <div>
-          Operation
-          {' '}
-          <Button size="small" disabled={editingKey !== ''} onClick={handleAddRow}>Add</Button>
+          Operation{' '}
+          <Button
+            size='small'
+            disabled={editingKey !== ''}
+            onClick={handleAddRow}
+          >
+            Add
+          </Button>
         </div>
       ),
       dataIndex: 'operation',
-      render: (_, record) => {
+      render: (_: any, record: TableRowType) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
@@ -211,19 +244,32 @@ function EditableTable({ storage, onEnable }) {
             >
               Save
             </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record)}>
-              <Button type="link">Cancel</Button>
+            <Popconfirm
+              title='Sure to cancel?'
+              onConfirm={() => cancel(record)}
+            >
+              <Button type='link'>Cancel</Button>
             </Popconfirm>
           </span>
         ) : (
           <span>
-            <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+            <Typography.Link
+              disabled={editingKey !== ''}
+              onClick={() => edit(record)}
+            >
               Edit
             </Typography.Link>
-            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record)}>
-              <Button type="link" danger>Delete</Button>
+            <Popconfirm
+              title='Sure to delete?'
+              onConfirm={() => handleDelete(record)}
+            >
+              <Button type='link' danger>
+                Delete
+              </Button>
             </Popconfirm>
-            <Button type="link" onClick={() => handleEnable(record)}>Enable</Button>
+            <Button type='link' onClick={() => handleEnable(record)}>
+              Enable
+            </Button>
           </span>
         );
       },
@@ -236,14 +282,14 @@ function EditableTable({ storage, onEnable }) {
       }
       return {
         ...col,
-        render: (text, record) => {
-          if (record.owner === storage.get(constants.LS_KEY_GITHUB_OWNER)
-            && record.repo === storage.get(constants.LS_KEY_GITHUB_REPO_NAME)) {
+        render: (text: string, record: TableRowType) => {
+          if (
+            record.owner === storage.get(constants.LS_KEY_GITHUB_OWNER) &&
+            record.repo === storage.get(constants.LS_KEY_GITHUB_REPO_NAME)
+          ) {
             return (
               <span>
-                {text}
-                {' '}
-                <CheckCircleOutlined />
+                {text} <CheckCircleOutlined />
               </span>
             );
           }
@@ -254,7 +300,7 @@ function EditableTable({ storage, onEnable }) {
 
     return {
       ...col,
-      onCell: (record) => ({
+      onCell: (record: TableRowType) => ({
         record,
         dataIndex: col.dataIndex,
         title: col.title,
@@ -265,7 +311,7 @@ function EditableTable({ storage, onEnable }) {
   return (
     <Form form={form} component={false}>
       <Table
-        size="small"
+        size='small'
         components={{
           body: {
             cell: EditableCell,
@@ -274,10 +320,12 @@ function EditableTable({ storage, onEnable }) {
         bordered
         dataSource={data}
         columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
+        rowClassName='editable-row'
+        pagination={
+          {
+            // onChange: cancel,
+          }
+        }
       />
     </Form>
   );

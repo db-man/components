@@ -1,25 +1,23 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Radio } from 'antd';
+import { Radio, RadioChangeEvent } from 'antd';
 import { columnType } from './types';
+import Column from '../types/Column';
 
-function RadioGroupFormField(props) {
-  const {
-    value, disabled, column, onChange,
-  } = props;
-  const handleChange = (e) => {
+function RadioGroupFormField(props: {
+  value: string;
+  disabled: boolean;
+  column: Column;
+  onChange: (value: string) => void;
+}) {
+  const { value, disabled, column, onChange } = props;
+  const handleChange = (e: RadioChangeEvent) => {
     onChange(e.target.value);
   };
 
   return (
-    <Radio.Group
-      onChange={handleChange}
-      value={value}
-      disabled={disabled}
-    >
-      {column.enum.map((r) => (
+    <Radio.Group onChange={handleChange} value={value} disabled={disabled}>
+      {(column.enum || []).map((r) => (
         <Radio key={r} value={r}>
           {r}
         </Radio>

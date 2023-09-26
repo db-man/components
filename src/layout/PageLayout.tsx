@@ -1,9 +1,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import {
-  Outlet, useParams,
-} from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { Layout } from 'antd';
 
 import BreadcrumbWrapper from './BreadcrumbWrapper';
@@ -16,11 +14,11 @@ export default function PageLayout() {
   const { dbName, tableName, action } = useParams();
   return (
     <Layout>
-      <Header className="header" style={{ height: '30px', lineHeight: '30px' }}>
+      <Header className='header' style={{ height: '30px', lineHeight: '30px' }}>
         <PageHeaderContent />
       </Header>
       <Layout>
-        <Sider width={300} className="site-layout-background" collapsible>
+        <Sider width={300} className='site-layout-background' collapsible>
           {dbName ? (
             <LeftSideMenu
               dbName={dbName}
@@ -36,7 +34,7 @@ export default function PageLayout() {
             action={action}
           />
           <Content
-            className="site-layout-background"
+            className='site-layout-background'
             style={{
               // padding: 24,
               margin: 0,

@@ -1,24 +1,29 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { columnType, tableType } from './types';
 import { getTablePrimaryKey } from '../utils';
+import DbTable from '../types/DbTable';
+import Column from '../types/Column';
 
 function RefTableLink({
-  dbName, tables, value, column,
+  dbName,
+  tables,
+  value,
+  column,
+}: {
+  dbName: string;
+  tables: DbTable[];
+  value: string | string[] | null;
+  column: Column;
 }) {
   const { referenceTable } = column;
   if (!referenceTable) {
     return null;
   }
 
-  const referenceTablePrimaryKey = getTablePrimaryKey(
-    tables,
-    referenceTable,
-  );
+  const referenceTablePrimaryKey = getTablePrimaryKey(tables, referenceTable);
   // TODO check existing, when exists then no Create button
   return (
     <span>
@@ -26,17 +31,14 @@ function RefTableLink({
         to={`/${dbName}/${referenceTable}/create?${referenceTablePrimaryKey}=${value}`}
       >
         Create
-      </Link>
-      {' '}
-      |
-      {' '}
+      </Link>{' '}
+      |{' '}
       <Link
         to={`/${dbName}/${referenceTable}/update?${referenceTablePrimaryKey}=${value}`}
       >
         Update
       </Link>
-      |
-      {' '}
+      |{' '}
       <Link
         to={`/${dbName}/${referenceTable}/get?${referenceTablePrimaryKey}=${value}`}
       >
@@ -52,7 +54,10 @@ RefTableLink.propTypes = {
   dbName: PropTypes.string.isRequired,
   tables: PropTypes.arrayOf(tableType).isRequired,
   column: columnType.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 };
 
 RefTableLink.defaultProps = {

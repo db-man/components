@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import { Collapse } from 'antd';
 
@@ -25,7 +23,7 @@ const Demos = () => {
 
   return (
     <Collapse defaultActiveKey={['ImageLink']}>
-      <Panel header="ImageLink" key="ImageLink">
+      <Panel header='ImageLink' key='ImageLink'>
         {fn('https://docs.mapbox.com/mapbox-gl-js/assets/cat.png', {
           id: 'foo',
           photos: ['https://docs.mapbox.com/mapbox-gl-js/assets/cat.png'],

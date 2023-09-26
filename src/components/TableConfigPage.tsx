@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /* eslint-disable react/prop-types */
 
 import { Table } from 'antd';
@@ -31,13 +29,13 @@ const columns = [
     key: 'primary',
     dataIndex: 'primary',
     title: 'primary',
-    render: (cell) => (cell === true ? 'Yes' : 'No'),
+    render: (cell: boolean) => (cell === true ? 'Yes' : 'No'),
   },
   {
     key: 'enum',
     dataIndex: 'enum',
     title: 'enum',
-    render: (cell) => {
+    render: (cell: string[]) => {
       if (!cell) return 'None';
       return cell.join(', ');
     },
@@ -50,7 +48,7 @@ const columns = [
   },
 ];
 
-const footer = ({ dbName }) =>
+const footer = ({ dbName }: { dbName: string }) =>
   function TableFooter() {
     return (
       <div>
@@ -74,7 +72,6 @@ const footer = ({ dbName }) =>
 
 export default function TableConfigPage() {
   const { dbName, columns: dbTableColumns } = useContext(PageContext);
-  console.debug('TableConfigPage', dbTableColumns); // eslint-disable-line no-console
   return (
     <div className='table-config-page'>
       <Table
