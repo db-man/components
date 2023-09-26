@@ -8,7 +8,7 @@ import { Menu } from 'antd';
 
 import { useAppContext } from '../contexts/AppContext';
 
-type PropsType = { params: { dbName: string } };
+type PropsType = { params?: { dbName: string } };
 
 const withRouter = (Component: any) => {
   function Wrapper(props: PropsType) {

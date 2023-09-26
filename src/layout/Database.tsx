@@ -9,8 +9,9 @@ function Database() {
   const { dbs } = useAppContext();
 
   if (!dbs) return <div>Failed to get dbs from localStorage</div>;
+  if (!params.dbName) return <div>db name is required</div>;
 
-  const selectedDb = dbs[params.dbName || ''];
+  const selectedDb = dbs[params.dbName];
   if (!selectedDb) return <div>db not found</div>;
 
   return (

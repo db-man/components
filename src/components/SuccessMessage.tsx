@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function SuccessMessage({ url }: { url: string }) {
+function SuccessMessage({ url }: { url: string | undefined }) {
   console.debug('Commit link:', url); // eslint-disable-line no-console
 
   return (

@@ -6,7 +6,7 @@ import { RowType } from '../types/Data';
 
 export interface PageContextType {
   appModes: string[];
-  dbs: Databases;
+  dbs?: Databases;
   dbName: string;
   tableName: string;
   action: string;
@@ -26,9 +26,10 @@ export interface PageContextType {
       tableFileSha: string | null
     ) => Promise<{
       commit: {
-        html_url: string;
+        html_url?: string;
       };
     }>;
+    // updateTableFile: any;
     updateRecordFile: (
       dbName: string,
       tableName: string,
@@ -37,14 +38,15 @@ export interface PageContextType {
       recordFileSha: string | null
     ) => Promise<{
       commit: {
-        html_url: string;
+        html_url?: string;
       };
     }>;
     getDataUrl: (dbName: string, tableName: string) => string;
     getRecordFileContentAndSha: (
       dbName: string,
       tableName: string,
-      recordId: string
+      recordId: string,
+      signal?: AbortSignal
     ) => Promise<{ content: RowType; sha: string }>;
     getGitHubFullPath: (path: string) => string;
     getDataPath: (dbName: string, tableName: string) => string;
@@ -55,7 +57,7 @@ export interface PageContextType {
       recordFileSha: string | null
     ) => Promise<{
       commit: {
-        html_url: string;
+        html_url?: string;
       };
     }>;
   } | null;

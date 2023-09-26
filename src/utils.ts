@@ -9,14 +9,17 @@ export const getUrlParams = () => {
 /**
  *
  * @param {*} columns
- * @returns {string|null}
+ * @returns {string}
  */
 export const getPrimaryKey = (columns: types.Column[]) => {
   const foundCol = columns.find((col) => col.primary);
-  return foundCol ? foundCol.id : null;
+  return foundCol ? foundCol.id : '';
 };
 
-export const getTablePrimaryKey = (tables: types.Table[], tableName: string) => {
+export const getTablePrimaryKey = (
+  tables: types.Table[],
+  tableName: string
+) => {
   const foundTable = tables.find((table) => table.name === tableName);
   if (!foundTable) {
     return null;

@@ -1,8 +1,6 @@
-// @ts-nocheck
-
 /* eslint-disable react/prop-types, react/destructuring-assignment, max-len, no-console, react/no-unused-class-component-methods */
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
 import { GithubDb } from '@db-man/github';
@@ -21,10 +19,18 @@ import GetPage from '../components/GetPage';
 import TableConfigPage from '../components/TableConfigPage';
 import QueryPage from '../components/QueryPage';
 import { useAppContext } from '../contexts/AppContext';
+import DbTable from '../types/DbTable';
 
 const { Provider } = PageContext;
 
-const mapp = {
+const mapp: {
+  [key: string]: React.ComponentType<{
+    dbName: string;
+    tableName: string;
+    action: string;
+    tables: DbTable[];
+  }>;
+} = {
   list: ListPage,
   random: RandomPage,
   create: CreatePage,
@@ -35,7 +41,7 @@ const mapp = {
   query: QueryPage,
 };
 
-export function TableList({ dbName }) {
+export function TableList({ dbName }: { dbName: string }) {
   const { dbs } = useAppContext();
   if (!dbs) return null;
   const tablesOfSelectedDb = dbs[dbName];
@@ -50,7 +56,13 @@ export function TableList({ dbName }) {
   );
 }
 
-export function ActionList({ dbName, tableName }) {
+export function ActionList({
+  dbName,
+  tableName,
+}: {
+  dbName: string;
+  tableName: string;
+}) {
   return (
     <div>
       List of actions in table:
@@ -66,16 +78,17 @@ export function ActionList({ dbName, tableName }) {
 /**
  * To render list/create/update page for `/db_name/table_name.json`
  */
-export default class PageWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // tables is got from db repo db_name/columns.json which contain all tables column definition in current database
-      tables: [],
-      loading: false,
-    };
-
-    this.githubDb = new GithubDb({
+const PageWrapper = (props: {
+  dbName: string;
+  tableName: string;
+  action: string;
+}) => {
+  // tables is got from db repo db_name/columns.json which contain all tables column definition in current database
+  const [tables, setTables] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
+  const githubDbRef = useRef(
+    new GithubDb({
       personalAccessToken: localStorage.getItem(
         constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN
       ),
@@ -83,62 +96,60 @@ export default class PageWrapper extends React.Component {
       owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
       repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
       dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA),
-    });
-  }
+    })
+  );
 
-  componentDidMount() {
+  useEffect(() => {
     // TODO we could get online and offline at the same time
     // then we only use offline data to render
     // then we compare the offline data with online data, if there is any diff, we show alert
     const onlineEnabled = false;
     if (onlineEnabled) {
-      this.getOnlineData();
+      getOnlineData();
     } else {
-      this.getOfflineData();
+      getOfflineData();
     }
 
-    const { action, tableName } = this.pageInfo;
+    const { action, tableName } = pageInfo();
     document.title = `${action} ${tableName}`;
-  }
+  }, []);
 
-  get columns() {
-    const { dbName, tableName } = this.props;
+  const columns = () => {
+    const { dbName, tableName } = props;
     const tablesOfSelectedDb = getTablesByDbName(dbName);
     if (!tablesOfSelectedDb) return [];
     const currentTable = tablesOfSelectedDb.find(
-      (table) => table.name === tableName
+      (table: DbTable) => table.name === tableName
     );
     if (!currentTable) return [];
     return currentTable.columns;
-  }
+  };
 
-  get pageInfo() {
-    const { dbName, tableName, action } = this.props;
+  const pageInfo = () => {
+    const { dbName, tableName, action } = props;
     return {
       // e.g. ['split-table']
       appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES)
-        ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',')
+        ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES)!.split(',')
         : [],
       dbName,
       tableName,
       action,
-      columns: this.columns,
-      primaryKey: getPrimaryKey(this.columns),
+      columns: columns(),
+      primaryKey: getPrimaryKey(columns()),
       tables: getTablesByDbName(dbName),
-      githubDb: this.githubDb,
+      githubDb: githubDbRef.current,
     };
-  }
+  };
 
-  getOnlineData = async () => {
+  const getOnlineData = async () => {
     try {
-      this.setState({ loading: true });
-      const tables = await this.githubDb.getDbTablesSchemaAsync(
-        this.props.dbName
+      setLoading(true);
+      const _tables = await githubDbRef.current.getDbTablesSchemaAsync(
+        props.dbName
       );
-      console.debug('use online columns', tables);
-      this.setState({
-        tables,
-      });
+      console.debug('use online columns', _tables);
+      setTables(_tables);
     } catch (error) {
       console.error(
         'Failed to get column JSON file in List component, error:',
@@ -146,91 +157,88 @@ export default class PageWrapper extends React.Component {
       );
       message.error('Failed to get online columns definition!');
     }
-    this.setState({ loading: false });
+    setLoading(false);
   };
 
-  getOfflineData = () => {
+  const getOfflineData = () => {
     if (!localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)) {
-      this.setState({ errMsg: 'No DBS schema defined in localStorage!' });
+      setErrMsg('No DBS schema defined in localStorage!');
       return;
     }
-    const tables = JSON.parse(
-      localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)
-    )[this.props.dbName];
-    this.setState({
-      tables,
-    });
+    const _tables = JSON.parse(
+      localStorage.getItem(constants.LS_KEY_DBS_SCHEMA) || '{}'
+    )[props.dbName];
+    setTables(_tables);
   };
 
-  renderTableListInDb = () => (
+  const renderTableListInDb = () => (
     <div>
       List of tables in DB:
-      <TableList dbName={this.props.dbName} />
+      <TableList dbName={props.dbName} />
     </div>
   );
 
-  renderActionInTable = () => (
-    <ActionList dbName={this.props.dbName} tableName={this.props.tableName} />
+  const renderActionInTable = () => (
+    <ActionList dbName={props.dbName} tableName={props.tableName} />
   );
 
-  render() {
-    const { dbName, tableName, action } = this.props;
-    const { loading, tables, errMsg } = this.state;
+  const { dbName, tableName, action } = props;
 
-    // if (!tableName) {
-    //   return this.renderTableListInDb();
-    // }
+  // if (!tableName) {
+  //   return this.renderTableListInDb();
+  // }
 
-    // if (!action) {
-    //   return this.renderActionInTable();
-    // }
+  // if (!action) {
+  //   return this.renderActionInTable();
+  // }
 
-    const errMsgs = [];
-    if (errMsg) {
-      errMsgs.push(errMsg);
-    }
-    if (!dbName) {
-      errMsgs.push('dbName is undefined!');
-    }
-    if (getPrimaryKey(this.columns) === null) {
-      errMsgs.push('Primary key not found on table!');
-    }
-    if (this.columns.length === 0) {
-      errMsgs.push('No columns found for this table!');
-    }
+  const errMsgs = [];
+  if (errMsg) {
+    errMsgs.push(errMsg);
+  }
+  if (!dbName) {
+    errMsgs.push('dbName is undefined!');
+  }
+  if (getPrimaryKey(columns()) === null) {
+    errMsgs.push('Primary key not found on table!');
+  }
+  if (columns().length === 0) {
+    errMsgs.push('No columns found for this table!');
+  }
 
-    if (errMsgs.length > 0) {
-      return <div className='dm-page-v2 err-msg'>{errMsgs.join(' ,')}</div>;
-    }
+  if (errMsgs.length > 0) {
+    return <div className='dm-page-v2 err-msg'>{errMsgs.join(' ,')}</div>;
+  }
 
-    const PageComponent = mapp[action];
+  const PageComponent = mapp[action];
 
-    if (!PageComponent) {
-      return (
-        <div>
-          <div>404 - PageComponent Not Found</div>
-          <div>{`/${dbName}/${tableName}/${action}`}</div>
-        </div>
-      );
-    }
-
-    if (loading) {
-      return <Spin tip='loading columns in PageWrapper'>Loading...</Spin>;
-    }
-
+  if (!PageComponent) {
     return (
-      <Provider value={this.pageInfo}>
-        <div className='dm-page-v2'>
-          {/* Pass tableName down, so child component to rerender according to this props */}
-          <PageComponent
-            dbName={dbName}
-            tableName={tableName}
-            action={action}
-            tables={tables}
-          />
-          <NavBar />
-        </div>
-      </Provider>
+      <div>
+        <div>404 - PageComponent Not Found</div>
+        <div>{`/${dbName}/${tableName}/${action}`}</div>
+      </div>
     );
   }
-}
+
+  if (loading) {
+    return <Spin tip='loading columns in PageWrapper'>Loading...</Spin>;
+  }
+
+  return (
+    <Provider value={pageInfo()}>
+      <div className='dm-page-v2'>
+        {/* Pass tableName down, so child component to rerender according to this props */}
+        <PageComponent
+          dbName={dbName}
+          tableName={tableName}
+          action={action}
+          tables={tables}
+        />
+        <NavBar />
+      </div>
+    </Provider>
+  );
+};
+
+export default PageWrapper;
