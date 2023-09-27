@@ -1,6 +1,6 @@
 import { Row, Col } from 'antd';
 import React, { useContext, useEffect } from 'react';
-import ReactJson from 'react-json-view';
+import JsonView from '@uiw/react-json-view';
 
 import PageContext from '../contexts/page';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
@@ -46,7 +46,9 @@ export default function QueryPage() {
           <div>Error:</div>
           <div style={{ color: 'red' }}>{result.err}</div>
           <div>Result:</div>
-          {result.obj && <ReactJson src={JSON.parse(result.obj)} />}
+          {result.obj && (
+            <JsonView value={JSON.parse(result.obj)} collapsed={1} />
+          )}
         </Col>
       </Row>
     </div>
