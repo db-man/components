@@ -2,7 +2,7 @@
 
 import { SortOrder } from 'antd/es/table/interface';
 import * as constants from '../../constants';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import { RowType } from '../../types/Data';
 
 /**
@@ -119,9 +119,9 @@ const defaultValueMapping: {
  * but only the col which is filterable
  */
 const searchByFilter =
-  (filterColumns: Column[], filterKeyVals: { [key: string]: string }) =>
+  (filterColumns: DbColumn[], filterKeyVals: { [key: string]: string }) =>
   (row: RowType) =>
-    filterColumns.reduce((prev, column: Column) => {
+    filterColumns.reduce((prev, column: DbColumn) => {
       const keyword = filterKeyVals[column.id];
       let matched = true;
       if (keyword) {
@@ -141,7 +141,7 @@ const searchByFilter =
  * @returns {Array}
  */
 export const getFilteredData = (
-  filterColumns: Column[],
+  filterColumns: DbColumn[],
   filterKeyVals: { [key: string]: string },
   originalRows: RowType[]
 ) => {
@@ -193,7 +193,7 @@ export const findDuplicates = (arr: string[]) => {
 /**
  * @returns {object} e.g. `{"name":"foo"}`
  */
-export const getInitialFilter = (filterProp: Column[]) => {
+export const getInitialFilter = (filterProp: DbColumn[]) => {
   let filter: {
     [key: string]: string;
   } = {

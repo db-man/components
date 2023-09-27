@@ -2,13 +2,13 @@ import React from 'react';
 import { Button } from 'antd';
 
 import { COL_UI_PRESETS } from '../constants';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 
 const PresetsButtons = ({
   column,
   onChange,
 }: {
-  column: Column;
+  column: DbColumn;
   onChange: (value: string, event: React.MouseEvent<HTMLElement>) => void;
 }) => (
   <>

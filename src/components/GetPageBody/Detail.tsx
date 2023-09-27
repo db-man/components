@@ -9,7 +9,7 @@ import * as constants from '../../constants';
 import * as ddRender from '../../ddRender/ddRender';
 import FieldWrapperForDetailPage from '../FieldWrapperForDetailPage';
 import StringFormFieldValue from '../StringFormFieldValue';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import { ValueType } from '../Form';
 
 interface DetailProps {
@@ -20,7 +20,7 @@ interface DetailProps {
 const Detail = (props: DetailProps) => {
   const { columns, tables } = React.useContext(PageContext);
 
-  const renderWithDdRender = (column: Column, value: any) => {
+  const renderWithDdRender = (column: DbColumn, value: any) => {
     const renderFn = ddRender.getColumnRender('type:getPage', column, {
       column,
       tables: tables,
@@ -36,7 +36,7 @@ const Detail = (props: DetailProps) => {
     return <div>No render fn: {value}</div>;
   };
 
-  const renderStringFieldValue = (column: Column) => {
+  const renderStringFieldValue = (column: DbColumn) => {
     const value = props.defaultValues[column.id];
 
     if (column['type:getPage']) {
@@ -59,7 +59,7 @@ const Detail = (props: DetailProps) => {
     );
   };
 
-  const renderFieldValue = (column: Column) => {
+  const renderFieldValue = (column: DbColumn) => {
     switch (column.type) {
       case constants.STRING:
         return renderStringFieldValue(column);

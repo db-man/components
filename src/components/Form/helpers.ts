@@ -1,5 +1,5 @@
 import { ValueType } from '.';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import { UiType } from '../../types/UiType';
 
 /**
@@ -23,7 +23,7 @@ export const validatePrimaryKey = (
  * @param {string} uiType e.g. "MultiLineInputBox"
  * @returns {is:bool,preview:bool}
  */
-export const isType = (column: Column, uiType: UiType) => {
+export const isType = (column: DbColumn, uiType: UiType) => {
   // type="MultiLineInputBox"
   // type=["MultiLineInputBox"]
   // type=["MultiLineInputBox", "WithPreview"]
@@ -41,14 +41,14 @@ export const obj2str = (obj: ValueType) => JSON.stringify(obj, null, '  ');
 export const str2obj = (str: string) => JSON.parse(str) as ValueType;
 
 export const getFormInitialValues = (
-  columns: Column[],
+  columns: DbColumn[],
   formValues: ValueType
 ) => {
   const initFormValues: {
     [key: string]: any;
   } = {};
   // Initialize form values with default values defined in table schema when form values are empty
-  columns.forEach((col: Column) => {
+  columns.forEach((col: DbColumn) => {
     if (!formValues[col.id]) {
       let defaultValue = '';
       switch (col['type:createUpdatePage']) {

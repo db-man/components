@@ -1,5 +1,5 @@
 import * as constants from '../constants';
-import Column, { RenderKeyType } from '../types/Column';
+import DbColumn, { RenderKeyType } from '../types/DbColumn';
 import { RowType } from '../types/Data';
 import { RenderArgs } from '../types/UiType';
 import ddRenderFnMapping from './ddRenderFnMapping';
@@ -49,7 +49,7 @@ export const getRender = (args: RenderArgs, tplExtra?: any) => {
  */
 export const getColumnRender = (
   renderKey: RenderKeyType,
-  column: Column,
+  column: DbColumn,
   tplExtra?: any
 ) => {
   const customRender = getRender(column[renderKey], tplExtra);

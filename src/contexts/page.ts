@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 import Databases from '../types/Databases';
 import { RowType } from '../types/Data';
 
@@ -10,7 +10,7 @@ export interface PageContextType {
   dbName: string;
   tableName: string;
   action: string;
-  columns: Column[];
+  columns: DbColumn[];
   primaryKey: string;
   tables: string[];
   githubDb: {

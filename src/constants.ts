@@ -1,4 +1,4 @@
-import { ColumnType } from './types/Column';
+import { ColumnType } from './types/DbColumn';
 
 // types
 export const STRING_ARRAY: ColumnType = 'STRING_ARRAY';

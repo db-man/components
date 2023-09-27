@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom';
 import PageContext from '../contexts/page';
 import { columnType } from './types';
 import { useAppContext } from '../contexts/AppContext';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 
 export default function RefTableLinks({
   value,
   column,
 }: {
   value: string | string[] | null;
-  column: Column;
+  column: DbColumn;
 }) {
   const { dbs } = useAppContext();
   const { dbName } = useContext(PageContext);

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { columnType, tableType } from './types';
 import { getTablePrimaryKey } from '../utils';
 import DbTable from '../types/DbTable';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 
 function RefTableLink({
   dbName,
@@ -16,7 +16,7 @@ function RefTableLink({
   dbName: string;
   tables: DbTable[];
   value: string | string[] | null;
-  column: Column;
+  column: DbColumn;
 }) {
   const { referenceTable } = column;
   if (!referenceTable) {

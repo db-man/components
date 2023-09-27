@@ -29,7 +29,7 @@ import {
 } from './helpers';
 import FieldWrapperForCreateUpdatePage from '../FieldWrapperForCreateUpdatePage';
 import PresetsButtons from '../PresetsButtons';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import { useAppContext } from '../../contexts/AppContext';
 import { RowType } from '../../types/Data';
 
@@ -59,7 +59,7 @@ const renderFormFieldWrapper = ({
   </div>
 );
 
-const filterOutHiddenFields = (column: Column) =>
+const filterOutHiddenFields = (column: DbColumn) =>
   column['type:createUpdatePage'] !== 'HIDE';
 
 const Form: React.FC<FormProps> = (props) => {
@@ -169,7 +169,7 @@ const Form: React.FC<FormProps> = (props) => {
       10
     );
 
-  const renderStringFormField = (column: Column) => {
+  const renderStringFormField = (column: DbColumn) => {
     const { loading } = props;
     const value = formValues[column.id];
     if (column['type:createUpdatePage'] === 'TextArea') {
@@ -223,7 +223,7 @@ const Form: React.FC<FormProps> = (props) => {
     );
   };
 
-  const renderStringArrayFormField = (column: Column) => {
+  const renderStringArrayFormField = (column: DbColumn) => {
     if (
       !column['type:createUpdatePage'] ||
       column['type:createUpdatePage'] === 'Select'
@@ -308,7 +308,7 @@ const Form: React.FC<FormProps> = (props) => {
     return null;
   };
 
-  const renderNumberFormField = (column: Column) => {
+  const renderNumberFormField = (column: DbColumn) => {
     const { loading } = props;
     return renderFormFieldWrapper({
       id: column.id,
@@ -326,7 +326,7 @@ const Form: React.FC<FormProps> = (props) => {
     });
   };
 
-  const renderBoolFormField = (column: Column) =>
+  const renderBoolFormField = (column: DbColumn) =>
     renderFormFieldWrapper({
       id: column.id,
       label: column.name,
@@ -340,7 +340,7 @@ const Form: React.FC<FormProps> = (props) => {
       ),
     });
 
-  const fieldRender = (column: Column) => {
+  const fieldRender = (column: DbColumn) => {
     switch (column.type) {
       case constants.STRING_ARRAY:
         return renderStringArrayFormField(column);

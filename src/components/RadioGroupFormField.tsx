@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Radio, RadioChangeEvent } from 'antd';
 import { columnType } from './types';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 
 function RadioGroupFormField(props: {
   value: string;
   disabled: boolean;
-  column: Column;
+  column: DbColumn;
   onChange: (value: string) => void;
 }) {
   const { value, disabled, column, onChange } = props;

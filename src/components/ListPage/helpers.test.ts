@@ -1,5 +1,5 @@
 import { STRING, STRING_ARRAY } from '../../constants';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import {
   getFilteredData,
   getSortedData,
@@ -80,7 +80,7 @@ describe('getFilteredData', () => {
     { id: 'foo2', tags: ['bar2', 'bar'] },
     { id: 'foo3', tags: ['bar2', 'bar1'] },
   ];
-  const filterCols: Column[] = [
+  const filterCols: DbColumn[] = [
     { id: 'name', name: 'Name', type: STRING },
     { id: 'tags', name: 'Tags', type: STRING_ARRAY },
   ];

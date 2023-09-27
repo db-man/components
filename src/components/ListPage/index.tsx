@@ -26,7 +26,7 @@ import {
 } from './helpers';
 import RefTableLinks from '../RefTableLinks';
 import * as constants from '../../constants';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import { RowType } from '../../types/Data';
 
 interface ListPageProps {
@@ -37,7 +37,7 @@ const defaultPage = 1;
 const defaultPageSize = 10;
 const debouncedUpdateUrl = debounce(updateUrl, 500);
 
-const filterCols = (columns: Column[]) => {
+const filterCols = (columns: DbColumn[]) => {
   return columns.filter((col) => col.filter);
 };
 

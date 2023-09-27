@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { columnType } from './types';
 import * as constants from '../constants';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 
 /**
  * Form field wrapper for create/update page
@@ -12,7 +12,7 @@ const FieldWrapperForCreateUpdatePage = ({
   column,
   children,
 }: {
-  column: Column;
+  column: DbColumn;
   children: React.ReactNode;
 }) => {
   const typeClassName =

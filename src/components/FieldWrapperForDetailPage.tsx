@@ -6,11 +6,11 @@ import PageContext from '../contexts/page';
 
 import { columnType } from './types';
 import * as constants from '../constants';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 import { useAppContext } from '../contexts/AppContext';
 
 interface FieldWrapperProps {
-  column: Column;
+  column: DbColumn;
   value: number | boolean | string | string[];
   children: ReactNode;
 }

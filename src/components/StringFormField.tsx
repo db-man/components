@@ -7,12 +7,12 @@ import StringFormFieldValue, { InputProps } from './StringFormFieldValue';
 import RefTableLink from './RefTableLink';
 import PageContext from '../contexts/page';
 import PresetsButtons from './PresetsButtons';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 import { useAppContext } from '../contexts/AppContext';
 
 interface StringFormFieldProps {
   label: string;
-  column: Column;
+  column: DbColumn;
   dbName: string;
   primaryKey: string;
   value?: string;
