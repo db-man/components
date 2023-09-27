@@ -1,21 +1,22 @@
-// @ts-nocheck
-
 import * as constants from '../constants';
+import Column, { RenderKeyType } from '../types/Column';
+import { RowType } from '../types/Data';
+import { RenderArgs } from '../types/UiType';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
 // Default render func when "type:listPage" or "type:getPage" not defined in db table column
 const defaultRenders = {
-  [constants.NUMBER]: (val) => val,
-  [constants.STRING]: (val) => val,
-  [constants.STRING_ARRAY]: (val) => val && val.join(', '),
-  [constants.BOOL]: (val) => (val === undefined ? '' : String(val)),
+  [constants.NUMBER]: (val: number) => val,
+  [constants.STRING]: (val: string) => val,
+  [constants.STRING_ARRAY]: (val: string[]) => val && val.join(', '),
+  [constants.BOOL]: (val: boolean) => (val === undefined ? '' : String(val)),
 };
 
 /**
- * @param {string|string[]} args
+ * @param {string|string[]} args e.g. "Link" or ["Link", "{{record.url}}"]
  * @param {Object} tplExtra
  */
-export const getRender = (args, tplExtra?: any) => {
+export const getRender = (args: RenderArgs, tplExtra?: any) => {
   // the column render function defined in Table component of antd
   // renderFn = (val, record, index) => ()
   let renderFn;
@@ -33,7 +34,7 @@ export const getRender = (args, tplExtra?: any) => {
 
   if (Array.isArray(args)) {
     const [renderFnName] = args;
-    renderFn = (val, record, index) =>
+    renderFn = (val: any, record: RowType, index?: number) =>
       ddRenderFnMapping[renderFnName](val, record, index, args, tplExtra);
   }
 
@@ -46,7 +47,11 @@ export const getRender = (args, tplExtra?: any) => {
  *   "type:listPage": ["Link", "{{record.url}}"]
  * }
  */
-export const getColumnRender = (renderKey, column, tplExtra?) => {
+export const getColumnRender = (
+  renderKey: RenderKeyType,
+  column: Column,
+  tplExtra?: any
+) => {
   const customRender = getRender(column[renderKey], tplExtra);
   if (customRender) {
     return customRender;
@@ -57,5 +62,10 @@ export const getColumnRender = (renderKey, column, tplExtra?) => {
   return defaultRenders[column.type || constants.STRING];
 };
 
-export const getRenderResultByColumn = (value, record, index, args, column) =>
-  getColumnRender('type:listPage', column)(value, record, index); // eslint-disable-line max-len
+// export const getRenderResultByColumn = (
+//   value: any,
+//   record: RowType,
+//   index: number,
+//   args: RenderArgs,
+//   column: Column
+// ) => getColumnRender('type:listPage', column)(value, record, index);

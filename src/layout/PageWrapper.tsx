@@ -79,9 +79,9 @@ export function ActionList({
  * To render list/create/update page for `/db_name/table_name.json`
  */
 const PageWrapper = (props: {
-  dbName: string;
-  tableName: string;
-  action: string;
+  dbName?: string;
+  tableName?: string;
+  action?: string;
 }) => {
   // tables is got from db repo db_name/columns.json which contain all tables column definition in current database
   const [tables, setTables] = useState([]);
@@ -132,9 +132,9 @@ const PageWrapper = (props: {
       appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES)
         ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES)!.split(',')
         : [],
-      dbName,
-      tableName,
-      action,
+      dbName: dbName || '',
+      tableName: tableName || '',
+      action: action || '',
       columns: columns(),
       primaryKey: getPrimaryKey(columns()),
       tables: getTablesByDbName(dbName),
@@ -167,19 +167,19 @@ const PageWrapper = (props: {
     }
     const _tables = JSON.parse(
       localStorage.getItem(constants.LS_KEY_DBS_SCHEMA) || '{}'
-    )[props.dbName];
+    )[props.dbName || ''];
     setTables(_tables);
   };
 
   const renderTableListInDb = () => (
     <div>
       List of tables in DB:
-      <TableList dbName={props.dbName} />
+      <TableList dbName={props.dbName || ''} />
     </div>
   );
 
   const renderActionInTable = () => (
-    <ActionList dbName={props.dbName} tableName={props.tableName} />
+    <ActionList dbName={props.dbName || ''} tableName={props.tableName || ''} />
   );
 
   const { dbName, tableName, action } = props;
@@ -210,7 +210,7 @@ const PageWrapper = (props: {
     return <div className='dm-page-v2 err-msg'>{errMsgs.join(' ,')}</div>;
   }
 
-  const PageComponent = mapp[action];
+  const PageComponent = mapp[action || ''];
 
   if (!PageComponent) {
     return (
@@ -230,9 +230,9 @@ const PageWrapper = (props: {
       <div className='dm-page-v2'>
         {/* Pass tableName down, so child component to rerender according to this props */}
         <PageComponent
-          dbName={dbName}
-          tableName={tableName}
-          action={action}
+          dbName={dbName || ''}
+          tableName={tableName || ''}
+          action={action || ''}
           tables={tables}
         />
         <NavBar />

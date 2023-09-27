@@ -27,6 +27,7 @@ const Detail = (props: DetailProps) => {
       rows: props.refTables[`ref:${column.referenceTable}:rows`], // eslint-disable-line react/prop-types
     });
     if (renderFn) {
+      // @ts-ignore
       const el = renderFn(value, props.defaultValues);
       if (el) {
         return el;

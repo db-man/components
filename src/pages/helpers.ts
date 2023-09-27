@@ -1,14 +1,14 @@
-// @ts-nocheck
-
 import { message } from 'antd';
 import * as constants from '../constants';
 import { errMsg } from '../utils';
+import DbTable from '../types/DbTable';
+import Databases from '../types/Databases';
 
-const loadDbsSchemaAsync = async (github, githubDb, path) => {
+const loadDbsSchemaAsync = async (github: any, githubDb: any, path: string) => {
   // Get all db names in root dir, db name is sub dir name
   const files = await github.getPath(path);
 
-  const dbsSchema = {
+  const dbsSchema: Databases = {
     /**
      * key must be:
      * - Top Nav title name
@@ -20,9 +20,9 @@ const loadDbsSchemaAsync = async (github, githubDb, path) => {
   // Loop get all table schema
   await Promise.all(
     files
-      .map(({ name }) => name)
-      .map((dbName) =>
-        githubDb.getDbTablesSchemaAsync(dbName).then((tables) => {
+      .map(({ name }: { name: string }) => name)
+      .map((dbName: string) =>
+        githubDb.getDbTablesSchemaAsync(dbName).then((tables: DbTable[]) => {
           dbsSchema[dbName] = tables;
         })
       )
@@ -31,8 +31,8 @@ const loadDbsSchemaAsync = async (github, githubDb, path) => {
   return dbsSchema;
 };
 
-const validateDbsSchame = (dbsSchema) => {
-  const errors = [];
+const validateDbsSchame = (dbsSchema: Databases) => {
+  const errors: string[] = [];
   Object.keys(dbsSchema).forEach((dbName) => {
     const tables = dbsSchema[dbName];
     tables.forEach((table, index) => {
@@ -71,7 +71,7 @@ const validateDbsSchame = (dbsSchema) => {
   return errors.length === 0;
 };
 
-const reloadDbsSchemaAsync = async (github, githubDb) => {
+const reloadDbsSchemaAsync = async (github: any, githubDb: any) => {
   message.info('Start loading DBs schema...');
 
   const path = localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH);
@@ -88,7 +88,7 @@ const reloadDbsSchemaAsync = async (github, githubDb) => {
       `Failed to get DB schema! Maybe you need to create this file: https://github.com/${localStorage.getItem(
         constants.LS_KEY_GITHUB_OWNER
       )}/${localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME)}/${path}`,
-      err
+      err as Error
     );
     return;
   }

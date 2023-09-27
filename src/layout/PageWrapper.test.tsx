@@ -1,10 +1,6 @@
-// @ts-nocheck
-
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import {
-  render, screen, act, /* waitFor, */
-} from '@testing-library/react';
+import { render, screen, act /* waitFor, */ } from '@testing-library/react';
 // import { GithubDb } from '@db-man/github';
 
 // import * as constants from '../constants';
@@ -15,7 +11,11 @@ import PageWrapper from './PageWrapper';
 
 describe('PageWrapper', () => {
   it('renders err when dbName is undefined', () => {
-    render(<BrowserRouter><PageWrapper /></BrowserRouter>);
+    render(
+      <BrowserRouter>
+        <PageWrapper />
+      </BrowserRouter>
+    );
     const el = screen.getByText(/dbName is undefined/i);
     expect(el).toBeInTheDocument();
   });
@@ -31,7 +31,11 @@ describe('PageWrapper', () => {
     // });
     // Object.getPrototypeOf(window.localStorage).setItem = jest.fn();
 
-    render(<BrowserRouter><PageWrapper /></BrowserRouter>);
+    render(
+      <BrowserRouter>
+        <PageWrapper />
+      </BrowserRouter>
+    );
     // screen.debug();
     const el = screen.getByText(/dbName is undefined/i);
     expect(el).toBeInTheDocument();
@@ -53,13 +57,24 @@ describe('PageWrapper', () => {
     // Prepare db schema in localStorage
     setDbs(JSON.stringify(dbsSchema));
 
-    render(<BrowserRouter><PageWrapper dbName="iam" tableName="users" action="list" /></BrowserRouter>);
+    render(
+      <BrowserRouter>
+        <PageWrapper dbName='iam' tableName='users' action='list' />
+      </BrowserRouter>
+    );
     const el = screen.getByText(/No columns found for this table!/i);
     expect(el).toBeInTheDocument();
   });
 
   it('renders', async () => {
-    const dbsSchema = { iam: [{ name: 'users', columns: [{ id: 'userId', name: 'User ID', primary: true }] }] };
+    const dbsSchema = {
+      iam: [
+        {
+          name: 'users',
+          columns: [{ id: 'userId', name: 'User ID', primary: true }],
+        },
+      ],
+    };
 
     // jest.spyOn(Object.getPrototypeOf(window.localStorage), 'getItem');
     // jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem');
@@ -91,8 +106,13 @@ describe('PageWrapper', () => {
     // Prepare db schema in localStorage
     setDbs(JSON.stringify(dbsSchema));
 
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
-      render(<BrowserRouter><PageWrapper dbName="iam" tableName="users" action="list" /></BrowserRouter>);
+      render(
+        <BrowserRouter>
+          <PageWrapper dbName='iam' tableName='users' action='list' />
+        </BrowserRouter>
+      );
     });
 
     // await screen.findByText('Loading iam/users ...');

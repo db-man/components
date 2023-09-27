@@ -13,6 +13,12 @@ type ColumnPlaceholder = string;
 // DEPRECATED: Use types.ColumnType from @db-man/github instead
 export type ColumnType = 'STRING' | 'STRING_ARRAY' | 'NUMBER' | 'BOOL';
 
+export type RenderKeyType =
+  | 'type:createUpdatePage'
+  | 'type:getPage'
+  | 'type:listPage'
+  | 'type:randomPage';
+
 export default interface Column extends AntdColumnType<Record<string, any>> {
   // TODO these 4 fields are already defined in types.Column, remove them
   id: string;

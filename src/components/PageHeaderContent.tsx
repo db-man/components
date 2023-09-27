@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
@@ -34,7 +32,7 @@ function PageHeaderContent(props: PropsType) {
         theme='dark'
         mode='horizontal'
         defaultSelectedKeys={['home']}
-        selectedKeys={[params.dbName]}
+        selectedKeys={[params?.dbName || '']}
         items={[
           { key: 'home', label: <Link to='/'>Home</Link> },
           ...Object.keys(dbs || {}).map((dbName) => ({

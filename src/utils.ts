@@ -22,13 +22,13 @@ export const getTablePrimaryKey = (
 ) => {
   const foundTable = tables.find((table) => table.name === tableName);
   if (!foundTable) {
-    return null;
+    return '';
   }
 
   return getPrimaryKey(foundTable.columns);
 };
 
-export const errMsg = (msg: string, err: Error) => {
+export const errMsg = (msg: string, err?: Error) => {
   console.error(`[db-man] ${msg}`, err); // eslint-disable-line no-console
   message.error(msg);
 };

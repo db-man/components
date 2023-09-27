@@ -1,17 +1,29 @@
-// @ts-nocheck
-
 /* eslint-disable max-len */
 
 import React from 'react';
 /**
- * https://github.com/handlebars-lang/handlebars.js/issues/1174
+ * When importing like this `import Handlebars from 'handlebars'`, will see below error when running npm run dev
+ *
  * ```
- * Compiled with problems:
- * ERROR in ./node_modules/handlebars/lib/index.js 15:11-24
- * Module not found: Error: Can't resolve 'fs' in '/.../node_modules/handlebars/lib'
+ * Failed to compile.
+ *
+ * Module not found: Error: Can't resolve 'fs' in '/Users/devin.chenyang/source/github.com/db-man/components/node_modules/handlebars/lib'
+ * WARNING in ./node_modules/handlebars/lib/index.js 20:38-56
+ * require.extensions is not supported by webpack. Use a loader instead.
+ *
+ * WARNING in ./node_modules/handlebars/lib/index.js 21:2-20
+ * require.extensions is not supported by webpack. Use a loader instead.
+ *
+ * WARNING in ./node_modules/handlebars/lib/index.js 22:2-20
+ * require.extensions is not supported by webpack. Use a loader instead.
  * ```
+ *
+ * The current tmp solution is to use `import Handlebars from 'handlebars/dist/handlebars'` instead.
+ *
+ * See more: https://github.com/handlebars-lang/handlebars.js/issues/1174
  */
-// import Handlebars from "handlebars";
+// import Handlebars from 'handlebars';
+// @ts-ignore Ignore handlebars type error
 import Handlebars from 'handlebars/dist/handlebars';
 
 import {
@@ -25,6 +37,19 @@ import PhotoList from '../components/PhotoList';
 import ErrorAlert from '../components/ErrorAlert';
 import TextAreaFormFieldValue from '../components/TextAreaFormFieldValue';
 import { getTablePrimaryKey } from '../utils';
+import { RowType } from '../types/Data';
+import DbTable from '../types/DbTable';
+import { RenderArgs } from '../types/UiType';
+
+interface Options {
+  fn: (this: any) => string;
+  hash: {
+    rows?: RowType[];
+    tables: DbTable[];
+    tableName: string;
+    primaryKeyVal: any;
+  };
+}
 
 /**
  * tpl: {{#replace "foo" "bar"}}{{title}}{{/replace}}
@@ -33,10 +58,11 @@ import { getTablePrimaryKey } from '../utils';
  */
 Handlebars.registerHelper(
   'replace',
-  function replaceHelper(find, replace, options) {
+  function replaceHelper(find: string, replace: string, options: Options) {
+    // @ts-ignore
     const string = options.fn(this);
     return string.replace(find, replace);
-  },
+  }
 );
 
 /**
@@ -44,19 +70,19 @@ Handlebars.registerHelper(
  * input: {"tags": ["foo", "bar"]}
  * output: "foo, bar"
  */
-Handlebars.registerHelper('join', (arr, sep) => {
+Handlebars.registerHelper('join', (arr: string[], sep: string) => {
   if (!arr) return '';
   return arr.join(sep);
 });
 
-Handlebars.registerHelper('getTableRecordByKey', (options) => {
+Handlebars.registerHelper('getTableRecordByKey', (options: Options) => {
   if (!options.hash.rows) return null;
   const primaryKey = getTablePrimaryKey(
     options.hash.tables,
-    options.hash.tableName,
+    options.hash.tableName
   );
   return options.hash.rows.find(
-    (row) => row[primaryKey] === options.hash.primaryKeyVal,
+    (row: RowType) => row[primaryKey] === options.hash.primaryKeyVal
   );
 });
 
@@ -66,8 +92,14 @@ Handlebars.registerHelper('getTableRecordByKey', (options) => {
  * @param {*} Component
  * @returns {()=><Component/>} render function
  */
-const genRenderFunc = (Component) =>
-  function dComponent(val, record, index, args, tplExtra) {
+const genRenderFunc = (Component: any) =>
+  function dComponent(
+    val: any,
+    record: RowType,
+    index?: number,
+    args?: RenderArgs,
+    tplExtra?: any
+  ) {
     if (!record || typeof record !== 'object') {
       console.error('[genRenderFunc] record should be an object!', record); // eslint-disable-line no-console
     }
@@ -87,20 +119,36 @@ const genRenderFunc = (Component) =>
       }
       return <Component {...props} />; // eslint-disable-line react/jsx-props-no-spreading
     } catch (err) {
-      console.error('Failed to parse JSON for tpl, err:', err, json); // eslint-disable-line no-console
+      console.error('Failed to parse JSON for tpl, err:', err, json);
       return (
         <div>
           val: {val}
-          <ErrorAlert json={json} error={err} tplStr={tplStr} record={record} />
+          <ErrorAlert
+            json={json}
+            error={err as Error}
+            tplStr={tplStr}
+            record={record}
+          />
         </div>
       );
     }
   };
 
+type DdRenderFnMappingType = Record<
+  string, // render function name, e.g. "Link"
+  (
+    val: any,
+    record: RowType,
+    index?: number,
+    args?: RenderArgs,
+    tplExtra?: any
+  ) => JSX.Element
+>;
+
 /**
  * Data Driving Render Function Mapping
  */
-const ddRenderFnMapping = {
+const ddRenderFnMapping: DdRenderFnMappingType = {
   // renderFnName: (cellVal, rowVal, colIndex, ...renderFnStr) => null
   // renderFnName: (cellVal, rowVal, colIndex, ...renderFnProps) => null
 

@@ -51,7 +51,7 @@ const RandomPageBody = () => {
   const renderItem = (item: RowType) => {
     const column = columns.find((col) => col.id === primaryKey);
     if (!column) return <div>No primary column found</div>;
-    const args = column['type:randomPage'];
+    const args = column['type:randomPage'] || '';
     const fn = ddRender.getRender(args) || ((val: any) => val);
     return (
       <List.Item>
