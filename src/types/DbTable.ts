@@ -1,6 +1,6 @@
 import { types } from '@db-man/github';
 
-// DEPRECATED: Use types.Table directly instead
-type DbTable = types.Table;
+// DEPRECATED: Use types.DbTable directly instead
+type DbTable = types.DbTable;
 
 export default DbTable;

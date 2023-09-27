@@ -68,7 +68,7 @@ An example:
 
 ### `type` (Required)
 
-See `src/types/Column.ts::ColumnType`
+See `src/types/Column.ts::DbColumnType`
 
 ### `primary`
 

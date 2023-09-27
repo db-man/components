@@ -1,8 +1,8 @@
-import { ColumnType } from './types/DbColumn';
+import { DbColumnType } from './types/DbColumn';
 
 // types
-export const STRING_ARRAY: ColumnType = 'STRING_ARRAY';
-export const STRING: ColumnType = 'STRING';
+export const STRING_ARRAY: DbColumnType = 'STRING_ARRAY';
+export const STRING: DbColumnType = 'STRING';
 export const NUMBER = 'NUMBER';
 export const BOOL = 'BOOL';
 

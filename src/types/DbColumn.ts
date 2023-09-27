@@ -6,12 +6,14 @@ import {
   RandomPageUiType,
   UiType,
 } from './UiType';
+import { RowType } from './Data';
+import { types } from '@db-man/github';
 
 // Only used in CreatePage or UpdatePage, only used in Input component (of type=STRING).
 type ColumnPlaceholder = string;
 
-// DEPRECATED: Use types.ColumnType from @db-man/github instead
-export type ColumnType = 'STRING' | 'STRING_ARRAY' | 'NUMBER' | 'BOOL';
+// DEPRECATED: Use types.DbColumnType from @db-man/github instead
+export type DbColumnType = 'STRING' | 'STRING_ARRAY' | 'NUMBER' | 'BOOL';
 
 export type RenderKeyType =
   | 'type:createUpdatePage'
@@ -19,13 +21,7 @@ export type RenderKeyType =
   | 'type:listPage'
   | 'type:randomPage';
 
-export default interface Column extends AntdColumnType<Record<string, any>> {
-  // TODO these 4 fields are already defined in types.Column, remove them
-  id: string;
-  name: string;
-  type: ColumnType;
-  primary?: boolean;
-
+type DbColumnExtendsUiType = {
   'type:createUpdatePage'?: UiType;
   'type:getPage'?: GetPageUiType;
   'type:listPage'?: ListPageUiType;
@@ -75,4 +71,11 @@ export default interface Column extends AntdColumnType<Record<string, any>> {
    * }
    */
   referenceTable?: string;
-}
+};
+
+// export default interface DbColumn extends AntdColumnType<RowType> {
+type DbColumn = AntdColumnType<RowType> &
+  types.DbColumn &
+  DbColumnExtendsUiType;
+
+export default DbColumn;
