@@ -1,9 +1,6 @@
-// @ts-nocheck
-
 /* eslint-disable max-len */
 
 import * as constants from '../../constants';
-
 /**
  * Search "oo"(keyword) in "foobar200"(text)
  * @param {string} keyword
@@ -151,6 +148,8 @@ export const getInitialFilter = filterProp => {
   filterProp.forEach(f => {
     filter[f.id] = '';
   });
+
+  // @ts-ignore TODO
   const url = new URL(window.location);
   // init field key with values passing from URL
   const filterParam = url.searchParams.get('filter');
@@ -169,6 +168,7 @@ export const getInitialSorter = () => {
     columnKey: '',
     order: ''
   };
+  // @ts-ignore TODO
   const url = new URL(window.location);
   const sorterParam = url.searchParams.get('sorter');
   if (sorterParam && sorterParam.startsWith('{')) {
@@ -182,6 +182,7 @@ export const getInitialSorter = () => {
   return sorter;
 };
 export const updateUrl = states => {
+  // @ts-ignore TODO
   const url = new URL(window.location);
   Object.keys(states).forEach(stateKey => {
     if (typeof states[stateKey] === 'object') {
@@ -196,11 +197,11 @@ export const updateUrl = states => {
 };
 export const getColumnSortOrder = (columnId, sorter) => {
   if (sorter.order === undefined) {
-    return false;
+    return null;
   }
   if (sorter.columnKey === columnId) {
     return sorter.order;
   }
-  return false;
+  return null;
 };
 //# sourceMappingURL=helpers.js.map

@@ -1,6 +1,17 @@
-import React from 'react';
-export default class TextAreaFormFieldValue extends React.Component {
-    handleChange: (event: any) => void;
-    render(): import("react/jsx-runtime").JSX.Element;
-}
+import PropTypes from 'prop-types';
+declare const TextAreaFormFieldValue: {
+    (props: {
+        value: string;
+        onChange: (value: string) => void;
+    }): import("react/jsx-runtime").JSX.Element;
+    propTypes: {
+        value: PropTypes.Requireable<string>;
+        onChange: PropTypes.Requireable<(...args: any[]) => any>;
+    };
+    defaultProps: {
+        value: string;
+        onChange: () => void;
+    };
+};
+export default TextAreaFormFieldValue;
 //# sourceMappingURL=TextAreaFormFieldValue.d.ts.map

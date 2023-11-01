@@ -1,3 +1,8 @@
-declare const _default: (props: any) => import("react/jsx-runtime").JSX.Element;
+type PropsType = {
+    params?: {
+        dbName: string;
+    };
+};
+declare const _default: (props: PropsType) => import("react/jsx-runtime").JSX.Element;
 export default _default;
 //# sourceMappingURL=PageHeaderContent.d.ts.map

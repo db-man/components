@@ -40,6 +40,7 @@ const GetPageBody = () => {
     const currentId = () => {
       return utils.getUrlParams()[primaryKey];
     };
+    // ValueType vs DataType
     return githubDb.getRecordFileContentAndSha(dbName, tableName, currentId()).then(({
       content
     }) => {
@@ -51,7 +52,7 @@ const GetPageBody = () => {
     });
   }, [dbName, tableName, githubDb, primaryKey]);
   const getTableRowsAsync = useCallback(() => {
-    return githubDb.getTableRows(dbName, tableName).then(({
+    return githubDb?.getTableRows(dbName, tableName).then(({
       content
     }) => {
       return content;

@@ -17,10 +17,14 @@ export type RadioGroupUiTypeEnum = string[];
 type SimpleUiType = string | RadioGroupUiType;
 type DynamicUiType = any;
 export type UiType = SimpleUiType | DynamicUiType;
-export type GetPageUiType = string;
+export type GetPageUiType = RenderArgs;
 /**
  * If is 'HIDE', the column will not be shown on the list page.
  */
-export type ListPageUiType = string | 'HIDE';
+export type ListPageUiType = RenderArgs | 'HIDE';
+export type RandomPageUiType = string;
+type RenderFuncName = string;
+type RenderFuncTpl = string;
+export type RenderArgs = string | [RenderFuncName, RenderFuncTpl];
 export {};
 //# sourceMappingURL=UiType.d.ts.map

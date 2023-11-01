@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import PropTypes from 'prop-types';
 export const linkShape = {
   children: PropTypes.string,

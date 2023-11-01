@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { InputProps } from './StringFormFieldValue';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 interface StringFormFieldProps {
     label: string;
-    column: Column;
+    column: DbColumn;
     dbName: string;
     primaryKey: string;
     value?: string;

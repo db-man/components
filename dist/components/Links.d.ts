@@ -1,9 +1,13 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-export declare function Fragment(props: any): any;
-export declare function Link({ children, href, text }: {
-    children: any;
-    href: any;
-    text: any;
+import { PhotoType } from './PhotoList';
+export declare function Fragment({ children }: {
+    children: React.ReactNode;
+}): React.ReactNode;
+export declare function Link({ children, href, text, }: {
+    children?: string;
+    href?: string;
+    text?: string;
 }): import("react/jsx-runtime").JSX.Element;
 export declare namespace Link {
     var propTypes: {
@@ -17,8 +21,11 @@ export declare namespace Link {
         text: string;
     };
 }
-export declare function Links({ links }: {
-    links: any;
+export declare function Links({ links, }: {
+    links: {
+        href?: string;
+        text?: string;
+    }[];
 }): import("react/jsx-runtime").JSX.Element;
 export declare namespace Links {
     var propTypes: {
@@ -37,11 +44,8 @@ export declare namespace Links {
  * @returns
  */
 export declare function ImageLink({ children, url, imgSrc, description, }: {
-    children: any;
-    url: any;
-    imgSrc: any;
-    description: any;
-}): import("react/jsx-runtime").JSX.Element;
+    children?: string;
+} & PhotoType): import("react/jsx-runtime").JSX.Element;
 export declare namespace ImageLink {
     var propTypes: {
         children: PropTypes.Requireable<string>;
@@ -56,8 +60,8 @@ export declare namespace ImageLink {
         description: string;
     };
 }
-export declare function ImageLinks({ imgs, limit }: {
-    imgs: any;
-    limit?: number | undefined;
-}): any;
+export declare function ImageLinks({ imgs, limit, }: {
+    imgs: PhotoType[];
+    limit?: number;
+}): import("react/jsx-runtime").JSX.Element[] | null;
 //# sourceMappingURL=Links.d.ts.map

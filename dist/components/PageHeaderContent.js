@@ -1,6 +1,4 @@
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
@@ -37,7 +35,7 @@ function PageHeaderContent(props) {
     theme: "dark",
     mode: "horizontal",
     defaultSelectedKeys: ['home'],
-    selectedKeys: [params.dbName],
+    selectedKeys: [params?.dbName || ''],
     items: [{
       key: 'home',
       label: /*#__PURE__*/React.createElement(Link, {

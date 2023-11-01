@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'antd';
@@ -18,11 +16,21 @@ export default function RefTableLinks({
     dbName
   } = useContext(PageContext);
   // val can be "123" or ["123", "456"]
-  let ids = value;
-  if (!Array.isArray(value)) {
-    ids = [value];
+  let ids = [];
+  if (Array.isArray(value)) {
+    ids = value;
+  } else {
+    ids = value === null ? [] : [value];
   }
-  const refTablePrimaryKey = dbs[dbName].find(db => db.name === column.referenceTable).columns.find(col => col.primary).id;
+  const foundRefTable = dbs[dbName].find(tb => tb.name === column.referenceTable);
+  if (!foundRefTable) {
+    return /*#__PURE__*/React.createElement("div", null, "Ref table not found");
+  }
+  const foundRefTableColumn = foundRefTable.columns.find(col => col.primary);
+  if (!foundRefTableColumn) {
+    return /*#__PURE__*/React.createElement("div", null, "Ref table primary column not found");
+  }
+  const refTablePrimaryKey = foundRefTableColumn.id;
   return /*#__PURE__*/React.createElement("span", {
     className: "ref-table"
   }, /*#__PURE__*/React.createElement(List, {

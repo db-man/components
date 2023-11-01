@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
+import { RowType } from '../types/Data';
 declare function ErrorAlert({ json, error, tplStr, record, }: {
-    json: any;
-    error: any;
-    tplStr: any;
-    record: any;
+    json: string;
+    error: {
+        message: string;
+    };
+    tplStr: string;
+    record: RowType;
 }): import("react/jsx-runtime").JSX.Element;
 declare namespace ErrorAlert {
     var propTypes: {

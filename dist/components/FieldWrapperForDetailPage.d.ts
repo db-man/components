@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import PropTypes from 'prop-types';
-import Column from '../types/Column';
+import DbColumn from '../types/DbColumn';
 interface FieldWrapperProps {
-    column: Column;
+    column: DbColumn;
     value: number | boolean | string | string[];
     children: ReactNode;
 }

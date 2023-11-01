@@ -5,22 +5,27 @@ import { BrowserRouter } from 'react-router-dom';
 import { render, act /* screen,  waitFor, */ } from '@testing-library/react';
 import ListPageBody from './index';
 import PageContext from '../../contexts/page';
+import { STRING } from '../../constants';
 const context = {
   dbName: 'db-man',
   tableName: 'users',
   action: 'list',
   columns: [{
     id: 'id',
-    name: 'ID'
+    name: 'ID',
+    type: STRING
   }, {
     id: 'email',
-    name: 'Email'
+    name: 'Email',
+    type: STRING
   }],
   primaryKey: 'id',
   tables: [],
   githubDb: {
     getTableRows: jest.fn()
-  }
+  },
+  appModes: [],
+  dbs: {}
 };
 jest.mock('@db-man/github');
 beforeEach(() => {
@@ -52,6 +57,7 @@ describe('ListPageBody', () => {
 
     // githubDb.getTableRows.mockResolvedValue({ content: [{ id: '123', email: 'foo@abc.com' }] });
 
+    // eslint-disable-next-line
     act(() => {
       render( /*#__PURE__*/React.createElement(BrowserRouter, null, /*#__PURE__*/React.createElement(PageContext.Provider, {
         value: context

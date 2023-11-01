@@ -1,5 +1,4 @@
-import DbTable from './DbTable';
-export default interface Databases {
-    [databaseName: string]: DbTable[];
-}
+import { types } from '@db-man/github';
+type Databases = types.Database;
+export default Databases;
 //# sourceMappingURL=Databases.d.ts.map

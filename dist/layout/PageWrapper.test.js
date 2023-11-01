@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen, act /* waitFor, */ } from '@testing-library/react';
@@ -104,6 +102,8 @@ describe('PageWrapper', () => {
 
     // Prepare db schema in localStorage
     setDbs(JSON.stringify(dbsSchema));
+
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
       render( /*#__PURE__*/React.createElement(BrowserRouter, null, /*#__PURE__*/React.createElement(PageWrapper, {
         dbName: "iam",

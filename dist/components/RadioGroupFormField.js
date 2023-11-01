@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Radio } from 'antd';
@@ -18,7 +16,7 @@ function RadioGroupFormField(props) {
     onChange: handleChange,
     value: value,
     disabled: disabled
-  }, column.enum.map(r => /*#__PURE__*/React.createElement(Radio, {
+  }, (column.enum || []).map(r => /*#__PURE__*/React.createElement(Radio, {
     key: r,
     value: r
   }, r)));

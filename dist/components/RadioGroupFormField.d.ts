@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
-declare function RadioGroupFormField(props: any): import("react/jsx-runtime").JSX.Element;
+import DbColumn from '../types/DbColumn';
+declare function RadioGroupFormField(props: {
+    value: string;
+    disabled: boolean;
+    column: DbColumn;
+    onChange: (value: string) => void;
+}): import("react/jsx-runtime").JSX.Element;
 declare namespace RadioGroupFormField {
     var propTypes: {
         value: PropTypes.Validator<string>;

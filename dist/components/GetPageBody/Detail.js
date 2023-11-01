@@ -21,6 +21,7 @@ const Detail = props => {
     });
 
     if (renderFn) {
+      // @ts-ignore
       const el = renderFn(value, props.defaultValues);
       if (el) {
         return el;

@@ -1,30 +1,42 @@
-// @ts-nocheck
-
 /* eslint-disable max-len */
 
 import React from 'react';
 /**
- * https://github.com/handlebars-lang/handlebars.js/issues/1174
+ * When importing like this `import Handlebars from 'handlebars'`, will see below error when running npm run dev
+ *
  * ```
- * Compiled with problems:
- * ERROR in ./node_modules/handlebars/lib/index.js 15:11-24
- * Module not found: Error: Can't resolve 'fs' in '/.../node_modules/handlebars/lib'
+ * Failed to compile.
+ *
+ * Module not found: Error: Can't resolve 'fs' in '/Users/devin.chenyang/source/github.com/db-man/components/node_modules/handlebars/lib'
+ * WARNING in ./node_modules/handlebars/lib/index.js 20:38-56
+ * require.extensions is not supported by webpack. Use a loader instead.
+ *
+ * WARNING in ./node_modules/handlebars/lib/index.js 21:2-20
+ * require.extensions is not supported by webpack. Use a loader instead.
+ *
+ * WARNING in ./node_modules/handlebars/lib/index.js 22:2-20
+ * require.extensions is not supported by webpack. Use a loader instead.
  * ```
+ *
+ * The current tmp solution is to use `import Handlebars from 'handlebars/dist/handlebars'` instead.
+ *
+ * See more: https://github.com/handlebars-lang/handlebars.js/issues/1174
  */
-// import Handlebars from "handlebars";
+// import Handlebars from 'handlebars';
+// @ts-ignore Ignore handlebars type error
 import Handlebars from 'handlebars/dist/handlebars';
 import { ImageLink, ImageLinks, Link, Links, Fragment } from '../components/Links';
 import PhotoList from '../components/PhotoList';
 import ErrorAlert from '../components/ErrorAlert';
 import TextAreaFormFieldValue from '../components/TextAreaFormFieldValue';
 import { getTablePrimaryKey } from '../utils';
-
 /**
  * tpl: {{#replace "foo" "bar"}}{{title}}{{/replace}}
  * input: {title:"foo"}
  * output: bar
  */
 Handlebars.registerHelper('replace', function replaceHelper(find, replace, options) {
+  // @ts-ignore
   const string = options.fn(this);
   return string.replace(find, replace);
 });
@@ -73,7 +85,7 @@ const genRenderFunc = Component => function dComponent(val, record, index, args,
     }
     return /*#__PURE__*/React.createElement(Component, props); // eslint-disable-line react/jsx-props-no-spreading
   } catch (err) {
-    console.error('Failed to parse JSON for tpl, err:', err, json); // eslint-disable-line no-console
+    console.error('Failed to parse JSON for tpl, err:', err, json);
     return /*#__PURE__*/React.createElement("div", null, "val: ", val, /*#__PURE__*/React.createElement(ErrorAlert, {
       json: json,
       error: err,
@@ -82,7 +94,6 @@ const genRenderFunc = Component => function dComponent(val, record, index, args,
     }));
   }
 };
-
 /**
  * Data Driving Render Function Mapping
  */

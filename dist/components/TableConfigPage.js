@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /* eslint-disable react/prop-types */
 
 import { Table } from 'antd';
@@ -55,7 +53,6 @@ export default function TableConfigPage() {
     dbName,
     columns: dbTableColumns
   } = useContext(PageContext);
-  console.debug('TableConfigPage', dbTableColumns); // eslint-disable-line no-console
   return /*#__PURE__*/React.createElement("div", {
     className: "table-config-page"
   }, /*#__PURE__*/React.createElement(Table, {

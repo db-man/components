@@ -1,9 +1,7 @@
-// @ts-nocheck
-
 import React from 'react';
 import { DbConnections, constants } from '../lib';
 const SettingsExample = () => {
-  const dbSchema = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA));
+  const dbSchema = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA) || '{}');
   if (dbSchema) {
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "App will use this DB schema to render features."), /*#__PURE__*/React.createElement("pre", {
       style: {

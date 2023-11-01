@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { Layout } from 'antd';

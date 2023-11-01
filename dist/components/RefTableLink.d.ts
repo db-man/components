@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
+import DbTable from '../types/DbTable';
+import DbColumn from '../types/DbColumn';
 declare function RefTableLink({ dbName, tables, value, column, }: {
-    dbName: any;
-    tables: any;
-    value: any;
-    column: any;
+    dbName: string;
+    tables: DbTable[];
+    value: string | string[] | null;
+    column: DbColumn;
 }): import("react/jsx-runtime").JSX.Element | null;
 declare namespace RefTableLink {
     var propTypes: {

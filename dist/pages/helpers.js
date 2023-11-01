@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { message } from 'antd';
 import * as constants from '../constants';
 import { errMsg } from '../utils';

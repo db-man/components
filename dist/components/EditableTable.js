@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /* eslint-disable react/prop-types, react/jsx-props-no-spreading */
 
 import React, { useState, useEffect } from 'react';
@@ -101,7 +99,7 @@ function EditableTable({
             key: k
           }) => k !== '0').map(({
             key: k
-          }) => Number(k))) + 1;
+          }) => Number(k))) + 1 + '';
         }
         newData.splice(index, 1, {
           ...item,
@@ -219,7 +217,7 @@ function EditableTable({
         ...col,
         render: (text, record) => {
           if (record.owner === storage.get(constants.LS_KEY_GITHUB_OWNER) && record.repo === storage.get(constants.LS_KEY_GITHUB_REPO_NAME)) {
-            return /*#__PURE__*/React.createElement("span", null, text, ' ', /*#__PURE__*/React.createElement(CheckCircleOutlined, null));
+            return /*#__PURE__*/React.createElement("span", null, text, " ", /*#__PURE__*/React.createElement(CheckCircleOutlined, null));
           }
           return text;
         }
@@ -250,7 +248,7 @@ function EditableTable({
     columns: mergedColumns,
     rowClassName: "editable-row",
     pagination: {
-      onChange: cancel
+      // onChange: cancel,
     }
   }));
 }

@@ -15,7 +15,7 @@ import { LS_KEY_DBS_SCHEMA } from './constants';
  */
 // export const dbs = JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);
 
-export const getTablesByDbName = dbName => {
+export const getTablesByDbName = (dbName = '') => {
   const keyVal = localStorage.getItem(LS_KEY_DBS_SCHEMA);
   if (!keyVal) return [];
   const dbs2 = JSON.parse(localStorage.getItem(LS_KEY_DBS_SCHEMA) || `{}`);

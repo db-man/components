@@ -1,5 +1,6 @@
-export declare const STRING_ARRAY = "STRING_ARRAY";
-export declare const STRING = "STRING";
+import { DbColumnType } from './types/DbColumn';
+export declare const STRING_ARRAY: DbColumnType;
+export declare const STRING: DbColumnType;
 export declare const NUMBER = "NUMBER";
 export declare const BOOL = "BOOL";
 export declare const LS_KEY_DBS_SCHEMA = "dm_dbs_schema";

@@ -7,16 +7,16 @@ export const getUrlParams = () => {
 /**
  *
  * @param {*} columns
- * @returns {string|null}
+ * @returns {string}
  */
 export const getPrimaryKey = columns => {
   const foundCol = columns.find(col => col.primary);
-  return foundCol ? foundCol.id : null;
+  return foundCol ? foundCol.id : '';
 };
 export const getTablePrimaryKey = (tables, tableName) => {
   const foundTable = tables.find(table => table.name === tableName);
   if (!foundTable) {
-    return null;
+    return '';
   }
   return getPrimaryKey(foundTable.columns);
 };

@@ -1,5 +1,5 @@
 import { ValueType } from '.';
-import Column from '../../types/Column';
+import DbColumn from '../../types/DbColumn';
 import { UiType } from '../../types/UiType';
 /**
  * Check duplicated primary key
@@ -11,13 +11,13 @@ export declare const validatePrimaryKey: (value: string, content: ValueType[], p
  * @param {string} uiType e.g. "MultiLineInputBox"
  * @returns {is:bool,preview:bool}
  */
-export declare const isType: (column: Column, uiType: UiType) => {
+export declare const isType: (column: DbColumn, uiType: UiType) => {
     is: boolean;
     preview: boolean;
 };
 export declare const obj2str: (obj: ValueType) => string;
-export declare const str2obj: (str: string) => ValueType;
-export declare const getFormInitialValues: (columns: Column[], formValues: ValueType) => {
+export declare const str2obj: (str: string) => import("../../types/Data").RowType;
+export declare const getFormInitialValues: (columns: DbColumn[], formValues: ValueType) => {
     [key: string]: any;
 };
 //# sourceMappingURL=helpers.d.ts.map

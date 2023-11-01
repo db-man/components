@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Input, Popover, Button } from 'antd';
@@ -17,7 +15,7 @@ export default function ErrorAlert({
         style: {
           width: '800px'
         }
-      }, /*#__PURE__*/React.createElement("div", null, "Error:", error.message), /*#__PURE__*/React.createElement("div", null, "tplStr:", ' ', /*#__PURE__*/React.createElement(Input.TextArea, {
+      }, /*#__PURE__*/React.createElement("div", null, "Error:", error.message), /*#__PURE__*/React.createElement("div", null, "tplStr: ", /*#__PURE__*/React.createElement(Input.TextArea, {
         defaultValue: tplStr
       })), /*#__PURE__*/React.createElement("div", null, "record:", ' ', /*#__PURE__*/React.createElement(Input.TextArea, {
         rows: 7,

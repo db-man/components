@@ -1,11 +1,6 @@
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-// @ts-nocheck
-
 /* eslint-disable react/prop-types, react/destructuring-assignment, max-len, no-console, react/no-unused-class-component-methods */
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { message, Spin } from 'antd';
 import { GithubDb } from '@db-man/github';
@@ -66,161 +61,141 @@ export function ActionList({
 /**
  * To render list/create/update page for `/db_name/table_name.json`
  */
-export default class PageWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    _defineProperty(this, "getOnlineData", async () => {
-      try {
-        this.setState({
-          loading: true
-        });
-        const tables = await this.githubDb.getDbTablesSchemaAsync(this.props.dbName);
-        console.debug('use online columns', tables);
-        this.setState({
-          tables
-        });
-      } catch (error) {
-        console.error('Failed to get column JSON file in List component, error:', error);
-        message.error('Failed to get online columns definition!');
-      }
-      this.setState({
-        loading: false
-      });
-    });
-    _defineProperty(this, "getOfflineData", () => {
-      if (!localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)) {
-        this.setState({
-          errMsg: 'No DBS schema defined in localStorage!'
-        });
-        return;
-      }
-      const tables = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA))[this.props.dbName];
-      this.setState({
-        tables
-      });
-    });
-    _defineProperty(this, "renderTableListInDb", () => /*#__PURE__*/React.createElement("div", null, "List of tables in DB:", /*#__PURE__*/React.createElement(TableList, {
-      dbName: this.props.dbName
-    })));
-    _defineProperty(this, "renderActionInTable", () => /*#__PURE__*/React.createElement(ActionList, {
-      dbName: this.props.dbName,
-      tableName: this.props.tableName
-    }));
-    this.state = {
-      // tables is got from db repo db_name/columns.json which contain all tables column definition in current database
-      tables: [],
-      loading: false
-    };
-    this.githubDb = new GithubDb({
-      personalAccessToken: localStorage.getItem(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN),
-      repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
-      owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
-      repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
-      dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)
-    });
-  }
-  componentDidMount() {
+const PageWrapper = props => {
+  // tables is got from db repo db_name/columns.json which contain all tables column definition in current database
+  const [tables, setTables] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
+  const githubDbRef = useRef(new GithubDb({
+    personalAccessToken: localStorage.getItem(constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN),
+    repoPath: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_PATH),
+    owner: localStorage.getItem(constants.LS_KEY_GITHUB_OWNER),
+    repoName: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_NAME),
+    dbsSchema: localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)
+  }));
+  useEffect(() => {
     // TODO we could get online and offline at the same time
     // then we only use offline data to render
     // then we compare the offline data with online data, if there is any diff, we show alert
     const onlineEnabled = false;
     if (onlineEnabled) {
-      this.getOnlineData();
+      getOnlineData();
     } else {
-      this.getOfflineData();
+      getOfflineData();
     }
     const {
       action,
       tableName
-    } = this.pageInfo;
+    } = pageInfo();
     document.title = `${action} ${tableName}`;
-  }
-  get columns() {
+  }, []);
+  const columns = () => {
     const {
       dbName,
       tableName
-    } = this.props;
+    } = props;
     const tablesOfSelectedDb = getTablesByDbName(dbName);
     if (!tablesOfSelectedDb) return [];
     const currentTable = tablesOfSelectedDb.find(table => table.name === tableName);
     if (!currentTable) return [];
     return currentTable.columns;
-  }
-  get pageInfo() {
+  };
+  const pageInfo = () => {
     const {
       dbName,
       tableName,
       action
-    } = this.props;
+    } = props;
     return {
       // e.g. ['split-table']
       appModes: localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES) ? localStorage.getItem(constants.LS_KEY_GITHUB_REPO_MODES).split(',') : [],
-      dbName,
-      tableName,
-      action,
-      columns: this.columns,
-      primaryKey: getPrimaryKey(this.columns),
+      dbName: dbName || '',
+      tableName: tableName || '',
+      action: action || '',
+      columns: columns(),
+      primaryKey: getPrimaryKey(columns()),
       tables: getTablesByDbName(dbName),
-      githubDb: this.githubDb
+      githubDb: githubDbRef.current
     };
+  };
+  const getOnlineData = async () => {
+    try {
+      setLoading(true);
+      const _tables = await githubDbRef.current.getDbTablesSchemaAsync(props.dbName);
+      console.debug('use online columns', _tables);
+      setTables(_tables);
+    } catch (error) {
+      console.error('Failed to get column JSON file in List component, error:', error);
+      message.error('Failed to get online columns definition!');
+    }
+    setLoading(false);
+  };
+  const getOfflineData = () => {
+    if (!localStorage.getItem(constants.LS_KEY_DBS_SCHEMA)) {
+      setErrMsg('No DBS schema defined in localStorage!');
+      return;
+    }
+    const _tables = JSON.parse(localStorage.getItem(constants.LS_KEY_DBS_SCHEMA) || '{}')[props.dbName || ''];
+    setTables(_tables);
+  };
+  const renderTableListInDb = () => /*#__PURE__*/React.createElement("div", null, "List of tables in DB:", /*#__PURE__*/React.createElement(TableList, {
+    dbName: props.dbName || ''
+  }));
+  const renderActionInTable = () => /*#__PURE__*/React.createElement(ActionList, {
+    dbName: props.dbName || '',
+    tableName: props.tableName || ''
+  });
+  const {
+    dbName,
+    tableName,
+    action
+  } = props;
+
+  // if (!tableName) {
+  //   return this.renderTableListInDb();
+  // }
+
+  // if (!action) {
+  //   return this.renderActionInTable();
+  // }
+
+  const errMsgs = [];
+  if (errMsg) {
+    errMsgs.push(errMsg);
   }
-  render() {
-    const {
-      dbName,
-      tableName,
-      action
-    } = this.props;
-    const {
-      loading,
-      tables,
-      errMsg
-    } = this.state;
-
-    // if (!tableName) {
-    //   return this.renderTableListInDb();
-    // }
-
-    // if (!action) {
-    //   return this.renderActionInTable();
-    // }
-
-    const errMsgs = [];
-    if (errMsg) {
-      errMsgs.push(errMsg);
-    }
-    if (!dbName) {
-      errMsgs.push('dbName is undefined!');
-    }
-    if (getPrimaryKey(this.columns) === null) {
-      errMsgs.push('Primary key not found on table!');
-    }
-    if (this.columns.length === 0) {
-      errMsgs.push('No columns found for this table!');
-    }
-    if (errMsgs.length > 0) {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "dm-page-v2 err-msg"
-      }, errMsgs.join(' ,'));
-    }
-    const PageComponent = mapp[action];
-    if (!PageComponent) {
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, "404 - PageComponent Not Found"), /*#__PURE__*/React.createElement("div", null, `/${dbName}/${tableName}/${action}`));
-    }
-    if (loading) {
-      return /*#__PURE__*/React.createElement(Spin, {
-        tip: "loading columns in PageWrapper"
-      }, "Loading...");
-    }
-    return /*#__PURE__*/React.createElement(Provider, {
-      value: this.pageInfo
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "dm-page-v2"
-    }, /*#__PURE__*/React.createElement(PageComponent, {
-      dbName: dbName,
-      tableName: tableName,
-      action: action,
-      tables: tables
-    }), /*#__PURE__*/React.createElement(NavBar, null)));
+  if (!dbName) {
+    errMsgs.push('dbName is undefined!');
   }
-}
+  if (getPrimaryKey(columns()) === null) {
+    errMsgs.push('Primary key not found on table!');
+  }
+  if (columns().length === 0) {
+    errMsgs.push('No columns found for this table!');
+  }
+  if (errMsgs.length > 0) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "dm-page-v2 err-msg"
+    }, errMsgs.join(' ,'));
+  }
+  const PageComponent = mapp[action || ''];
+  if (!PageComponent) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, "404 - PageComponent Not Found"), /*#__PURE__*/React.createElement("div", null, `/${dbName}/${tableName}/${action}`));
+  }
+  if (loading) {
+    return /*#__PURE__*/React.createElement(Spin, {
+      tip: "loading columns in PageWrapper"
+    }, "Loading...");
+  }
+  return /*#__PURE__*/React.createElement(Provider, {
+    value: pageInfo()
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dm-page-v2"
+  }, /*#__PURE__*/React.createElement(PageComponent, {
+    dbName: dbName || '',
+    tableName: tableName || '',
+    action: action || '',
+    tables: tables
+  }), /*#__PURE__*/React.createElement(NavBar, null)));
+};
+export default PageWrapper;
 //# sourceMappingURL=PageWrapper.js.map

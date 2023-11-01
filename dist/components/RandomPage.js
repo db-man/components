@@ -1,19 +1,8 @@
-// @ts-nocheck
-
-/* eslint-disable react/prop-types */
-
 import React from 'react';
 import RandomPageBody from './RandomPageBody';
-export default function RandomPage(props) {
-  const {
-    dbName,
-    tableName
-  } = props;
+export default function RandomPage() {
   return /*#__PURE__*/React.createElement("div", {
     className: "random-page"
-  }, /*#__PURE__*/React.createElement(RandomPageBody, {
-    dbName: dbName,
-    tableName: tableName
-  }));
+  }, /*#__PURE__*/React.createElement(RandomPageBody, null));
 }
 //# sourceMappingURL=RandomPage.js.map

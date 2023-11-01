@@ -1,5 +1,3 @@
-//- @ts-nocheck
-
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -58,7 +56,7 @@ const ListPage = props => {
     };
   }, []);
   const filteredSortedData = () => {
-    const filteredData = getFilteredData(filterCols(columns), filter, rows);
+    const filteredData = getFilteredData(filterCols(columns), filter, rows || []);
     if (sorter.columnKey && sorter.order !== undefined) {
       return getSortedData(filteredData, sorter);
     }

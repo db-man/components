@@ -98,7 +98,7 @@ const Form = props => {
     props.onSubmit(formValues);
   };
   const handleDelete = () => {
-    props.onDelete(formValues);
+    props.onDelete && props.onDelete(formValues);
   };
   const isSplitTable = () => {
     const {
@@ -322,10 +322,11 @@ const Form = props => {
 //   onDelete: PropTypes.func,
 // };
 
-Form.defaultProps = {
-  rows: [],
-  onSubmit: () => {},
-  onDelete: () => {}
-};
+// Form.defaultProps = {
+//   rows: [],
+//   onSubmit: () => {},
+//   onDelete: () => {},
+// };
+
 export default Form;
 //# sourceMappingURL=index.js.map

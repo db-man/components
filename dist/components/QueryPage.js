@@ -1,8 +1,6 @@
-// @ts-nocheck
-
 import { Row, Col } from 'antd';
 import React, { useContext, useEffect } from 'react';
-import ReactJson from 'react-json-view';
+import JsonView from '@uiw/react-json-view';
 import PageContext from '../contexts/page';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 const defaultCode = 'return input;';
@@ -19,7 +17,7 @@ export default function QueryPage() {
   });
   const [content, setContent] = React.useState([]);
   useEffect(() => {
-    githubDb.getTableRows(dbName, tableName).then(response => {
+    githubDb?.getTableRows(dbName, tableName).then(response => {
       setContent(response.content);
     });
   }, []);
@@ -54,8 +52,9 @@ export default function QueryPage() {
     style: {
       color: 'red'
     }
-  }, result.err), /*#__PURE__*/React.createElement("div", null, "Result:"), result.obj && /*#__PURE__*/React.createElement(ReactJson, {
-    src: JSON.parse(result.obj)
+  }, result.err), /*#__PURE__*/React.createElement("div", null, "Result:"), result.obj && /*#__PURE__*/React.createElement(JsonView, {
+    value: JSON.parse(result.obj),
+    collapsed: 1
   }))));
 }
 //# sourceMappingURL=QueryPage.js.map

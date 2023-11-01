@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 declare function SuccessMessage({ url }: {
-    url: any;
+    url: string | undefined;
 }): import("react/jsx-runtime").JSX.Element;
 declare namespace SuccessMessage {
     var propTypes: {

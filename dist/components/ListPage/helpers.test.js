@@ -1,5 +1,4 @@
-// @ts-nocheck
-
+import { STRING, STRING_ARRAY } from '../../constants';
 import { getFilteredData, getSortedData, isAllFilterInvalid, searchKeywordInText, stringArrayFilter, searchStringInArray, searchKeywordInTags, searchKeywordsInTagsWithLogicAnd, searchKeywordsInTagsWithLogicOr } from './helpers';
 describe('searchKeywordInTags', () => {
   it('should return proper value', () => {
@@ -64,10 +63,12 @@ describe('getFilteredData', () => {
   }];
   const filterCols = [{
     id: 'name',
-    type: 'STRING'
+    name: 'Name',
+    type: STRING
   }, {
     id: 'tags',
-    type: 'STRING_ARRAY'
+    name: 'Tags',
+    type: STRING_ARRAY
   }];
   it('should reture 3 rows when fitler by bar1 OR bar2', () => {
     expect(getFilteredData(filterCols, {
@@ -95,19 +96,23 @@ describe('getFilteredData', () => {
 test('getFilteredData should return proper value', () => {
   expect(getFilteredData([{
     id: 'name',
-    type: 'STRING'
+    name: 'Name',
+    type: STRING
   }, {
     id: 'tags',
-    type: 'STRING_ARRAY'
+    name: 'Tags',
+    type: STRING_ARRAY
   }], {
     name: '',
     tags: ''
   }, [])).toEqual([]);
   expect(getFilteredData([{
     id: 'name',
+    name: 'Name',
     type: 'STRING'
   }, {
     id: 'tags',
+    name: 'Tags',
     type: 'STRING_ARRAY'
   }], {
     name: 'foo',
@@ -115,9 +120,11 @@ test('getFilteredData should return proper value', () => {
   }, [])).toEqual([]);
   expect(getFilteredData([{
     id: 'name',
+    name: 'Name',
     type: 'STRING'
   }, {
     id: 'tags',
+    name: 'Tags',
     type: 'STRING_ARRAY'
   }], {
     name: 'foo',
@@ -127,9 +134,11 @@ test('getFilteredData should return proper value', () => {
   }])).toEqual([]);
   expect(getFilteredData([{
     id: 'name',
+    name: 'Name',
     type: 'STRING'
   }, {
     id: 'tags',
+    name: 'Tags',
     type: 'STRING_ARRAY'
   }], {
     name: 'foo',
@@ -141,10 +150,12 @@ test('getFilteredData should return proper value', () => {
   }]);
   expect(getFilteredData([{
     id: 'name',
-    type: 'STRING'
+    name: 'Name',
+    type: STRING
   }, {
     id: 'tags',
-    type: 'STRING_ARRAY'
+    name: 'Tags',
+    type: STRING_ARRAY
   }], {
     name: 'foo',
     tags: 'bar'
@@ -153,9 +164,11 @@ test('getFilteredData should return proper value', () => {
   }])).toEqual([]);
   expect(getFilteredData([{
     id: 'name',
+    name: 'Name',
     type: 'STRING'
   }, {
     id: 'tags',
+    name: 'Tags',
     type: 'STRING_ARRAY'
   }], {
     name: 'foo',

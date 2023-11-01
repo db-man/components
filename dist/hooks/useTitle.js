@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useEffect } from 'react';
 export default function useTitle(title) {
   useEffect(() => {

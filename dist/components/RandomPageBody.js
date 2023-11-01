@@ -1,11 +1,6 @@
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-// @ts-nocheck
-
 /* eslint-disable react/destructuring-assignment, no-console, max-len */
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { List, Card } from 'antd';
 
@@ -29,58 +24,49 @@ const getRandomItems = rows => {
   }
   return randomItems;
 };
-export default class RandomPageBody extends React.Component {
-  constructor(props) {
-    super(props);
-    _defineProperty(this, "getDataAsync", async () => {
-      try {
-        const {
-          content
-        } = await this.context.githubDb.getTableRows(this.context.dbName, this.context.tableName);
-        this.setState({
-          content
-        });
-      } catch (error) {
-        console.error('Failed to get JSON file in RandomPageBody component, error:', error);
+const RandomPageBody = () => {
+  const {
+    githubDb,
+    dbName,
+    tableName,
+    primaryKey,
+    columns
+  } = useContext(PageContext);
+  const [content, setContent] = useState(null);
+  useEffect(() => {
+    getDataAsync();
+  }, []);
+  const getDataAsync = async () => {
+    try {
+      const contentAndSha = await githubDb.getTableRows(dbName, tableName);
+      setContent(contentAndSha.content);
+    } catch (error) {
+      console.error('Failed to get JSON file in RandomPageBody component, error:', error);
+    }
+  };
+  const renderItem = item => {
+    const column = columns.find(col => col.id === primaryKey);
+    if (!column) return /*#__PURE__*/React.createElement("div", null, "No primary column found");
+    const args = column['type:randomPage'] || '';
+    const fn = ddRender.getRender(args) || (val => val);
+    return /*#__PURE__*/React.createElement(List.Item, null, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("div", null, fn(item[primaryKey], item, 0)), /*#__PURE__*/React.createElement(Link, {
+      to: {
+        pathname: `/${dbName}/${tableName}/update`,
+        search: `?${primaryKey}=${item[primaryKey]}`
       }
+    }, "Update")));
+  };
+  const renderList = () => {
+    if (!content) return null;
+    return /*#__PURE__*/React.createElement(List, {
+      grid: listGrid,
+      dataSource: getRandomItems(content),
+      renderItem: renderItem
     });
-    _defineProperty(this, "renderItem", item => {
-      const {
-        primaryKey
-      } = this.context;
-      const column = this.context.columns.find(col => col.id === primaryKey);
-      const args = column['type:randomPage'];
-      const fn = ddRender.getRender(args) || (val => val);
-      return /*#__PURE__*/React.createElement(List.Item, null, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("div", null, fn(item[primaryKey], item, 0)), /*#__PURE__*/React.createElement(Link, {
-        to: {
-          pathname: `/${this.context.dbName}/${this.context.tableName}/update`,
-          search: `?${primaryKey}=${item[primaryKey]}`
-        }
-      }, "Update")));
-    });
-    _defineProperty(this, "renderList", () => {
-      const {
-        content
-      } = this.state;
-      if (!content) return null;
-      return /*#__PURE__*/React.createElement(List, {
-        grid: listGrid,
-        dataSource: getRandomItems(content),
-        renderItem: this.renderItem
-      });
-    });
-    this.state = {
-      content: null
-    };
-  }
-  componentDidMount() {
-    this.getDataAsync();
-  }
-  render() {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "random-page-body-component"
-    }, this.renderList());
-  }
-}
-RandomPageBody.contextType = PageContext;
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "random-page-body-component"
+  }, renderList());
+};
+export default RandomPageBody;
 //# sourceMappingURL=RandomPageBody.js.map

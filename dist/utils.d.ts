@@ -1,13 +1,14 @@
 import { types } from '@db-man/github';
+import DbColumn from './types/DbColumn';
 export declare const getUrlParams: () => {
     [k: string]: string;
 };
 /**
  *
  * @param {*} columns
- * @returns {string|null}
+ * @returns {string}
  */
-export declare const getPrimaryKey: (columns: types.Column[]) => string | null;
-export declare const getTablePrimaryKey: (tables: types.Table[], tableName: string) => string | null;
-export declare const errMsg: (msg: string, err: Error) => void;
+export declare const getPrimaryKey: (columns: DbColumn[]) => string;
+export declare const getTablePrimaryKey: (tables: types.DbTable[], tableName: string) => string;
+export declare const errMsg: (msg: string, err?: Error) => void;
 //# sourceMappingURL=utils.d.ts.map

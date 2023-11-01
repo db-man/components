@@ -1,10 +1,3 @@
-import React from 'react';
-export default class RandomPageBody extends React.Component {
-    constructor(props: any);
-    componentDidMount(): void;
-    getDataAsync: () => Promise<void>;
-    renderItem: (item: any) => import("react/jsx-runtime").JSX.Element;
-    renderList: () => import("react/jsx-runtime").JSX.Element | null;
-    render(): import("react/jsx-runtime").JSX.Element;
-}
+declare const RandomPageBody: () => import("react/jsx-runtime").JSX.Element;
+export default RandomPageBody;
 //# sourceMappingURL=RandomPageBody.d.ts.map

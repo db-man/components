@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import * as constants from '../constants';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
@@ -12,7 +10,7 @@ const defaultRenders = {
 };
 
 /**
- * @param {string|string[]} args
+ * @param {string|string[]} args e.g. "Link" or ["Link", "{{record.url}}"]
  * @param {Object} tplExtra
  */
 export const getRender = (args, tplExtra) => {
@@ -51,5 +49,12 @@ export const getColumnRender = (renderKey, column, tplExtra) => {
   // renderFn = (val, record, index) => ()
   return defaultRenders[column.type || constants.STRING];
 };
-export const getRenderResultByColumn = (value, record, index, args, column) => getColumnRender('type:listPage', column)(value, record, index); // eslint-disable-line max-len
+
+// export const getRenderResultByColumn = (
+//   value: any,
+//   record: RowType,
+//   index: number,
+//   args: RenderArgs,
+//   column: Column
+// ) => getColumnRender('type:listPage', column)(value, record, index);
 //# sourceMappingURL=ddRender.js.map

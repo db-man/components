@@ -1,1 +1,1 @@
-{"version":3,"file":"PresetsButtons.d.ts","sourceRoot":"","sources":["../../src/components/PresetsButtons.tsx"],"names":[],"mappings":"AAMA,QAAA,MAAM,cAAc;;;SAanB,CAAC;AAEF,eAAe,cAAc,CAAC"}
+{"version":3,"file":"PresetsButtons.d.ts","sourceRoot":"","sources":["../../src/components/PresetsButtons.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAI1B,OAAO,QAAQ,MAAM,mBAAmB,CAAC;AAEzC,QAAA,MAAM,cAAc;YAIV,QAAQ;sBACE,MAAM,SAAS,gBAAgB,CAAC,WAAW,CAAC,KAAK,IAAI;6CAgBxE,CAAC;AAEF,eAAe,cAAc,CAAC"}

@@ -1,10 +1,12 @@
-import React from 'react';
+export type StorageType = {
+    set: (k: string, v: string) => void;
+    get: (k: string) => string | null;
+};
 /**
  * To save online db tables schema in the local db, then pages could load faster
  */
-export default class DbConnections extends React.Component {
-    handleLoadDbsClick: () => void;
-    handleDbConnectionEnable: () => void;
-    render(): import("react/jsx-runtime").JSX.Element;
-}
+declare const DbConnections: ({ storage }: {
+    storage: StorageType;
+}) => import("react/jsx-runtime").JSX.Element;
+export default DbConnections;
 //# sourceMappingURL=DbConnections.d.ts.map

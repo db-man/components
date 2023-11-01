@@ -1,11 +1,13 @@
+import React from 'react';
 import PropTypes from 'prop-types';
+import DbColumn from '../types/DbColumn';
 /**
  * Form field wrapper for create/update page
  */
 declare const FieldWrapperForCreateUpdatePage: {
-    ({ column, children }: {
-        column: any;
-        children: any;
+    ({ column, children, }: {
+        column: DbColumn;
+        children: React.ReactNode;
     }): import("react/jsx-runtime").JSX.Element;
     propTypes: {
         column: PropTypes.Validator<NonNullable<PropTypes.InferProps<{

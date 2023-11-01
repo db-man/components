@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { utils as githubUtils } from '@db-man/github';
 export const getNewRows = (formValues, oldRows, primaryKey, currentId) => oldRows.map(row => {
   if (row[primaryKey] !== currentId) {

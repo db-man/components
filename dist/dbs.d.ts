@@ -10,6 +10,6 @@
  * }
  * ```
  */
-export declare const getTablesByDbName: (dbName: string) => any;
+export declare const getTablesByDbName: (dbName?: string) => any;
 export declare const setDbs: (val: string) => void;
 //# sourceMappingURL=dbs.d.ts.map

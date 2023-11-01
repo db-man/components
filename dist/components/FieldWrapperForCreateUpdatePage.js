@@ -1,10 +1,7 @@
-// @ts-nocheck
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { columnType } from './types';
 import * as constants from '../constants';
-
 /**
  * Form field wrapper for create/update page
  */
