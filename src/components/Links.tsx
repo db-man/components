@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'antd';
+
 import * as types from './types';
 import { PhotoType } from './PhotoList';
+import { downloadImage } from '../utils';
 
 export function Fragment({ children }: { children: React.ReactNode }) {
   return children;
@@ -96,6 +99,14 @@ export function ImageLink({
       </a>
       <br />
       {description}
+      <br />
+      <Button
+        onClick={() => {
+          downloadImage(url2);
+        }}
+      >
+        Download
+      </Button>
     </div>
   );
 }
