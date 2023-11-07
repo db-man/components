@@ -193,7 +193,7 @@ const ddRenderFnMapping: DdRenderFnMappingType = {
    * {
    *   "type:getPage": [
    *     "PhotoList",
-   *     "[{{#each record.photoUrls}}{{#if @index}},{{/if}}{\"url\":\"{{this}}\",\"imgSrc\":\"{{this}}_th.jpg\",\"description\":\"{{#with (getTableRecordByKey tables=../extra.tables tableName=\"rates\" primaryKeyVal=this rows=../extra.rows)}}{{join tags \", \"}}{{/with}}\"}{{/each}}]"
+   *     "[{{#each record.photoUrls}}{{#if @index}},{{/if}}{\"url\":\"{{this}}\",\"imgSrc\":\"{{this}}_th.jpg\",\"description\":\"{{#with (getTableRecordByKey tables=../extra.tables tableName=\"imgs\" primaryKeyVal=this rows=../extra.rows)}}{{join tags \", \"}}{{/with}}\"}{{/each}}]"
    *   ]
    * }
    * ```

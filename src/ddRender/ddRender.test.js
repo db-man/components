@@ -110,19 +110,22 @@ describe('getRender', () => {
 describe('handlebars helper getTableRecordByKey', () => {
   it('should return proper value', () => {
     const tables = [
-      { name: 'rates', columns: [{ id: 'url', primary: true }] },
-      { name: 'details', columns: [{ id: 'itemId', primary: true }] },
+      { name: 'users', columns: [{ id: 'userId', primary: true }] },
+      { name: 'imgs', columns: [{ id: 'url', primary: true }] },
     ];
-    const ratesTableRows = [
+    const imgsTableRows = [
       { url: 'https://foo.jpg', tags: ['foo', 'bar'] },
       { url: 'https://bar.jpg', tags: ['foo2', 'bar2'] },
     ];
-    const record = {
-      itemId: '123',
-      samples: ['https://foo.jpg', 'https://bar.jpg'],
+    const userRecord = {
+      userId: '123',
+      photos: ['https://foo.jpg', 'https://bar.jpg'],
     };
+    // loop each photos of one user from `users` table
+    // for each photo link, try to search in `imgs` table
+    // when found, get the tags of record from `imgs` table
     const tpl = Handlebars.compile(`[
-{{#each record.samples}}
+{{#each userRecord.photos}}
 {{#if @index}},{{/if}}
 {
   "url":"{{this}}",
@@ -130,7 +133,7 @@ describe('handlebars helper getTableRecordByKey', () => {
   "description":"{{#with (
     getTableRecordByKey
     tables=../extra.tables
-    tableName="rates"
+    tableName="imgs"
     primaryKeyVal=this
     rows=../extra.rows
   )}}{{join tags ", "}}{{/with}}"
@@ -138,10 +141,10 @@ describe('handlebars helper getTableRecordByKey', () => {
 {{/each}}
 ]`);
     const json = tpl({
-      record,
+      userRecord,
       extra: {
         tables,
-        rows: ratesTableRows,
+        rows: imgsTableRows,
       },
     });
     const result = JSON.parse(json);
