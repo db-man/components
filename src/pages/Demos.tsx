@@ -4,6 +4,7 @@ import React from 'react';
 import { Collapse } from 'antd';
 
 import { getColumnRender } from '../ddRender/ddRender';
+import PhotoListExample from './demos/PhotoListExample'
 
 const { Panel } = Collapse;
 
@@ -24,12 +25,15 @@ const Demos = () => {
   });
 
   return (
-    <Collapse defaultActiveKey={['ImageLink']}>
+    <Collapse defaultActiveKey={['PhotoList']}>
       <Panel header='ImageLink' key='ImageLink'>
         {fn('https://docs.mapbox.com/mapbox-gl-js/assets/cat.png', {
           id: 'foo',
           photos: ['https://docs.mapbox.com/mapbox-gl-js/assets/cat.png'],
         })}
+      </Panel>
+      <Panel header='PhotoList' key='PhotoList'>
+        <PhotoListExample />
       </Panel>
     </Collapse>
   );
