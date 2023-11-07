@@ -17,7 +17,7 @@ const Demos = () => {
     'type:getPage': ['ImageLink', '{"url":"{{record.photos.[0]}}","imgSrc":"{{record.photos.[0]}}"}']
   });
   return /*#__PURE__*/React.createElement(Collapse, {
-    defaultActiveKey: ['PhotoList']
+    defaultActiveKey: ['ImageLink']
   }, /*#__PURE__*/React.createElement(Panel, {
     header: "ImageLink",
     key: "ImageLink"

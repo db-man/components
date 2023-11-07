@@ -1,7 +1,9 @@
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'antd';
 import * as types from './types';
+import { downloadImage } from '../utils';
 export function Fragment({
   children
 }) {
@@ -79,7 +81,11 @@ export function ImageLink({
   }, /*#__PURE__*/React.createElement("span", null, url2), /*#__PURE__*/React.createElement("img", {
     alt: "ImageLink",
     src: imgSrc2
-  })), /*#__PURE__*/React.createElement("br", null), description);
+  })), /*#__PURE__*/React.createElement("br", null), description, /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement(Button, {
+    onClick: () => {
+      downloadImage(url2);
+    }
+  }, "Download"));
 }
 ImageLink.propTypes = {
   children: PropTypes.string,
