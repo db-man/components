@@ -232,7 +232,7 @@ const ListPage = (props: ListPageProps) => {
 
   const getTableColumns = () => {
     const cols = columns
-      .filter((column) => column['type:listPage'] !== 'HIDE')
+      .filter((column) => column[constants.TYPE_LIST_PAGE] !== 'HIDE')
       .map((column) => {
         // Table component of antd
         const antdCol: AntdColumnType<RowType> = {
@@ -245,7 +245,7 @@ const ListPage = (props: ListPageProps) => {
           ...column.tableProps,
         };
 
-        const renderFn = getColumnRender('type:listPage', column);
+        const renderFn = getColumnRender(constants.TYPE_LIST_PAGE, column);
         if (renderFn) {
           antdCol.render = renderFn;
         }

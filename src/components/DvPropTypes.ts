@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import PropTypes from 'prop-types';
+import { TYPE_GET_PAGE, TYPE_LIST_PAGE } from '../constants';
 
 // Data driven type
 // e.g. "Link"
@@ -59,8 +60,8 @@ const column = PropTypes.shape({
   name: PropTypes.string,
   type: PropTypes.string,
   'type:createUpdatePage': uiType,
-  'type:getPage': uiType,
-  'type:listPage': uiType,
+  [TYPE_GET_PAGE]: uiType,
+  [TYPE_LIST_PAGE]: uiType,
 });
 
 const columns = PropTypes.arrayOf(column);

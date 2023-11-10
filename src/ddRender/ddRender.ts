@@ -5,11 +5,20 @@ import { RenderArgs } from '../types/UiType';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
 // Default render func when "type:listPage" or "type:getPage" not defined in db table column
-const defaultRenders = {
+const defaultRendersForListPage = {
   [constants.NUMBER]: (val: number) => val,
   [constants.STRING]: (val: string) => val,
   [constants.STRING_ARRAY]: (val: string[]) => val && val.join(', '),
   [constants.BOOL]: (val: boolean) => (val === undefined ? '' : String(val)),
+};
+const defaultRendersForGetPage = {
+  [constants.NUMBER]: (val: number) =>
+    val === undefined ? 'NO_VALUE' : String(val),
+  [constants.STRING]: (val: string) => (val === undefined ? 'NO_VALUE' : val),
+  [constants.STRING_ARRAY]: (val: string[]) =>
+    val === undefined ? 'NO_VALUE' : val && val.join(', '),
+  [constants.BOOL]: (val: boolean) =>
+    val === undefined ? 'NO_VALUE' : String(val),
 };
 
 /**
@@ -52,14 +61,26 @@ export const getColumnRender = (
   column: DbColumn,
   tplExtra?: any
 ) => {
+  // should only used for "type:listPage" or "type:getPage"
+  if (
+    !renderKey ||
+    [constants.TYPE_LIST_PAGE, constants.TYPE_GET_PAGE].indexOf(renderKey) < 0
+  ) {
+    console.error('getColumnRender: invalid renderKey', renderKey);
+  }
+
   const customRender = getRender(column[renderKey], tplExtra);
   if (customRender) {
     return customRender;
   }
 
+  if (renderKey === constants.TYPE_GET_PAGE) {
+    return defaultRendersForGetPage[column.type || constants.STRING];
+  }
+
   // the column render function defined in Table component of antd
   // renderFn = (val, record, index) => ()
-  return defaultRenders[column.type || constants.STRING];
+  return defaultRendersForListPage[column.type || constants.STRING];
 };
 
 // export const getRenderResultByColumn = (
@@ -68,4 +89,4 @@ export const getColumnRender = (
 //   index: number,
 //   args: RenderArgs,
 //   column: Column
-// ) => getColumnRender('type:listPage', column)(value, record, index);
+// ) => getColumnRender(constants.TYPE_LIST_PAGE, column)(value, record, index);

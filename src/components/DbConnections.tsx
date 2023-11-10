@@ -14,7 +14,7 @@ export type StorageType = {
  * To save online db tables schema in the local db, then pages could load faster
  */
 const DbConnections = ({ storage }: { storage: StorageType }) => {
-  const handleLoadDbsClick = () => {
+  const handleDbConnectionEnable = () => {
     const githubDb = new GithubDb({
       personalAccessToken: storage.get(
         constants.LS_KEY_GITHUB_PERSONAL_ACCESS_TOKEN
@@ -26,10 +26,6 @@ const DbConnections = ({ storage }: { storage: StorageType }) => {
     });
     const { github } = githubDb;
     reloadDbsSchemaAsync(github, githubDb).then(() => {});
-  };
-
-  const handleDbConnectionEnable = () => {
-    handleLoadDbsClick();
   };
 
   return (
