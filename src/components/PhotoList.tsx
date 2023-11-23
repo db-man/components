@@ -1,8 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { List, Button } from "antd";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { List, Button, message } from 'antd';
 
-import { ImageLink } from "./Links";
+import { ImageLink } from './Links';
+import { downloadImage } from '../utils';
 
 const listGrid = {
   gutter: 16,
@@ -20,8 +21,6 @@ export type PhotoType = {
   description: string;
 };
 
-
-
 const renderItem = (item: PhotoType) => (
   <List.Item>
     <ImageLink
@@ -33,6 +32,8 @@ const renderItem = (item: PhotoType) => (
 );
 
 const PhotoList = ({ photos }: { photos: PhotoType[] }) => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const renderDup = () => {
     const photoMap: {
       [key: string]: number;
@@ -47,12 +48,38 @@ const PhotoList = ({ photos }: { photos: PhotoType[] }) => {
     return Object.keys(photoMap)
       .filter((key) => photoMap[key] > 1)
       .map((key) => photoMap[key])
-      .join(",");
+      .join(',');
+  };
+
+  // Download photos every 1s
+  const downloadAll = (photoUrls: string[]) => {
+    let index: number = 0;
+
+    function download(): void {
+      if (index < photoUrls.length) {
+        downloadImage(photoUrls[index]);
+        messageApi.info('Download ' + photoUrls[index]);
+        index++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }
+
+    // Run download every 1s
+    const intervalId: number = window.setInterval(download, 1000);
   };
 
   return (
     <div>
+      {contextHolder}
       {renderDup()}
+      <Button
+        onClick={() => {
+          downloadAll(photos.map((p) => p.url));
+        }}
+      >
+        Download all
+      </Button>
       <List grid={listGrid} dataSource={photos} renderItem={renderItem} />
     </div>
   );
