@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
 
-import { Table } from 'antd';
 import React, { useContext } from 'react';
+import { Table, Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+
 import PageContext from '../contexts/page';
+import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
 const columns = [
   {
@@ -44,7 +47,15 @@ const columns = [
     key: 'type:createUpdatePage',
     dataIndex: 'type:createUpdatePage',
     title: 'type:createUpdatePage',
-    // render: (cell) => (cell === true ? 'Yes' : 'No'),
+  },
+  {
+    key: 'type:getPage',
+    dataIndex: 'type:getPage',
+    title: 'type:getPage',
+    render: (cell: object) => {
+      if (typeof cell === 'object') return JSON.stringify(cell);
+      return cell;
+    },
   },
 ];
 
@@ -72,15 +83,38 @@ const footer = ({ dbName }: { dbName: string }) =>
 
 export default function TableConfigPage() {
   const { dbName, columns: dbTableColumns } = useContext(PageContext);
+
+  const items: TabsProps['items'] = [
+    {
+      key: 'table',
+      label: 'Table',
+      children: (
+        <div>
+          <Table
+            rowKey='id'
+            dataSource={dbTableColumns}
+            columns={columns}
+            pagination={false}
+            footer={footer({ dbName })}
+          />
+        </div>
+      ),
+    },
+    {
+      key: 'json',
+      label: 'JSON',
+      children: (
+        <ReactSimpleCodeEditor
+          value={JSON.stringify(dbTableColumns, null, '  ')}
+          onChange={() => {}}
+        />
+      ),
+    },
+  ];
+
   return (
     <div className='table-config-page'>
-      <Table
-        rowKey='id'
-        dataSource={dbTableColumns}
-        columns={columns}
-        pagination={false}
-        footer={footer({ dbName })}
-      />
+      <Tabs defaultActiveKey='table' items={items} />
     </div>
   );
 }

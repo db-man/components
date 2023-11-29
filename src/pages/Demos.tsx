@@ -8,7 +8,7 @@ const { Panel } = Collapse;
 
 const Demos = () => {
   return (
-    <Collapse defaultActiveKey={['ImageLink']}>
+    <Collapse defaultActiveKey={['PhotoList']}>
       <Panel header='ImageLink' key='ImageLink'>
         <ImageLinkExample />
       </Panel>

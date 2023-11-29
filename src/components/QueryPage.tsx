@@ -39,7 +39,11 @@ export default function QueryPage() {
       <Row>
         <Col span={16}>
           Code:
-          <ReactSimpleCodeEditor value={code} onChange={setCode} />
+          <ReactSimpleCodeEditor
+            height='50em'
+            value={code}
+            onChange={setCode}
+          />
           <br />
         </Col>
         <Col span={8}>

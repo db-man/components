@@ -18,18 +18,14 @@ export default function ErrorAlert({
     <Alert
       message={
         <div>
-          Failed to parse JSON generated from template, fallback to render plain
-          text.
-          <div>
-            The generated JSON:
-            <Input.TextArea defaultValue={json} />
-          </div>
+          {`Failed to parse JSON generated from template, fallback to render plain text. `}
           <Popover
             content={
               <div style={{ width: '800px' }}>
+                <div>Error: {error.message}</div>
                 <div>
-                  Error:
-                  {error.message}
+                  {`The generated JSON (Copy the JSON to do the validation):`}
+                  <Input.TextArea defaultValue={json} />
                 </div>
                 <div>
                   tplStr: <Input.TextArea defaultValue={tplStr} />
@@ -46,7 +42,9 @@ export default function ErrorAlert({
             title='Debug Info'
             trigger='click'
           >
-            <Button danger>Debug Info</Button>
+            <Button size='small' danger>
+              Debug Info
+            </Button>
           </Popover>
         </div>
       }
