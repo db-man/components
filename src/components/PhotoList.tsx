@@ -78,7 +78,7 @@ const PhotoList = ({ photos }: { photos: PhotoType[] }) => {
           downloadAll(photos.map((p) => p.url));
         }}
       >
-        Download all
+        Download All
       </Button>
       <List grid={listGrid} dataSource={photos} renderItem={renderItem} />
     </div>

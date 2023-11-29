@@ -87,13 +87,8 @@ export function ImageLink({
     imgSrc2 = children;
   }
   return (
-    <div>
-      <a
-        className='dm-dd-image-link'
-        href={url2}
-        rel='noreferrer'
-        target='_blank'
-      >
+    <div className='dm-dd-image-link'>
+      <a href={url2} rel='noreferrer' target='_blank'>
         <span>{url2}</span>
         <img alt='ImageLink' src={imgSrc2} />
       </a>
