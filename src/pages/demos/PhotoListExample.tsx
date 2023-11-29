@@ -1,3 +1,5 @@
+import React from 'react';
+
 import PhotoList from '../../components/PhotoList';
 
 const PhotoListExample = () => {
