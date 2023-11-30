@@ -275,6 +275,7 @@ function EditableTable({
       },
     },
   ];
+
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
       if (col.dataIndex !== 'key') {
@@ -308,6 +309,7 @@ function EditableTable({
       }),
     };
   });
+
   return (
     <Form form={form} component={false}>
       <Table
