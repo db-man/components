@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 
-import { Table } from 'antd';
 import React, { useContext } from 'react';
+import { Table, Tabs } from 'antd';
 import PageContext from '../contexts/page';
+import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 const columns = [{
   key: 'id',
   dataIndex: 'id',
@@ -36,9 +37,15 @@ const columns = [{
   key: 'type:createUpdatePage',
   dataIndex: 'type:createUpdatePage',
   title: 'type:createUpdatePage'
-  // render: (cell) => (cell === true ? 'Yes' : 'No'),
+}, {
+  key: 'type:getPage',
+  dataIndex: 'type:getPage',
+  title: 'type:getPage',
+  render: cell => {
+    if (typeof cell === 'object') return JSON.stringify(cell);
+    return cell;
+  }
 }];
-
 const footer = ({
   dbName
 }) => function TableFooter() {
@@ -53,16 +60,31 @@ export default function TableConfigPage() {
     dbName,
     columns: dbTableColumns
   } = useContext(PageContext);
+  const items = [{
+    key: 'table',
+    label: 'Table',
+    children: /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Table, {
+      rowKey: "id",
+      dataSource: dbTableColumns,
+      columns: columns,
+      pagination: false,
+      footer: footer({
+        dbName
+      })
+    }))
+  }, {
+    key: 'json',
+    label: 'JSON',
+    children: /*#__PURE__*/React.createElement(ReactSimpleCodeEditor, {
+      value: JSON.stringify(dbTableColumns, null, '  '),
+      onChange: () => {}
+    })
+  }];
   return /*#__PURE__*/React.createElement("div", {
     className: "table-config-page"
-  }, /*#__PURE__*/React.createElement(Table, {
-    rowKey: "id",
-    dataSource: dbTableColumns,
-    columns: columns,
-    pagination: false,
-    footer: footer({
-      dbName
-    })
+  }, /*#__PURE__*/React.createElement(Tabs, {
+    defaultActiveKey: "table",
+    items: items
   }));
 }
 //# sourceMappingURL=TableConfigPage.js.map

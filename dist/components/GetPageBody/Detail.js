@@ -14,7 +14,7 @@ const Detail = props => {
     tables
   } = React.useContext(PageContext);
   const renderWithDdRender = (column, value) => {
-    const renderFn = ddRender.getColumnRender('type:getPage', column, {
+    const renderFn = ddRender.getColumnRender(constants.TYPE_GET_PAGE, column, {
       column,
       tables: tables,
       rows: props.refTables[`ref:${column.referenceTable}:rows`] // eslint-disable-line react/prop-types
@@ -31,11 +31,11 @@ const Detail = props => {
   };
   const renderStringFieldValue = column => {
     const value = props.defaultValues[column.id];
-    if (column['type:getPage']) {
+    if (column[constants.TYPE_GET_PAGE]) {
       return renderWithDdRender(column, value);
     }
     let preview = false;
-    if (column['type:getPage'] === 'WithPreview') {
+    if (column[constants.TYPE_GET_PAGE] === 'WithPreview') {
       preview = true;
     }
     return /*#__PURE__*/React.createElement(StringFormFieldValue, {

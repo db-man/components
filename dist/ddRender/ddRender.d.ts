@@ -13,5 +13,5 @@ export declare const getRender: (args: RenderArgs, tplExtra?: any) => ((val: any
  *   "type:listPage": ["Link", "{{record.url}}"]
  * }
  */
-export declare const getColumnRender: (renderKey: RenderKeyType, column: DbColumn, tplExtra?: any) => ((val: any, record: RowType, index?: number | undefined, args?: RenderArgs | undefined, tplExtra?: any) => JSX.Element) | ((val: number) => number) | ((val: string) => string) | ((val: string[]) => string) | ((val: boolean) => string);
+export declare const getColumnRender: (renderKey: RenderKeyType, column: DbColumn, tplExtra?: any) => ((val: any, record: RowType, index?: number | undefined, args?: RenderArgs | undefined, tplExtra?: any) => JSX.Element) | ((val: number) => number) | ((val: string) => string) | ((val: string[]) => string) | ((val: boolean) => string) | ((val: number) => string);
 //# sourceMappingURL=ddRender.d.ts.map

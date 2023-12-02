@@ -47,10 +47,64 @@ describe('getColumnRender', () => {
   });
   describe('given hidden column in a list page', () => {
     it('should return default render func', () => {
-      const colFunc = getColumnRender('type:listPage', {
+      const view = getColumnRender('type:listPage', {
         'type:listPage': 'HIDE'
       });
-      expect(colFunc('foo')).toBe('foo');
+      expect(view('foo')).toBe('foo');
+    });
+  });
+  describe('default render function', () => {
+    it('type is STRING', () => {
+      const view = getColumnRender('type:getPage', {
+        id: 'name',
+        name: 'Name',
+        type: 'STRING'
+      });
+      expect(view('David', {
+        name: 'David'
+      })).toBe('David');
+      expect(view(undefined, {
+        name: undefined
+      })).toBe('NO_VALUE');
+    });
+    it('type is STRING_ARRAY', () => {
+      const view = getColumnRender('type:getPage', {
+        id: 'tags',
+        name: 'Tags',
+        type: 'STRING_ARRAY'
+      });
+      expect(view(['dog', 'cat'], {
+        tags: ['dog', 'cat']
+      })).toBe('dog, cat');
+      expect(view(undefined, {
+        tags: undefined
+      })).toBe('NO_VALUE');
+    });
+    it('type is NUMBER', () => {
+      const view = getColumnRender('type:getPage', {
+        id: 'age',
+        name: 'Age',
+        type: 'NUMBER'
+      });
+      expect(view(12, {
+        age: 12
+      })).toBe('12');
+      expect(view(undefined, {
+        age: undefined
+      })).toBe('NO_VALUE');
+    });
+    it('type is BOOL', () => {
+      const view = getColumnRender('type:getPage', {
+        id: 'active',
+        name: 'Active',
+        type: 'BOOL'
+      });
+      expect(view(true, {
+        active: true
+      })).toBe('true');
+      expect(view(undefined, {
+        active: undefined
+      })).toBe('NO_VALUE');
     });
   });
 });

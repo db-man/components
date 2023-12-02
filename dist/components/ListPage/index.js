@@ -190,7 +190,7 @@ const ListPage = props => {
     className: "dm-alert-validations"
   }, alertDuplicatedRowKey(), alertTableDataInvalid());
   const getTableColumns = () => {
-    const cols = columns.filter(column => column['type:listPage'] !== 'HIDE').map(column => {
+    const cols = columns.filter(column => column[constants.TYPE_LIST_PAGE] !== 'HIDE').map(column => {
       // Table component of antd
       const antdCol = {
         key: column.id,
@@ -201,7 +201,7 @@ const ListPage = props => {
         sorter: true,
         ...column.tableProps
       };
-      const renderFn = getColumnRender('type:listPage', column);
+      const renderFn = getColumnRender(constants.TYPE_LIST_PAGE, column);
       if (renderFn) {
         antdCol.render = renderFn;
       }

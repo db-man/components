@@ -44,6 +44,7 @@ export default function QueryPage() {
   }, /*#__PURE__*/React.createElement(Row, null, /*#__PURE__*/React.createElement(Col, {
     span: 16
   }, "Code:", /*#__PURE__*/React.createElement(ReactSimpleCodeEditor, {
+    height: "50em",
     value: code,
     onChange: setCode
   }), /*#__PURE__*/React.createElement("br", null)), /*#__PURE__*/React.createElement(Col, {

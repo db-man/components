@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
-declare function ReactSimpleCodeEditor({ value, onChange, }: {
+declare function ReactSimpleCodeEditor({ height, value, onChange, }: {
+    height?: string;
     value: string;
     onChange: (value: string) => void;
 }): import("react/jsx-runtime").JSX.Element;

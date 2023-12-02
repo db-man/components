@@ -1,7 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { List } from "antd";
-import { ImageLink } from "./Links";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { List, Button, message } from 'antd';
+import { ImageLink } from './Links';
+import { downloadImage } from '../utils';
 const listGrid = {
   gutter: 16,
   xs: 1,
@@ -19,6 +20,7 @@ const renderItem = item => /*#__PURE__*/React.createElement(List.Item, null, /*#
 const PhotoList = ({
   photos
 }) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const renderDup = () => {
     const photoMap = {};
     photos.forEach(photo => {
@@ -28,9 +30,30 @@ const PhotoList = ({
         photoMap[photo.url] += 1;
       }
     });
-    return Object.keys(photoMap).filter(key => photoMap[key] > 1).map(key => photoMap[key]).join(",");
+    return Object.keys(photoMap).filter(key => photoMap[key] > 1).map(key => photoMap[key]).join(',');
   };
-  return /*#__PURE__*/React.createElement("div", null, renderDup(), /*#__PURE__*/React.createElement(List, {
+
+  // Download photos every 1s
+  const downloadAll = photoUrls => {
+    let index = 0;
+    function download() {
+      if (index < photoUrls.length) {
+        downloadImage(photoUrls[index]);
+        messageApi.info('Download ' + photoUrls[index]);
+        index++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }
+
+    // Run download every 1s
+    const intervalId = window.setInterval(download, 1000);
+  };
+  return /*#__PURE__*/React.createElement("div", null, contextHolder, renderDup(), /*#__PURE__*/React.createElement(Button, {
+    onClick: () => {
+      downloadAll(photos.map(p => p.url));
+    }
+  }, "Download All"), /*#__PURE__*/React.createElement(List, {
     grid: listGrid,
     dataSource: photos,
     renderItem: renderItem

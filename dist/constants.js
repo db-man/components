@@ -15,4 +15,8 @@ export const LS_KEY_DB_CONNECTIONS = 'dm_db_connections';
 
 // Table column definitions
 export const COL_UI_PRESETS = 'ui:presets';
+
+// UI type
+export const TYPE_GET_PAGE = 'type:getPage';
+export const TYPE_LIST_PAGE = 'type:listPage';
 //# sourceMappingURL=constants.js.map

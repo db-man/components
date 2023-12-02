@@ -2,11 +2,17 @@ import * as constants from '../constants';
 import ddRenderFnMapping from './ddRenderFnMapping';
 
 // Default render func when "type:listPage" or "type:getPage" not defined in db table column
-const defaultRenders = {
+const defaultRendersForListPage = {
   [constants.NUMBER]: val => val,
   [constants.STRING]: val => val,
   [constants.STRING_ARRAY]: val => val && val.join(', '),
   [constants.BOOL]: val => val === undefined ? '' : String(val)
+};
+const defaultRendersForGetPage = {
+  [constants.NUMBER]: val => val === undefined ? 'NO_VALUE' : String(val),
+  [constants.STRING]: val => val === undefined ? 'NO_VALUE' : val,
+  [constants.STRING_ARRAY]: val => val === undefined ? 'NO_VALUE' : val && val.join(', '),
+  [constants.BOOL]: val => val === undefined ? 'NO_VALUE' : String(val)
 };
 
 /**
@@ -40,14 +46,21 @@ export const getRender = (args, tplExtra) => {
  * }
  */
 export const getColumnRender = (renderKey, column, tplExtra) => {
+  // should only used for "type:listPage" or "type:getPage"
+  if (!renderKey || [constants.TYPE_LIST_PAGE, constants.TYPE_GET_PAGE].indexOf(renderKey) < 0) {
+    console.error('getColumnRender: invalid renderKey', renderKey);
+  }
   const customRender = getRender(column[renderKey], tplExtra);
   if (customRender) {
     return customRender;
   }
+  if (renderKey === constants.TYPE_GET_PAGE) {
+    return defaultRendersForGetPage[column.type || constants.STRING];
+  }
 
   // the column render function defined in Table component of antd
   // renderFn = (val, record, index) => ()
-  return defaultRenders[column.type || constants.STRING];
+  return defaultRendersForListPage[column.type || constants.STRING];
 };
 
 // export const getRenderResultByColumn = (
@@ -56,5 +69,5 @@ export const getColumnRender = (renderKey, column, tplExtra) => {
 //   index: number,
 //   args: RenderArgs,
 //   column: Column
-// ) => getColumnRender('type:listPage', column)(value, record, index);
+// ) => getColumnRender(constants.TYPE_LIST_PAGE, column)(value, record, index);
 //# sourceMappingURL=ddRender.js.map

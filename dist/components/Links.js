@@ -73,8 +73,9 @@ export function ImageLink({
     url2 = children;
     imgSrc2 = children;
   }
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
-    className: "dm-dd-image-link",
+  return /*#__PURE__*/React.createElement("div", {
+    className: "dm-dd-image-link"
+  }, /*#__PURE__*/React.createElement("a", {
     href: url2,
     rel: "noreferrer",
     target: "_blank"

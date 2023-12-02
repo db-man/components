@@ -6,6 +6,7 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 export default function ReactSimpleCodeEditor({
+  height,
   value,
   onChange
 }) {
@@ -13,7 +14,8 @@ export default function ReactSimpleCodeEditor({
     style: {
       fontFamily: '"Fira code", "Fira Mono", monospace',
       fontSize: '12px',
-      height: '50em',
+      height,
+      // '50em' or undefined
       width: '60em',
       backgroundColor: 'white'
     },
