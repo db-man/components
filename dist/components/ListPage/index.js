@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Table, Input, Row, Col, Spin, Popover, Alert, message } from 'antd';
+import { Table, Input, Row, Col, Spin, Popover, Alert, message, Segmented } from 'antd';
 import { RightSquareFilled } from '@ant-design/icons';
 // @ts-ignore TODO: fix types for lodash
 import debounce from 'lodash.debounce';
@@ -10,12 +10,24 @@ import { getColumnRender } from '../../ddRender/ddRender';
 import { findDuplicates, getFilteredData, getSortedData, getInitialFilter, updateUrl, getColumnSortOrder, getInitialSorter } from './helpers';
 import RefTableLinks from '../RefTableLinks';
 import * as constants from '../../constants';
+import ImageCardTable from './ImageCardTable';
 const defaultPage = 1;
 const defaultPageSize = 10;
 const debouncedUpdateUrl = debounce(updateUrl, 500);
 const filterCols = columns => {
   return columns.filter(col => col.filter);
 };
+const TableView = 'table_view';
+const ImageView = 'image_view';
+
+/**
+ * URL params:
+ * - page: number
+ * - pageSize: number
+ * - filter: string
+ * - sorter: string
+ * - view: string (table_view or image_view)
+ */
 const ListPage = props => {
   const {
     columns,
@@ -35,13 +47,15 @@ const ListPage = props => {
   const [errMsg, setErrMsg] = useState('');
   const [rows, setRows] = useState(null);
   const [contentTableName, setContentTableName] = useState(''); // the current table name of data this.state.rows
+  // TODO to improve this part, how to get initial value from URL?
   const [page, setPage] = useState(() => {
-    const url = new URL(window.location.href);
-    return Number(url.searchParams.get('page')) || defaultPage;
+    return Number(new URL(window.location.href).searchParams.get('page')) || defaultPage;
   });
   const [pageSize, setPageSize] = useState(() => {
-    const url = new URL(window.location.href);
-    return Number(url.searchParams.get('pageSize')) || defaultPageSize;
+    return Number(new URL(window.location.href).searchParams.get('pageSize')) || defaultPageSize;
+  });
+  const [view, setView] = useState(() => {
+    return new URL(window.location.href).searchParams.get('view') || TableView;
   });
   const controllerRef = useRef(new AbortController());
   useEffect(() => {
@@ -139,6 +153,18 @@ const ListPage = props => {
       }
     });
 
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+  const handleCardTableChange = pagination => {
+    setPage(pagination.current || defaultPage);
+    setPageSize(pagination.pageSize || defaultPageSize);
+    debouncedUpdateUrl({
+      page: pagination.current,
+      pageSize: pagination.pageSize
+    });
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -291,7 +317,7 @@ const ListPage = props => {
   return /*#__PURE__*/React.createElement("div", {
     className: "dm-list-page list-component"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "table-filter"
+    className: "dm-table-filter"
   }, /*#__PURE__*/React.createElement(Row, {
     gutter: 10
   }, filterCols(columns).map(f => /*#__PURE__*/React.createElement(Col, {
@@ -301,7 +327,30 @@ const ListPage = props => {
     size: "small",
     value: filter[f.id],
     onChange: handleFilterChange(f.id)
-  }))))), renderTable());
+  }))))), /*#__PURE__*/React.createElement(Segmented, {
+    value: view,
+    options: [{
+      label: 'Table View',
+      value: TableView
+    }, {
+      label: 'Image View',
+      value: ImageView
+    }],
+    onChange: val => {
+      setView(val + '');
+      debouncedUpdateUrl({
+        view: val
+      });
+    }
+  }), view === TableView ? renderTable() : /*#__PURE__*/React.createElement(ImageCardTable, {
+    imgKey: columns.find(col => col.isListPageImageViewKey)?.id,
+    dataSource: filteredSortedData(),
+    pagination: {
+      current: page,
+      pageSize
+    },
+    onChange: handleCardTableChange
+  }));
 };
 export default ListPage;
 ListPage.propTypes = {

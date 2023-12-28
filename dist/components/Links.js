@@ -83,6 +83,7 @@ export function ImageLink({
     alt: "ImageLink",
     src: imgSrc2
   })), /*#__PURE__*/React.createElement("br", null), description, /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement(Button, {
+    className: "dm-dd-image-link-download-btn",
     onClick: () => {
       downloadImage(url2);
     }

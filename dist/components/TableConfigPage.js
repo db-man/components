@@ -45,6 +45,11 @@ const columns = [{
     if (typeof cell === 'object') return JSON.stringify(cell);
     return cell;
   }
+}, {
+  key: 'isListPageImageViewKey',
+  dataIndex: 'isListPageImageViewKey',
+  title: 'isListPageImageViewKey',
+  render: cell => cell === true ? 'Yes' : 'No'
 }];
 const footer = ({
   dbName

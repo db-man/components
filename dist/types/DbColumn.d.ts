@@ -13,9 +13,9 @@ type DbColumnExtendsUiType = {
     /**
      * - Only used on create/update page.
      *   - When `type="STRING_ARRAY"`, and default UI component `Select` is used.
-     *     - To render some buttons on top of the dropdown, click button to quick input a new tag into dropdown.
+     *     - To render some buttons on top of the dropdown, click button to quick append a new tag into the dropdown.
      *   - When `type="STRING"`, and default UI component `Input` is used.
-     *     - To render some buttons on top of the input box, click button to quick input a new text into input box.
+     *     - To render some buttons on top of the input box, click button to quick input a new text into the input box.
      */
     'ui:presets'?: string[];
     placeholder?: ColumnPlaceholder;
@@ -29,6 +29,7 @@ type DbColumnExtendsUiType = {
     enum?: RadioGroupUiTypeEnum;
     /**
      * Pass to the Column of Ant Design Table.
+     * TODO maybe we should use `tableColProps` instead of `tableProps`?
      */
     tableProps?: any;
     /**
@@ -55,6 +56,7 @@ type DbColumnExtendsUiType = {
      * }
      */
     referenceTable?: string;
+    isListPageImageViewKey?: string;
 };
 type DbColumn = AntdColumnType<RowType> & types.DbColumn & DbColumnExtendsUiType;
 export default DbColumn;

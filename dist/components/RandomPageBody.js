@@ -47,6 +47,7 @@ const RandomPageBody = () => {
   const renderItem = item => {
     const column = columns.find(col => col.id === primaryKey);
     if (!column) return /*#__PURE__*/React.createElement("div", null, "No primary column found");
+    // TODO move `type:randomPage` out of the primary column, it should be in the table level.
     const args = column['type:randomPage'] || '';
     const fn = ddRender.getRender(args) || (val => val);
     return /*#__PURE__*/React.createElement(List.Item, null, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("div", null, fn(item[primaryKey], item, 0)), /*#__PURE__*/React.createElement(Link, {
