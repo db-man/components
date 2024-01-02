@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Alert, Card, Empty, Pagination } from 'antd';
+import { Link } from 'react-router-dom';
 import { ImageLink } from '../Links';
+import PageContext from '../../contexts/page';
 const gridStyle = {
   width: '25%',
   textAlign: 'center'
@@ -11,6 +13,11 @@ const ImageCardTable = ({
   pagination,
   onChange
 }) => {
+  const {
+    dbName,
+    tableName,
+    primaryKey
+  } = useContext(PageContext);
   if (!imgKey) {
     return /*#__PURE__*/React.createElement(Alert, {
       message: "Error",
@@ -57,7 +64,12 @@ const ImageCardTable = ({
     return /*#__PURE__*/React.createElement(Card.Grid, {
       key: index,
       style: gridStyle
-    }, el);
+    }, el, /*#__PURE__*/React.createElement(Link, {
+      to: {
+        pathname: `/${dbName}/${tableName}/update`,
+        search: `?${primaryKey}=${item[primaryKey]}`
+      }
+    }, "Update"));
   })), /*#__PURE__*/React.createElement(Pagination, {
     current: pagination.current,
     pageSize: pagination.pageSize,

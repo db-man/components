@@ -22,7 +22,7 @@ export type GetPageUiType = RenderArgs;
  * If is 'HIDE', the column will not be shown on the list page.
  */
 export type ListPageUiType = RenderArgs | 'HIDE';
-export type RandomPageUiType = string;
+export type RandomPageUiType = RenderArgs;
 type RenderFuncName = string;
 type RenderFuncTpl = string;
 export type RenderArgs = string | [RenderFuncName, RenderFuncTpl];
