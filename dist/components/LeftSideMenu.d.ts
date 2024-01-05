@@ -1,7 +1,7 @@
 import React from 'react';
 interface LeftSideMenuProps {
     dbName: string;
-    tableName?: string;
+    tableName: string;
     action?: string;
 }
 declare const LeftSideMenu: React.FC<LeftSideMenuProps>;

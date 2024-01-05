@@ -4,12 +4,16 @@ import { Layout } from 'antd';
 import BreadcrumbWrapper from './BreadcrumbWrapper';
 import LeftSideMenu from '../components/LeftSideMenu';
 import PageHeaderContent from '../components/PageHeaderContent';
+import { useAppContext } from '../contexts/AppContext';
 const {
   Header,
   Content,
   Sider
 } = Layout;
 export default function PageLayout() {
+  const {
+    dbs
+  } = useAppContext();
   const {
     dbName,
     tableName,
@@ -25,7 +29,7 @@ export default function PageLayout() {
     width: 300,
     className: "site-layout-background",
     collapsible: true
-  }, dbName ? /*#__PURE__*/React.createElement(LeftSideMenu, {
+  }, dbName && dbs[dbName] && tableName ? /*#__PURE__*/React.createElement(LeftSideMenu, {
     dbName: dbName,
     tableName: tableName,
     action: action

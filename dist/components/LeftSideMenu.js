@@ -12,36 +12,30 @@ const LeftSideMenu = ({
   const {
     dbs
   } = useAppContext();
-  const [openKeys, setOpenKeys] = useState([]);
+  const [openKeys, setOpenKeys] = useState(() => {
+    // if table name not exist, then collapse all menus
+    // if table name exist, then expand the menu of this table
+    const table = dbs[dbName].find(({
+      name
+    }) => name === tableName);
+    if (!table) {
+      return [];
+    }
+    return [table.name];
+  });
   const handleOpenChange = keys => {
     setOpenKeys(keys);
   };
-  if (!dbs) {
-    return null;
-  }
-  const tablesOfSelectedDb = dbs[dbName];
-  if (!tablesOfSelectedDb) {
-    return null;
-  }
-  const firstTableOfSelectedDb = tablesOfSelectedDb[0];
-  const selectedKeys = [`${dbName}-${tableName}-${action}`];
-  let openKeys3 = [firstTableOfSelectedDb.name];
-  if (tableName) {
-    openKeys3 = [tableName];
-  }
-  if (openKeys.length > 0) {
-    openKeys3 = openKeys;
-  }
   return /*#__PURE__*/React.createElement(Menu, {
     mode: "inline",
-    selectedKeys: selectedKeys,
-    openKeys: openKeys3,
+    selectedKeys: [`${dbName}-${tableName}-${action}`],
+    openKeys: openKeys,
     style: {
       height: '100%',
       borderRight: 0
     },
     onOpenChange: handleOpenChange,
-    items: tablesOfSelectedDb.map(({
+    items: dbs[dbName].map(({
       name: tName
     }) => ({
       key: tName,
@@ -83,7 +77,7 @@ const LeftSideMenu = ({
 };
 LeftSideMenu.propTypes = {
   dbName: PropTypes.string.isRequired,
-  tableName: PropTypes.string,
+  tableName: PropTypes.string.isRequired,
   action: PropTypes.string
 };
 LeftSideMenu.defaultProps = {
