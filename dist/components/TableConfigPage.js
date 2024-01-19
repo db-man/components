@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { Table, Tabs } from 'antd';
 import PageContext from '../contexts/page';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
+import { DB_CFG_FILENAME } from '../constants';
 const columns = [{
   key: 'id',
   dataIndex: 'id',
@@ -63,10 +64,10 @@ const footer = ({
   dbName
 }) => function TableFooter() {
   return /*#__PURE__*/React.createElement("div", null, "Table column definition:", ' ', /*#__PURE__*/React.createElement("a", {
-    href: `https://github.com/${localStorage.getItem('dm_github_owner')}/${localStorage.getItem('dm_github_repo_name')}/blob/main/${localStorage.getItem('dm_github_repo_path')}/${dbName}/columns.json`,
+    href: `https://github.com/${localStorage.getItem('dm_github_owner')}/${localStorage.getItem('dm_github_repo_name')}/blob/main/${localStorage.getItem('dm_github_repo_path')}/${dbName}/${DB_CFG_FILENAME}`,
     target: "_blank",
     rel: "noreferrer"
-  }, "columns.json"));
+  }, DB_CFG_FILENAME));
 };
 export default function TableConfigPage() {
   const {

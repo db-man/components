@@ -38,7 +38,6 @@ export const getRender = (args, tplExtra) => {
   }
   return renderFn;
 };
-
 /**
  * column def:
  * {

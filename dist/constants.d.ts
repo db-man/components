@@ -13,4 +13,5 @@ export declare const LS_KEY_DB_CONNECTIONS = "dm_db_connections";
 export declare const COL_UI_PRESETS = "ui:presets";
 export declare const TYPE_GET_PAGE = "type:getPage";
 export declare const TYPE_LIST_PAGE = "type:listPage";
+export declare const DB_CFG_FILENAME = "dbcfg.json";
 //# sourceMappingURL=constants.d.ts.map

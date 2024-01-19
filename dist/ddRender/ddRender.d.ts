@@ -7,11 +7,13 @@ import { RenderArgs } from '../types/UiType';
  * @param {Object} tplExtra
  */
 export declare const getRender: (args: RenderArgs, tplExtra?: any) => ((val: any, record: RowType, index?: number | undefined, args?: RenderArgs | undefined, tplExtra?: any) => JSX.Element) | undefined;
+type ColumnRenderType = (renderKey: RenderKeyType, column: DbColumn, tplExtra?: any) => (val: any, record: RowType, index?: number) => any;
 /**
  * column def:
  * {
  *   "type:listPage": ["Link", "{{record.url}}"]
  * }
  */
-export declare const getColumnRender: (renderKey: RenderKeyType, column: DbColumn, tplExtra?: any) => ((val: any, record: RowType, index?: number | undefined, args?: RenderArgs | undefined, tplExtra?: any) => JSX.Element) | ((val: number) => number) | ((val: string) => string) | ((val: string[]) => string) | ((val: boolean) => string) | ((val: number) => string);
+export declare const getColumnRender: ColumnRenderType;
+export {};
 //# sourceMappingURL=ddRender.d.ts.map
