@@ -7,6 +7,13 @@ npm i
 npm run dev
 ```
 
+## Run cypress test (with lerna)
+
+```sh
+npx cypress run
+--scope @db-man/components
+```
+
 ## Publish
 
 ```
